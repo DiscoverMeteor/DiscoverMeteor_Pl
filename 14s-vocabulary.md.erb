@@ -1,5 +1,5 @@
 ---
-title: Meteor Vocabulary
+title: Słownik Meteor'a
 slug: meteor-vocabulary
 date: 0014/01/02
 number: 14.5
@@ -8,27 +8,27 @@ contents: Review a few common Meteor terms.
 paragraphs: 24
 ---
 
-////
+W tej książce spotkasz kilka nowych terminów lub takie, które znasz ale używane w nowy sposób w kontekscie Meteor'a. W tym rozdziale zajmiemy się ich przedstawieniem.
 
-#### Client
+#### Klient
 
-////
+Kiedy mówimy o Kliencie, odnośimy się do kodu, który uruchamiany jest w przeglądarce użytkownika, czy to w tradycyjnej przeglądarce jak Firefox lub Safari, czy w czymś bardziej skomplikowanym jak UIWebView w natywnej aplikacji na iPhone'a.
 
-#### Collection
+#### Kolekcja
 
-////
+Kolekcje w Meteor'ze są zbiorami danych automatycznie synchronizowanymi pomiędzy klientem i serwerem. Kolekcje posiadają nazwę (jak np. `posty`), i zazwyczaj istnieją zarówno na kliencie jak i na serwerze. Pomimo tego, że zachowują się inaczej, mają wspólne API oparte na API bazy danych Mongo.
 
-#### Computation
+#### Komputacja (Obliczenie)
 
-////
+Komputacja jest blokiem kodu, który jest uruchamiany za każdym razem kiedy reaktywne źródło danych, na którym jest oparta zmieni się. Mając reaktywne źródło danych (na przykład zmienna Session) i chcąc reagować na jego zmiany, będziesz musiał ustawić komputacje dla niego.
 
-#### Cursor
+#### Kursor
 
-////
+Kursor jest rezultate wykonania zapytania na kolekcji Mongo. Na kliencie, kursor nie jest zwykłą tablicą wyników ale *reaktywnym* obiektem, na którym można obserwować dodawanie, usuwanie i aktualizowanie obiektów.
  
 #### DDP
 
-////
+DDP jest w Meteor'ze Rozproszonym Protokołem Danych (ang. Distributed Data Protocol), który używany jest do symchronizacji kolekcji i wykonywania metod Meteor'a. DDP jest typowym protokołem, którego przeznaczeniem jest zastąpienie ociężałego protopkołu HTTP protokołem czasu rzeczystistego.
 
 #### Deps
 
