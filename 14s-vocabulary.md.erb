@@ -28,15 +28,15 @@ Kursor jest rezultate wykonania zapytania na kolekcji Mongo. Na kliencie, kursor
  
 #### DDP
 
-DDP jest w Meteor'ze Rozproszonym Protokołem Danych (ang. Distributed Data Protocol), który używany jest do symchronizacji kolekcji i wykonywania metod Meteor'a. DDP jest typowym protokołem, którego przeznaczeniem jest zastąpienie ociężałego protopkołu HTTP protokołem czasu rzeczystistego.
+DDP jest w Meteor'ze Rozproszonym Protokołem Danych (ang. Distributed Data Protocol), który używany jest do synchronizacji kolekcji i wykonywania metod Meteor'a. DDP jest typowym protokołem, którego przeznaczeniem jest zastąpienie ociężałego protopkołu HTTP protokołem czasu rzeczystistego.
 
-#### Deps
+#### Zależności (ang. Deps)
 
-////
+Zależności to część systemu reaktywności Meteor'a. Zależności działając pod maską zapewniają automatyczną synchronizację kodu HTML z danymi modelu.
 
-#### Document
+#### Dokument
 
-////
+Mongo jest bazą danych opartą o dokumenty, w związku z tym obiekty wyciągane z kolekcji są nazywane "dokumentami". Dokumenty są prostymi obiektami JavaScript (jednak nie mogą zawierać funkcji) z jedną specjalną właściwością `_id`, którą Meteor wykorzystuje do śledzenia właściwości obiektu podczas użycia protokołu DDP.
 
 #### Helpers
 
