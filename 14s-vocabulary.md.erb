@@ -4,7 +4,7 @@ slug: meteor-vocabulary
 date: 0014/01/02
 number: 14.5
 sidebar: true
-contents: Review a few common Meteor terms. 
+contents: Przegląd niektórych występujących w Meteor'ze terminów.
 paragraphs: 24
 ---
 
@@ -54,39 +54,39 @@ Metody w Meteor'ze są zdalnymi wywołaniami funkcji zainicjowanymi na kliencie,
 
 Kolekcja po stronie klienta jest magazynem danych rezydującym w pamięci operacyjnej, dostarczającej API na wzór Mongo. Biblioteka dostarczająca wspomniane funkcjonalności nazywana jest "MiniMongo" aby zaznaczyć, że jest okrojoną wersją bazy Mongo, która w całości działa w pamięci operacyjnej.
 
-////
+#### Pakiet
 
-#### Package
+Pakiet w Meteor'ze może składać się z
 
-////
+  1. Kodu JavaScript działającego po stronie serwera.
+  2. Kodu JavaScript działającego po stronie klienta.
+  3. Instrukcji na temat sposobu przetwarzania zasobów (np. z SASS do CSS).
+  4. Zasobów do przetworzenia.
 
-  1. ////
-  2. ////
-  3. ////
-  4. ////
+Pakiet jest jak biblioteka o super mocy. Meteor posiada obszerny zestaw pakietów. Dostępne jest także repozytorium [Atmosphere](http://atmosphere.meteor.com), które jest kolekcją pakietów pisanych przez społeczności użytkowników Meteor'a.
 
-////
+#### Publikacja
 
-#### Publication
+A publication is a named set of data that is customized for each user that subscribes to it. You set up a publication on the server.
 
-////
+Publikacja jest opatrzonym nazwą zbiorem danych, który jest indywidualnie dostosowywany do każdego użytkownika, który tę publikację subskrybuje. Publikacja jest umieszczana na serwerze.
 
-#### Server
+#### Serwer
 
-////
+Serwer Meteor'a jest serwerem HTTP i DDP działającym w oparciu o node.js. Składa się z wszystkich bibliotek wchodzących w skład Meteor'a oraz twojego kodu JavaScript rezydującego po stronie serwera. Podczas uruchomiania serwera Meteor łączy się z bazą danych Mongo (która jest uruchomiana automatycznie w trybie deweloperskim).
 
-#### Session
+#### Sesja
 
-////
+Sesja w Meteor'ze odnosi się do działającego po stronie klienta reaktywnego źródła danych, używanego przez twoją aplikację do śledzenia stanu w jakim jest użytkownik. 
 
-#### Subscription
+#### Subskrybcja
 
-////
+Subskrybcja jest odwołaniem do publikacji przez konkretnego klienta. Subskrybcja składa się z kodu, który uruchamiany jest w przeglądarce i komunikuje się z publikacją na serwerze, oraz zapewnia synchronizację danych.
 
-#### Template
+#### Szablon
 
-////
+Szablon sposobem generowania kodu HTML w JavaScript'cie. Meteor domyślnie wspiera Handlebars, bibliotekę nie opartą na funkcjach logicznych. Planowane jest wsparcie dla innych systemów szablonów w przyszłości.
 
-#### Template Data Context
+#### Kontekst danych szablonu
 
-////
+Kiedy szablon jest renderowany, odwołuje się on do JavaScript'owego obiektu, który dostarcza konkretnych danych dla tego szczególnego przypadku renderowania. Obiekty te zazwyczaj są prostymi obiektami JavaScript (ang. plain-old-JavaScript-objects, POJOs), często są to dokumenty z kolekcji, jednak mogą być bardziej skomplikowane i posiadać funkcje.
