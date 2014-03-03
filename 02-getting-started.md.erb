@@ -1,48 +1,50 @@
 ---
-title: Getting Started
+title: Jak zacząć
 slug: getting-started
 date: 0002/01/01
 number: 2
-contents: Install Meteor & Meteorite.|Learn about the 5 types of Meteor packages.|Setup the file structure of your Meteor app.
-paragraphs: 49
+points: 10
+photoUrl: http://www.flickr.com/photos/ikewinski/9511230392/
+photoAuthor: Mike Lewinski
+contents: Instalacja Meteor & Meteorite.|Naucz się o 5 typach pakietów Meteor'a.|Ustaw strukturę plików twojej aplikcjacji.
 ---
 
-////
+Pierwsze wrażenie jest ważne - dlatego proces instalacji Meteor'a powinien być stosunkowo łatwy. W większości przypadków, będzie gotowy do działania w mniej niż pięć minut.
 
-////
+Aby zacząć, możemy zainstaować Meteor'a otwierając okno terminala i wpisując:
 
 ~~~bash
 $ curl https://install.meteor.com | sh
 ~~~
 
-////
+To zainstaluje komendę `meteor` w twoim systemie i będziesz mógł zacząć używać Meteor'a.
 
 <% note do %>
 
-### *Not* Installing Meteor
+### *Nie* instalowanie Meteor'a
 
-////
+Jeżeli nie możesz (albo nie chcesz) instalować Meteor'a lokalnie, polecamy spróbować [Nitrous.io](http://nitrous.io).
 
-////
+Nitrous.io to serwis pozwalający Ci uruchamiać aplikacje i edytować ich kod w twojej przeglądarce, napisaliśmy [krótki poradnik](https://www.discovermeteor.com/2013/10/04/meteor-nitrous/) aby pomóc ci w konfiguracji.
 
-////
+Możesz także wykonwać tę instrukcję aż do sekcji "Instalacja Meteor'a i Meteorite" (włącznie), i następnie przejść przez książkę ponownie rozpoczynając od sekcji "Tworzenie prostej aplikacji" z tego rozdziału.
 
 <% end %>
  
 ### Meteorite
 
-////
+Zważając na fakt, iż Meteor nie wspiera jeszcze pakietów firm trzecich, Tom Coleman (jeden z autorów tej książki) wraz z kilkoma innymi członkami społeczności stworzyli [Meteorite](http://oortcloud.github.com/meteorite/), wrapper dla Meteor'a. Meteorite zajmuje się także instalacją Meteor'a i podłączeniem dowolnego pakietu ktory możesz znaleźć.
 
-////
+Jako że będziemy polegać na pakietach firm trzecich dla niektórych funkcjonalności Microscope'a, zainstalujmy Meteorite.
 
-### Installing Meteorite
+### Instalacja Meteorite
 
-////
+Musisz się upewnić że node i git są zainstalowane na twoim komputerze. Zainstaluj je w standardowy sposób dla twojego systemu operacyjnego, lub sprawdź te łącza:
  
-- [Node download site](http://nodejs.org/download/)
-- [Git download site](http://git-scm.com/downloads)
+- [strona do pobrania Node](http://nodejs.org/download/)
+- [strona do pobrania Git](http://git-scm.com/downloads)
 
-////
+Następnie, zainstalujmy Meteorite. Jest to pakiet [npm](https://npmjs.org/) (ang Node Package Module, standarowy format modułów Node'a), instalujemy go za pomocą:
 
 ~~~bash
 $ npm install -g meteorite
@@ -50,39 +52,39 @@ $ npm install -g meteorite
 
 <% note do %>
 
-### Permission errors?
+### Błedy uprawnień?
 
-////
+Na niektórych komputerach możesz potrzebować uprawnień root'a aby zainstalować Meteorite. Aby uniknąć problemów, upewnij się że używasz `sudo -H`:
 
 ~~~bash
 $ sudo -H npm install -g meteorite
 ~~~
 
-////
+Możesz poczytać więcej o tym problemie w [dokumentacji Meteorite](https://github.com/oortcloud/meteorite/blob/master/README.md#permission-woes).
 
 <% end %>
 
-////
+To wszystko! Od tego momentu Meteorite będzie się wszystkim zajmował.
 
-////
+Notka: nie ma jeszcze obsługie Meteorite dla Windows, ale możesz spojrzeć na [nasz przewodnik dla Windows](http://themeteorbook.com/2013/03/20/using-meteor-and-atmopshere-on-windows/).
 
 <% note do %>
 
   ### `mrt` vs `meteor`
   
-////
+Meteorite zainstaluje komendę `mrt`, którą będziemy używać do isntalacji pakietów dla naszej aplikacji. Jednakże kiedy chcemy uruchomić nasz serwer, nadal używamy komendy `meteor`.
   
 <% end %>
 
-### Creating a Simple App
+### Tworzenie prostej aplikacji
 
-////
+Teraz, kiedy mam zainstalowany Meteorite, stwórzmy aplikację. Aby to zrobić, używamy komendy wiersza poleceń Meteorite'a `mrt`:
 
 ~~~bash
 $ mrt create microscope
 ~~~
 
-////
+Ta komenda ściągnie Meteor'a i dokona podstawowej konfiguracji, gotowego do użycia projektu Meteor'a. Kiedy skończy, powinieneś widzieć katalog `microscope/`, zawierający następujące pliki:
 
 ~~~bash
 microscope.css  
@@ -91,24 +93,25 @@ microscope.js
 smart.json 
 ~~~
 
-////
+Aplikacja którą Meteor dla ciebie stworzył jest to prosty kod, który prezentuje kilka prostych wzorców.
 
-////
+Mimo, iż nasza aplikacja nie robi zbyt wiele, możemy ją uruchomić. Aby uruchomić aplikację, wejdź do terminala i napisz:
 
 ~~~bash
 $ cd microscope
 $ meteor
 ~~~
 
-////
+Teraz wpisz w swojeje przeglądarce adres `http://localhost:3000/` (lub odpowiednik `http://0.0.0.0:3000/`) i powinieneś zobaczyć mniej więcej coś takiego: 
+
 
 <%= screenshot "2-1", "Meteor's Hello World." %>
 
 <%= commit "2-1", "Created basic microscope project." %>
 
-////
+Gratulacje! Twoja pierwsza aplikacja w Meteor'ze działa. Przy okazji, aby ją zatrzymać wszystko co musisz zrobić to w oknie terminala i w zakładce gdzie aplikacja jest uruchomiona nacisnąć `ctrl+c`.
 
-### Adding a Package
+### Dodawanie pakietu
 
 ////
 
@@ -120,40 +123,40 @@ $ mrt add bootstrap
 
 <% note do %>
 
-### A Note on Packages
+### Notka o Pakietach
 
-////
+Kiedy mówimy o pakietach w kontekście Meteor'a, warto pomówić o szczegółach. Meteor używa pięciu typów pakietów:
 
-- ////
-- ////
-- ////
-- ////
-- ////
+- Rdzeń Meteor'a jako takie jest podzielone na **rdzenne pakiety**. Są one zawarte w każdej aplikacji Meteor'a i pradopobonie nigdy nie będziesz musiał się o nie martwić.
+- Meteor **pakiety smart** (ang. smart packages) są grupą [około 37 pakietów](http://docs.meteor.com/#packages) (możesz zobaczyć całą listę za pomocą `meteor list`), które są dostarczane razem z Meteor'em i możesz je opcjonalnie zaimportować do swojej aplikacji. Możesz dodać je nawet, gdy nie używasz Meteorite, za pomocą `meteor add packagename`.
+- **Pakiety lokalne** to pakeity które możesz swtorzyć sam i włożyć je do katalogu `/packages`. Także nie potrzebujesz Meteorite by z nich korzystać.
+- **pakiety smart Atmosphere** to pakiety do Meteor'a trzecich firmy znajdujące się na [Atmosphere](http://atmosphere.meteor.com). By je importować i używać potrzebny jest Meteorite.
+- **pakiety NPM** (Node Packaged Modules) to pakiety Node.js. Mimo, iż nie współpracują one od razu z Meteorem w stanie w jakim są dostarczane, *mogą* być używane przez wyżej wymienione typy pakietów.
 
 <% end %>
 
-### The File Structure of a Meteor App
+### Struktura plików aplikacji Meteor
 
-////
+Zanim zaczniemy pisać kod, musimy skonfigurować prawidłowo nasz projekt. Aby wyczyścić naszą strukturę, otwórz katalog `microscope` i usuń  `microscope.html`, `microscope.js`, and `microscope.css`.
 
-////
+Następnie, stwórz pięc katalogów w `/microscope`: `/client`, `/server`, `/public`, `/lib`, and `/collections` oraz puste pliki `main.html` and `main.js` w katalogu `/client`. Nie przejmuj się jeżeli zepsuje to chwilowo aplikację, uzupełnimy te pliki w następnym rozdziale.
 
-////
+Powinniśmy wspomnieć, że niektóre z tych katalogów ma specjalne właściwości. Jeżeli chodzi o pliki, Meteor posiada następujące reguły:
 
-- ////
-- ////
-- ////
-- ////
-- ////
-- ////
+- Kod zawarty w katalogu `/server` uruchamiany jest tylko po stronie serwera.
+- Kod zawarty w katalogu `/client` uruchamiany jest tylko po stronie klienta.
+- Wszystko inne uruchamiane jest zarówno po stronie serwera jak i klienta.
+- Pliki w katalogu `/lib` są ładowane jako pierwsze.
+- Pliki `main.*` są ładowane na końcu.
+- Twoje zasoby statyczne (czcionki, obrazki, itd.) powinny być umieszczone w katalogu `/public`.
 
-////
+Warto zauważyć, że mimo, iż Meteor posiada te reguły, nie zmusza cię do używania jakiejkolwiek predefiniowanej struktury katalogów dla Twojej aplikacji. Tak więc struktura którą proponujemy jest naszym sposobem pisania aplikacji, a nie sztywnymi regułami.
 
-////
+Jeżeli chcesz poznać więcej szczegółów, zachęcamy by zapoznać się z [oficjalną dokumentacją Meteor'a](http://docs.meteor.com/#structuringyourapp).
 
 <% note do %>
 
-### Is Meteor MVC?
+### Czy Meteor używa MVC?
 
 ////
 
