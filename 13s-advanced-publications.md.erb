@@ -1,16 +1,16 @@
 ---
-title: Advanced Publications
+title: Zaawansowane publikacje
 slug: advanced-publications
 date: 0013/01/02
 number: 13.5
 sidebar: true
-contents: Learn more advanced patterns for manipulating publications.|See just how flexible publications and subscriptions can get. 
+contents: Naucz się zaawansowanych metod zarządzania publikacjami.|Poznaj możliwości jakie oferują publikacje i subskrypcje. 
 paragraphs: 36
 ---
 
 ////
  
-### Publishing a Collection Multiple Times
+### Wielokrotne publikowanie kolekcji
 
 ////
  
@@ -22,7 +22,7 @@ paragraphs: 36
  
 ////
  
-<%= diagram "doublecollection", "Publishing a collection twice", "pull-center" %>
+<%= diagram "doublecollection", "Dwukrotne publikowanie kolekcji", "pull-center" %>
 
 ~~~js
 Meteor.publish('allPosts', function() {
@@ -53,7 +53,7 @@ Meteor.publish('bestPosts', function(limit) {
 ~~~
 <%= caption "server/publications.js" %>
 
-### Subscribing to a Publication Multiple Times
+### Wielokrotna subskrypcja publikacji
 
 ////
  
@@ -61,7 +61,7 @@ Meteor.publish('bestPosts', function(limit) {
  
 ////
  
-<%= diagram "subscribetwice", "Subscribing twice to one publication", "pull-center" %>
+<%= diagram "subscribetwice", "Dwukrotna subskrypcja tej samej publikacji", "pull-center" %>
 
 ////
  
@@ -82,7 +82,7 @@ Meteor.subscribe('posts', {baseScore: -1, submitted: -1, limit: 10});
  
 ////
  
-### Multiple Collections in a Single Subscription
+### Wiele kolekcji w pojedyńczej subskrypcji
 
 ////
  
@@ -98,7 +98,7 @@ Meteor.subscribe('posts', {baseScore: -1, submitted: -1, limit: 10});
  
 ////
  
-<%= diagram "multiplecollections", "Two collections in one subscription", "pull-center" %>
+<%= diagram "multiplecollections", "Dwie kolekcje w jednej subskrypcji", "pull-center" %>
 
 ~~~js
 Meteor.publish('topComments', function(topPostIds) {
@@ -114,7 +114,7 @@ Meteor.publish('topComments', function(topPostIds) {
 Meteor.publish('topPosts', function(limit) {
   var sub = this, commentHandles = [], postHandle = null;
   
-  // send over the top two comments attached to a single post
+  // prześlij dwa pierwsze komentarze załączone do postu
   function publishPostComments(postId) {
     var commentsCursor = Comments.find({postId: postId}, {limit: 2});
     commentHandles[post._id] = 
@@ -130,17 +130,17 @@ Meteor.publish('topPosts', function(limit) {
       sub.changed('posts', id, fields);
     },
     removed: function(id) {
-      // stop observing changes on the post's comments
+      // przestań obserwować zmiany komentarzy do postu
       commentHandles[id] && commentHandles[id].stop();
-      // delete the post
+      // usuń post
       sub.removed('posts', id);
     }
   });
   
   sub.ready();
   
-  // make sure we clean everything up (note `_publishCursor`
-  //   does this for us with the comment observers)
+  // upewnij się, że wszystko zostało posprzątane (uwaga: `_publishCursor`
+  // robi to za nas za pomocą obserwatora komentarzy)
   sub.onStop(function() { postsHandle.stop(); });
 });
 ~~~
@@ -151,11 +151,11 @@ Meteor.publish('topPosts', function(limit) {
  
 ////
  
-### Linking different collections
+### Łączenie różnych kolekcji
 
 ////
  
-<%= diagram "linkedcollections", "One collection for two subscriptions", "pull-center" %>
+<%= diagram "linkedcollections", "Jedna kolekcja dla dwóch subskrypcji", "pull-center" %>
 
 ////
  
@@ -172,7 +172,7 @@ Meteor.publish('topPosts', function(limit) {
     var videosCursor = Resources.find({type: 'video'});
     Meteor.Collection._publishCursor(videosCursor, sub, 'videos');
     
-    // _publishCursor doesn't call this for us in case we do this more than once.
+    // _publishCursor nie woła tego za nas w przypadku, gdy robimy to więcej niż raz.
     sub.ready();
   });
 ~~~
