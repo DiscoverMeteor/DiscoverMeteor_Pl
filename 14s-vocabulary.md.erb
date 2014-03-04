@@ -4,66 +4,66 @@ slug: meteor-vocabulary
 date: 0014/01/02
 number: 14.5
 sidebar: true
-contents: Przegląd niektórych występujących w Meteor'ze terminów.
+contents: Przegląd niektórych terminów występujących w Meteorze.
 paragraphs: 24
 ---
 
-W tej książce spotkasz kilka nowych terminów lub takie, które znasz ale używane w nowy sposób w kontekscie Meteor'a. W tym rozdziale zajmiemy się ich przedstawieniem.
+W tej książce poznasz kilka nowych terminów. Znajdziesz również takie, które znasz, ale są one używane w nowy sposób w kontekście Meteora. W tym rozdziale zajmiemy się ich przedstawieniem.
 
 #### Klient
 
-Kiedy mówimy o Kliencie, odnośimy się do kodu, który uruchamiany jest w przeglądarce użytkownika, czy to w tradycyjnej przeglądarce jak Firefox lub Safari, czy w czymś bardziej skomplikowanym jak UIWebView w natywnej aplikacji na iPhone'a.
+Kiedy mówimy o Kliencie, odnosimy się do kodu, który uruchamiany jest po stronie użytkownika. Może to być tradycyjna przeglądarka jak Firefox lub Safari, lub coś bardziej skomplikowanego jak np. UIWebView dla natywnej aplikacji iPhone'a.
 
 #### Kolekcja
 
-Kolekcje w Meteor'ze są zbiorami danych automatycznie synchronizowanymi pomiędzy klientem i serwerem. Kolekcje posiadają nazwę (jak np. `posty`), i zazwyczaj istnieją zarówno na kliencie jak i na serwerze. Pomimo tego, że zachowują się inaczej, mają wspólne API oparte na API bazy danych Mongo.
+Kolekcje w Meteorze są zbiorami danych automatycznie synchronizowanymi pomiędzy klientem i serwerem. Kolekcje posiadają nazwę (jak np. `posty`) i zazwyczaj istnieją zarówno na po stronie klienta jak i serwera. Pomimo tego, że zachowują się inaczej, mają wspólne API oparte na API bazy danych Mongo.
 
 #### Komputacja (Obliczenie)
 
-Komputacja jest blokiem kodu, który jest uruchamiany za każdym razem kiedy reaktywne źródło danych, na którym jest oparta zmieni się. Mając reaktywne źródło danych (na przykład zmienna Session) i chcąc reagować na jego zmiany, będziesz musiał ustawić komputacje dla niego.
+Komputacja jest blokiem kodu, który jest uruchamiany za każdym razem, kiedy reaktywne źródło danych, na którym jest oparta, zmieni się. Mając reaktywne źródło danych (na przykład zmienna Session) i chcąc reagować na jego zmiany, będziesz musiał ustawić komputacje dla niego.
 
 #### Kursor
 
-Kursor jest rezultate wykonania zapytania na kolekcji Mongo. Na kliencie, kursor nie jest zwykłą tablicą wyników ale *reaktywnym* obiektem, na którym można obserwować dodawanie, usuwanie i aktualizowanie obiektów.
+Kursor jest rezultatem wykonania zapytania na kolekcji Mongo. Po stronie klienta, kursor nie jest zwykłą tablicą wyników ale *reaktywnym* obiektem, na którym można obserwować dodawanie, usuwanie i aktualizowanie obiektów.
  
 #### DDP
 
-DDP jest w Meteor'ze Rozproszonym Protokołem Danych (ang. Distributed Data Protocol), który używany jest do synchronizacji kolekcji i wykonywania metod Meteor'a. DDP jest typowym protokołem, którego przeznaczeniem jest zastąpienie ociężałego protopkołu HTTP protokołem czasu rzeczystistego.
+DDP jest w Meteorze Rozproszonym Protokołem Danych (ang. Distributed Data Protocol), który używany jest do synchronizacji kolekcji i wykonywania metod Meteora. Głównym zadaniem DDP jest zastąpienie ociężałego protopkołu HTTP protokołem czasu rzeczystistego.
 
 #### Zależności (ang. Deps)
 
-Zależności to część systemu reaktywności Meteor'a. Zależności działając pod maską zapewniają automatyczną synchronizację kodu HTML z danymi modelu.
+Zależności to część systemu reaktywności Meteora. Zależności działając pod maską zapewniają automatyczną synchronizację kodu HTML z danymi modelu.
 
 #### Dokument
 
-Mongo jest bazą danych opartą o dokumenty, w związku z tym obiekty wyciągane z kolekcji są nazywane "dokumentami". Dokumenty są prostymi obiektami JavaScript (jednak nie mogą zawierać funkcji) z jedną specjalną właściwością `_id`, którą Meteor wykorzystuje do śledzenia właściwości obiektu w protokole DDP.
+Mongo jest bazą danych opartą o dokumenty. W związku z tym obiekty wyciągane z kolekcji są nazywane "dokumentami". Dokumenty są prostymi obiektami JavaScript (jednak nie mogą zawierać funkcji) z jedną specjalną właściwością `_id`, którą Meteor wykorzystuje do śledzenia właściwości obiektu w protokole DDP.
 
 #### Funkcje pomocnicze (ang. Helpers)
 
-Kiedy system szablon potrzebuje wyrenderować coś bardziej złożonego niż właściwość dokumentu wtedy z pomocą przychodzą funkcje pomocnicze (potocznie zwane helperami). Funkcje te ułatwiają renderowanie.
+Kiedy system szablon potrzebuje wyrenderować coś bardziej złożonego niż właściwość dokumentu wtedy z pomocą przychodzą funkcje pomocnicze (potocznie zwane helperami). Funkcje te ułatwiają renderowanie danych.
 
 #### Kompensacja opóźnienia
 
-Jest techniką, która umożliwia symulację wykonania Metody na kliencie, aby uniknąć opóźnienia (pot. lagu) spowodowanego czekanie na odpowiedź serwera.
+Jest techniką, która umożliwia symulację wykonania metody po stronie klienta. Pozwala to uniknąć opóźnienia (pot. lagu) spowodowanego czekaniem na odpowiedź serwera.
 
 #### Metoda
 
-Metody w Meteor'ze są zdalnymi wywołaniami funkcji zainicjowanymi na kliencie, a wykonywanymi na serwerze. Posiadają mechanizmy, które umożliwiają śledzenie zmian w kolekcjach oraz kompensację opóźnienia.
+Metody w Meteorze są zdalnymi wywołaniami funkcji zainicjowanymi po stronie klienta, a wykonywanymi na serwerze. Są zaopatrzone w mechanizmy, które umożliwiają śledzenie zmian w kolekcjach oraz kompensację opóźnienia.
 
 #### MiniMongo
 
-Kolekcja po stronie klienta jest magazynem danych rezydującym w pamięci operacyjnej, dostarczającej API na wzór Mongo. Biblioteka dostarczająca wspomniane funkcjonalności nazywana jest "MiniMongo" aby zaznaczyć, że jest okrojoną wersją bazy Mongo, która w całości działa w pamięci operacyjnej.
+Implementacja kolekcji po stronie klienta. Jest magazynem danych rezydującym w pamięci operacyjnej, posiadającym API na wzór Mongo. Biblioteka dostarczająca wspomniane funkcjonalności nazywana jest "MiniMongo" aby zaznaczyć, że jest okrojoną wersją bazy Mongo, która w całości działa w pamięci operacyjnej.
 
 #### Pakiet
 
-Pakiet w Meteor'ze może składać się z
+Pakiet w Meteorze może składać się z
 
   1. Kodu JavaScript działającego po stronie serwera.
   2. Kodu JavaScript działającego po stronie klienta.
   3. Instrukcji na temat sposobu przetwarzania zasobów (np. z SASS do CSS).
   4. Zasobów do przetworzenia.
 
-Pakiet jest jak biblioteka o super mocy. Meteor posiada obszerny zestaw pakietów. Dostępne jest także repozytorium [Atmosphere](http://atmosphere.meteor.com), które jest kolekcją pakietów pisanych przez społeczności użytkowników Meteor'a.
+Pakiet można traktować jak bibliotekę o super mocy. Meteor posiada obszerny zestaw pakietów. Dostępne jest także repozytorium [Atmosphere](http://atmosphere.meteor.com), które jest kolekcją pakietów pisanych przez społeczność użytkowników Meteora.
 
 #### Publikacja
 
@@ -73,20 +73,20 @@ Publikacja jest opatrzonym nazwą zbiorem danych, który jest indywidualnie dost
 
 #### Serwer
 
-Serwer Meteor'a jest serwerem HTTP i DDP działającym w oparciu o node.js. Składa się z wszystkich bibliotek wchodzących w skład Meteor'a oraz twojego kodu JavaScript rezydującego po stronie serwera. Podczas uruchomiania serwera Meteor łączy się z bazą danych Mongo (która jest uruchomiana automatycznie w trybie deweloperskim).
+Serwer Meteora to serwer HTTP i DDP działającymi w oparciu o node.js. Jest złożony z wszystkich bibliotek wchodzących w skład Meteor'a oraz twojego kodu JavaScript rezydującego po stronie serwera. Podczas uruchomiania serwera Meteor łączy się z bazą danych Mongo (która jest uruchomiana automatycznie w trybie deweloperskim).
 
 #### Sesja
 
-Sesja w Meteor'ze odnosi się do działającego po stronie klienta reaktywnego źródła danych, używanego przez twoją aplikację do śledzenia stanu w jakim jest użytkownik. 
+Sesja w Meteorze odnosi się do działającego po stronie klienta reaktywnego źródła danych, używanego przez twoją aplikację do śledzenia stanu w jakim jest użytkownik. 
 
 #### Subskrybcja
 
-Subskrybcja jest odwołaniem do publikacji przez konkretnego klienta. Subskrybcja składa się z kodu, który uruchamiany jest w przeglądarce i komunikuje się z publikacją na serwerze, oraz zapewnia synchronizację danych.
+Subskrybcja jest odwołaniem do publikacji dla konkretnego klienta. Subskrybcja składa się z kodu, który uruchamiany jest w przeglądarce i komunikuje się z publikacją na serwerze, oraz zapewnia synchronizację danych.
 
 #### Szablon
 
-Szablon sposobem generowania kodu HTML w JavaScript'cie. Meteor domyślnie wspiera Handlebars, bibliotekę nie opartą na funkcjach logicznych. Planowane jest wsparcie dla innych systemów szablonów w przyszłości.
+Szablony pozwalają na generowanie kodu HTML w JavaScript'cie. Meteor domyślnie wspiera bibliotekę Handlebars, bibliotekę nie opartą na funkcjach logicznych. Planowane jest wsparcie dla innych systemów szablonów w przyszłości.
 
 #### Kontekst danych szablonu
 
-Kiedy szablon jest renderowany, odwołuje się on do JavaScript'owego obiektu, który dostarcza konkretnych danych dla tego szczególnego przypadku renderowania. Obiekty te zazwyczaj są prostymi obiektami JavaScript (ang. plain-old-JavaScript-objects, POJOs), często są to dokumenty z kolekcji, jednak mogą być bardziej skomplikowane i posiadać funkcje.
+Podczas renderowania szablonu wykorzystywany jest obiekt JavaScript, który posiada konkretne dane przeznaczone dla tego szablonu. Obiekty te zazwyczaj są prostymi obiektami JavaScript (ang. plain-old-JavaScript-objects, POJOs), często są to dokumenty z kolekcji, jednak mogą być bardziej skomplikowane i posiadać funkcje.
