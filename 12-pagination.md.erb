@@ -1,9 +1,9 @@
 ---
-title: Pagination
+title: Dzielenie dokumentu na strony
 slug: pagination
 date: 0012/01/01
 number: 12
-contents: Learn more about Meteor's subscriptions, and how we can use them to control data.|Implement infinite-style pagination.|Use the `iron-router-progress` package to implement a nifty iOS-style progress bar.|Create a special subscription to deal with direct links to posts page.
+contents: Dowiedz się wiecej o subskrypcjach w Meteorze i wykorzystaniu ich do kontroli danych.|Zaimplementuj nieskończone dzielenie dokumentu na strony.|Użyj pakietu `iron-router-progress` aby zaimplementować pasek postępu w stylu iOS.|Utwórz specjalną subskrypcję dla bezpośrednich linków do strony z postem.
 paragraphs: 67
 ---
 
@@ -15,12 +15,12 @@ paragraphs: 67
 
 ////
 
-### Adding More Posts
+### Dodawanie postów
 
 ////
 
 ~~~js
-// Fixture data 
+// Dane początkowe
 if (Posts.find().count() === 0) {
 
   //...
@@ -55,7 +55,7 @@ if (Posts.find().count() === 0) {
 
 <%= commit "12-1", "Added enough posts that pagination is necessary." %>
 
-### Infinite Pagination
+### Nieskończone dzielenie dokumentu na strony.
 
 ////
 
@@ -137,7 +137,7 @@ Meteor.publish('notifications', function() {
 
 <% note do %>
 
-### Passing Parameters
+### Przekazywanie parametrów
 
 ////
 
@@ -223,7 +223,7 @@ Router.map(function() {
 
 <% note do %>
 
-### Why Not Pages?
+### Dlaczego nie osobne strony?
 
 ////
 
@@ -245,7 +245,7 @@ Router.map(function() {
 
 <% end %>
 
-### Creating a Route Controller
+### Implementacja kontrolera Routera
 
 ////
 
@@ -290,7 +290,7 @@ Router.map(function() {
 
 <%= commit "12-3", "Refactored postsLists route into a RouteController." %>
 
-### Adding A Load More Link
+### Dodawanie linku 'Pokaż więcej'
 
 ////
 
@@ -371,13 +371,13 @@ PostsListController = RouteController.extend({
 
 <% note do %>
 
-### Count vs Length
+### Liczba postów a ich długość
 
 ////
 
 <% end %>
 
-### A Better Progress Bar
+### Lepszy pasek postępu
 
 ////
 
@@ -410,7 +410,7 @@ Router.map(function() {
 
 <%= commit "12-5", "Use the iron-router-progress package to make pagination nicer." %>
 
-### Accessing Any Post
+### Dostęp do dowolnego postu
 
 ////
 

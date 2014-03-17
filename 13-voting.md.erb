@@ -1,9 +1,9 @@
 ---
-title: Voting
+title: Głosowanie
 slug: voting
 date: 0013/01/01
 number: 13
-contents: Build a system where users can vote on posts.|Rank our posts by vote on a "best" post page.|Learn how to write a general handlebars helper.|Learn a little more about data security in Meteor.|Cover some interesting performance considerations in MongoDB.
+contents: Zbuduj system głosowania na posty przez użytkowników.|Oceniaj nasze posty na stronie "najlepszych" postów.|Naucz się jak zaimplementować helper (funcję pomocniczą) szablonu handlebars.|Dowiedz się podstaw bezpieczeństwa danych w Meteorze.|Rozważ kilka interesujących kwestii dotyczących wydajności MongoDB.
 paragraphs: 49
 ---
 
@@ -13,13 +13,13 @@ paragraphs: 49
 
 ////
 
-### Data Model
+### Model Danych
 
 ////
 
 <% note do %>
 
-### Data Privacy & Publications
+### Prywatność Danych i Publikacji
 
 ////
 
@@ -32,11 +32,11 @@ paragraphs: 49
 ////
 
 ~~~js
-// Fixture data 
+// dane początkowe
 if (Posts.find().count() === 0) {
   var now = new Date().getTime();
   
-  // create two users
+  // utwórz dwóch użytkowników
   var tomId = Meteor.users.insert({
     profile: { name: 'Tom Coleman' }
   });
@@ -113,14 +113,14 @@ if (Posts.find().count() === 0) {
 ~~~js
 //...
 
-// check that there are no previous posts with the same link
+// upewnij się, że nie ma postów z takim samym odnośnikiem
 if (postAttributes.url && postWithSameLink) {
   throw new Meteor.Error(302, 
     'This link has already been posted', 
     postWithSameLink._id);
 }
 
-// pick out the whitelisted keys
+// wybierz klucze z whitelisty
 var post = _.extend(_.pick(postAttributes, 'url', 'title', 'message'), {
   userId: user._id, 
   author: user.username, 
@@ -139,7 +139,7 @@ return postId;
 <%= caption "collections/posts.js" %>
 <%= highlight "16~17" %>
 
-### Building our Voting Templates
+### Budowa szablonów wykorzystywanych do głosowania
 
 ////
 
@@ -217,7 +217,7 @@ Meteor.methods({
 
 ////
 
-### User Interface Tweaks
+### Poprawki interfejsu użytkownika
 
 ////
 
@@ -304,7 +304,7 @@ Handlebars.registerHelper('pluralize', function(n, thing) {
 
 ////
 
-### Smarter Voting Algorithm
+### Mądrzejszy algorytm głosowania
 
 ////
 
@@ -349,7 +349,7 @@ Meteor.methods({
 
 <% note do %>
 
-### Latency Compensation
+### Kompensacja lagów
 
 ////
 
@@ -370,7 +370,7 @@ Meteor.methods({
 
 <% end %>
 
-### Ranking the Front Page Posts
+### Ocenianie postów na frontowej stronie
 
 ////
 
@@ -490,7 +490,7 @@ Router.map(function() {
 
 <%= commit "13-5", "Added routes for post lists, and pages to display them." %>
 
-### A Better Header
+### Lepszy nagłówek
 
 ////
 
@@ -554,7 +554,7 @@ Template.header.helpers({
 
 <% note do %>
 
-### Helper Arguments
+### Parametry helpera
 
 ////
 
