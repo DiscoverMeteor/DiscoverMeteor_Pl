@@ -1,10 +1,10 @@
 ---
-title: Comments
+title: Komentarze
 slug: comments
 complete: 100
 date: 0010/01/01
 number: 10
-contents: Display existing comments.|Add a comment posting form.|Learn how to load only the current post's comments.|Add a comment count property to posts.
+contents: Wyświetlanie istniejących komentarzy.|Dodanie formularza do wprowadzania nowych postów.|Jak wczytywać komentarze wyłącznie bieżącego posta.|Dodanie licznika komentarzy do postów.
 paragraphs: 34
 ---
 
@@ -22,7 +22,7 @@ Comments = new Meteor.Collection('comments');
 if (Posts.find().count() === 0) {
   var now = new Date().getTime();
   
-  // create two users
+  // utwórz dwóch użytkowników
   var tomId = Meteor.users.insert({
     profile: { name: 'Tom Coleman' }
   });
@@ -109,7 +109,7 @@ Router.configure({
 
 ////
 
-### Displaying comments
+### Wyświetlanie komentarzy
 
 ////
 
@@ -211,7 +211,7 @@ Template.postItem.helpers({
 
 <%= screenshot "10-1", "Displaying comments" %>
 
-### Submitting Comments
+### Wysyłanie komentarzy
 
 ////
 
@@ -230,7 +230,7 @@ Template.postItem.helpers({
   {{#if currentUser}}
     {{> commentSubmit}}
   {{else}}
-    <p>Please log in to leave a comment.</p>
+    <p>Komentować mogą wyłącznie zalogowani użytkownicy. Proszę się zalogować.</p>
   {{/if}}
 </template>
 ~~~
@@ -244,13 +244,13 @@ Template.postItem.helpers({
   <form name="comment" class="comment-form">
     <div class="control-group">
         <div class="controls">
-            <label for="body">Comment on this post</label>
+            <label for="body">Skomentuj</label>
             <textarea name="body"></textarea>
         </div>
     </div>
     <div class="control-group">
         <div class="controls">
-            <button type="submit" class="btn">Add Comment</button>
+            <button type="submit" class="btn">Dodaj komentarz</button>
         </div>
     </div>
   </form>
@@ -258,7 +258,7 @@ Template.postItem.helpers({
 ~~~
 <%= caption "client/views/comments/comment_submit.html" %>
 
-<%= screenshot "10-2", "The comment submit form" %>
+<%= screenshot "10-2", "Formularz do dodawania komentarza" %>
 
 ////
 
@@ -296,13 +296,13 @@ Meteor.methods({
     var post = Posts.findOne(commentAttributes.postId);
     // ensure the user is logged in
     if (!user)
-      throw new Meteor.Error(401, "You need to login to make comments");
+      throw new Meteor.Error(401, "Musisz się zalogować aby dodawać komentarze");
       
     if (!commentAttributes.body)
-      throw new Meteor.Error(422, 'Please write some content');
+      throw new Meteor.Error(422, 'Proszę wpisać treść komentarza. ');
       
     if (!post)
-      throw new Meteor.Error(422, 'You must comment on a post');
+      throw new Meteor.Error(422, 'Musisz komentować określony post');
     
     comment = _.extend(_.pick(commentAttributes, 'postId', 'body'), {
       userId: user._id,
@@ -317,11 +317,11 @@ Meteor.methods({
 <%= caption "collections/comments.js" %>
 <%= highlight "3~25" %>
 
-<%= commit "10-3", "Created a form to submit comments." %>
+<%= commit "10-3", "Utworzony formularz do dodawania koentarzy." %>
 
 ////
 
-### Controlling the Comments Subscription
+### Kontrola subskrypcji komentarzy
 
 ////
 
@@ -369,13 +369,13 @@ Meteor.publish('comments', function(postId) {
 <%= caption "server/publications.js" %>
 <%= highlight "5~7" %>
 
-<%= commit "10-4", "Made a simple publication/subscription for comments." %>
+<%= commit "10-4", "Utworzona prosta publikacja/subskrypcja komentarzy." %>
 
 ////
 
-<%= screenshot "10-3", "Our comments are gone!" %>
+<%= screenshot "10-3", "Wszystkie komentarze zniknęły!" %>
 
-### Counting Comments
+### Liczenie komentarzy
 
 ////
 
@@ -422,7 +422,7 @@ var postId = Posts.insert(post);
 ////
 
 ~~~js
-// update the post with the number of comments
+// uaktualnienie posta o liczbę komentarzy
 Posts.update(comment.postId, {$inc: {commentsCount: 1}});
 
 return Comments.insert(comment);
@@ -431,6 +431,6 @@ return Comments.insert(comment);
 
 ////
 
-<%= commit "10-5", "Denormalized the number of comments into the post." %>
+<%= commit "10-5", "Zdenormalizowana liczba komentarzy do posta." %>
 
 ////
