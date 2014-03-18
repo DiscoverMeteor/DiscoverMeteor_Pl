@@ -1,10 +1,10 @@
 ---
-title: Creating a Meteorite Package
+title: Publikacja pakietu na meteorite
 slug: creating-a-meteorite-package
 date: 0009/01/02
 number: 9.5
 sidebar: true
-contents: Write a local in-app package.|Write some tests for your package.|Release your package on Atmosphere.
+contents: Tworzenie pakietu lokalnej aplikacji.|Pisanie testów dla pakietu.|Publikacja pakietu w Atmosphere.
 paragraphs: 22
 ---
 
@@ -16,7 +16,7 @@ paragraphs: 22
 
 ~~~js
 Package.describe({
-  summary: "A pattern to display application errors to the user"
+  summary: "Szablon do wyświetlania błędów aplikacji uźytkownikowi."
 });
 
 Package.on_use(function (api, where) {
@@ -80,7 +80,7 @@ Template.meteorError.rendered = function() {
 ~~~
 <%= caption "packages/errors/errors_list.js" %>
 
-### Testing the package out with Microscope
+### Testowanie pakietu z Microscope
 
 ////
 
@@ -89,7 +89,7 @@ $ rm client/helpers/errors.js
 $ rm client/views/includes/errors.html
 $ rm client/views/includes/errors.js
 ~~~
-<%= caption "removing old files on the bash console" %>
+<%= caption "usuwanie starych plików z konsoli" %>
 
 ////
 
@@ -121,21 +121,21 @@ Posts.update(currentPostId, {$set: postProperties}, function(error) {
 ~~~
 <%= caption "client/views/posts/post_edit.js" %>
 
-<%= scommit "9-5-1", "Created basic errors package and linked it in." %>
+<%= scommit "9-5-1", "Utworzona podstawowa wersja pakietu i zlinkowanie go w aplikacji." %>
 
 ////
 
-### Writing tests
+### Pisanie testów
 
 ////
 
 ////
 
 ~~~js
-Tinytest.add("Errors collection works", function(test) {
+Tinytest.add("Kolecja Errors funkcjonuje poprawnie.", function(test) {
   test.equal(Errors.collection.find({}).count(), 0);
   
-  Errors.throw('A new error!');
+  Errors.throw('Nowy błąd!');
   test.equal(Errors.collection.find({}).count(), 1);
   
   Errors.collection.remove({});
@@ -145,12 +145,12 @@ Tinytest.addAsync("Errors template works", function(test, done) {
   Errors.throw('A new error!');
   test.equal(Errors.collection.find({seen: false}).count(), 1);
   
-  // render the template
+  // renderowanie szablonu
   OnscreenDiv(Spark.render(function() {
     return Template.meteorErrors();
   }));
   
-  // wait a few milliseconds
+  // poczekaj kilka milisekund
   Meteor.setTimeout(function() {
     test.equal(Errors.collection.find({seen: false}).count(), 0);
     test.equal(Errors.collection.find({}).count(), 1);
@@ -179,7 +179,7 @@ Package.on_test(function(api) {
 ~~~
 <%= caption "packages/errors/package.js" %>
 
-<%= scommit "9-5-2", "Added tests to the package." %>
+<%= scommit "9-5-2", "Dodanie testów do pakietu." %>
 
 ////
 
@@ -188,9 +188,9 @@ $ meteor test-packages errors
 ~~~
 <%= caption "Terminal" %>
 
-<%= screenshot "s7-1", "Passing all tests" %>
+<%= screenshot "s7-1", "Wszystkie testy przechodzą poprawnie." %>
 
-### Releasing the package
+### Publikacja pakietu
 
 ////
 
@@ -199,7 +199,7 @@ $ meteor test-packages errors
 ~~~json
 {
   "name": "errors",
-  "description": "A pattern to display application errors to the user",
+  "description": "Szablon do wyświetlania błędów aplikacji uźytkownikowi.",
   "homepage": "https://github.com/tmeasday/meteor-errors",
   "author": "Tom Coleman <tom@thesnail.org>",
   "version": "0.1.0",
@@ -210,7 +210,7 @@ $ meteor test-packages errors
 ~~~
 <%= caption "packages/errors/smart.json" %>
 
-<%= scommit "9-5-3", "Added a smart.json" %>
+<%= scommit "9-5-3", "Dodanie pliku smart.json" %>
 
 ////
 
@@ -221,11 +221,11 @@ $ meteor test-packages errors
 ~~~bash
 $ git init
 $ git add -A
-$ git commit -m "Created Errors Package"
+$ git commit -m "Utworzony Pakiet Errors"
 $ git remote add origin https://github.com/tmeasday/meteor-errors.git
 $ git push origin master
 $ mrt release .
-Done!
+Zrobione!
 ~~~
 <%= caption "Terminal (run from within `packages/errors`)" %>
 
@@ -241,6 +241,6 @@ $ mrt add errors
 ~~~
 <%= caption "Terminal (run from the top level of the app)" %>
 
-<%= scommit "9-5-4", "Removed package from development tree." %>
+<%= scommit "9-5-4", "Usunięto pakiet z aplikacji." %>
 
 ////
