@@ -18,7 +18,7 @@ Comments = new Meteor.Collection('comments');
 <%= caption "collections/comments.js" %>
 
 ~~~js
-// Fixture data 
+// Dane początkowe
 if (Posts.find().count() === 0) {
   var now = new Date().getTime();
   
@@ -101,7 +101,7 @@ Router.configure({
 <%= caption "lib/router.js" %>
 <%= highlight "4~6" %>
 
-<%= commit "10-1", "Added comments collection, pub/sub and fixtures." %>
+<%= commit "10-1", "Dodana kolekcja komentarzy, publikacja/subskrypcja i dane początkowe." %>
 
 ////
 
@@ -205,11 +205,11 @@ Template.postItem.helpers({
 <%= caption "client/views/posts/post_item.js" %>
 <%= highlight "9,10,11" %>
 
-<%= commit "10-2", "Display comments on `postPage`." %>
+<%= commit "10-2", "Wyświetlanie komentarzy na `postPage`." %>
 
 ////
 
-<%= screenshot "10-1", "Displaying comments" %>
+<%= screenshot "10-1", "Wyświetlanie komentarzy" %>
 
 ### Wysyłanie komentarzy
 
