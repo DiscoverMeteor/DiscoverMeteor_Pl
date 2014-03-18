@@ -1,9 +1,9 @@
 ---
-title: Errors
+title: Błędy
 slug: errors
 date: 0009/01/01
 number: 9
-contents: Create a better mechanism for displaying errors and messages.|Learn how to use `Template.rendered` to know when a user has seen an error.|Use a router filter to make sure errors are only seen once.
+contents: Utworzenie lepszego mechanizmu wyświetlania błędów i komunikatów.|Jak używać `Template.rendered` aby rozpoznać, kiedy użytkownik zobaczył błąd.|Używanie filtra routera aby upewnić się, że błąd został wyświetlony tylko raz.
 paragraphs: 31
 ---
 
@@ -11,7 +11,7 @@ paragraphs: 31
 
 ////
 
-### Introducing Local Collections
+### Wprowadzenie do lokalnych kolekcji
 
 ////
 
@@ -38,7 +38,7 @@ throwError = function(message) {
 
 ////
 
-### Displaying errors
+### Wyświetlanie błędów
 
 ////
 
@@ -78,7 +78,7 @@ throwError = function(message) {
 
 <% note do %>
 
-### Twin Templates
+### Bliźniacze szablony
 
 ////
 
@@ -97,9 +97,9 @@ Template.errors.helpers({
 ~~~
 <%= caption "client/views/includes/errors.js" %>
 
-<%= commit "9-1", "Basic error reporting." %>
+<%= commit "9-1", "Podstawowe raportowanie błędów." %>
 
-### Creating errors
+### Tworzenie błędów
 
 ////
 
@@ -133,13 +133,13 @@ Template.postSubmit.events({
 <%= caption "client/views/posts/post_submit.js" %>
 <%= highlight "12~14, 16~21" %>
 
-<%= commit "9-2", "Actually use the error reporting." %>
+<%= commit "9-2", "Używanie raportowania błędów." %>
 
 ////
 
-<%= screenshot "9-1", "Triggering an error" %>
+<%= screenshot "9-1", "Wyzwalanie błędów" %>
 
-### Clearing Errors
+### Usuwanie błędów
 
 ////
 
@@ -204,7 +204,7 @@ Template.error.rendered = function() {
 <%= caption "client/views/includes/errors.js" %>
 <%= highlight "7~12" %>
 
-<%= commit "9-3", "Monitor which errors have been seen, and clear on routing." %>
+<%= commit "9-3", "Monitorowanie które błędy były wyświetlone i czyszczenie ich w routerze." %>
 
 ////
 
@@ -212,7 +212,7 @@ Template.error.rendered = function() {
 
 <% note do %>
 
-### The `rendered` callback
+### Callback `rendered`
 
 ////
 
