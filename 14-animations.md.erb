@@ -76,27 +76,27 @@ Oznacza to, że jedynym wyzwaniem jest znalezienie miejsca *z którego* je animo
 
 <% note do %>
 
-### Position:absolute
+### Pozycja bezwględna (Position:absolute)
 
-////
+Moglibyśmy również użyć `position:absolute` z względnym elementem nadrzędnym do pozycjonowania elementów. Wielkim minusem bezwzględnie pozycjonowanych elementów jest to, że są całkowicie usuwane z przepływu strony, powodując zwinięcie nadrzędnego kontenera tak jak gdyby byłby pusty.
 
-////
+To w konsekwencji oznacza, że potrzebowalibyśmy sztucznie ustawić wysokość kontenera za pomocą JavaScript zamiast postawić przeglądarce na naturalne rozmieszczenie elementów. W związku z tym, gdzie tylko można najlepiej używać pozycjonowania względnego.
 
 <% end %>
 
-### Total Recall
+### Pamięć absolutna.
 
-////
+Pozostaje jeszcze jeden problem. Podczas gdy element A zostaje w DOM i może dzięki temu "pamiętać" poprzednią pozcyję, element B przeżywa reinkarnację jako element B' i ma wyczyszczoną pamięć o poprzedniej pozycji.
 
-////
+Na szczęście Meteor radzi sobie z tym problemem przez udostępnienie objektu **instancji szablonu** w callbacku `rendered`. Za oficjalną [dokumentacją Meteora](http://docs.meteor.com/#template_rendered):
 
-> //// 
+> W callbacku `this` odności się do obiektu instancji szablonu, który jest unikatowy do tego wystąpienia szablonu i zachowany przy renderowaniu.
 
-////
+Zatem co zrobimy, to odnajdziemy obecną pozycję posta na stronie i następnie zapamiętamy tą pozycję w obiekcie instancji szablonu. W ten sposób, nawet wtedy gdy post jest usuwany i ponownie tworzony jesteśmy w stanie określić skąd go animować.
 
-////
+Instancje szablonu pozwalają również na dostęp do danych kolekcji przez własność `data`. Okaże się to pomocne do ustalenia rankingu posta.
 
-### Ocena Postów
+### Ranking Postów
 
 ////
 
