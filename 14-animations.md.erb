@@ -3,15 +3,15 @@ title: Animacje
 slug: animations
 date: 0014/01/01
 number: 14
-contents: Co dzieje się za kulisami gdy Meteor zamienia dwa elementy DOM.|Jak animować zmianę kolejności postów.|Jak animować wstawianie nowych postów.
+contents: Co dzieje się za kulisami Meteora podczas zamiany dwóch elementów DOM.|Jak animować zmianę kolejności postów.|Jak animować wstawianie nowych postów.
 paragraphs: 58
 ---
 
-Osiągneliśmy już głosowanie w czasie rzeczywistym, punktację i ranking. Niestety te usprawnienia doprowadziły do nieprzyjemnego interfejsu użytkownika, ponieważ posty skaczą po stronie głównej. Użyjemy animacji aby je wygładzić. 
+Opanowaliśmy już głosowanie w czasie rzeczywistym, punktację i ranking. Niestety te usprawnienia doprowadziły do nieprzyjemnego interfejsu użytkownika, ponieważ posty skaczą po stronie głównej. Użyjemy animacji aby pozbyć się tego efektu i wygładzić interfejs. 
 
 ### Meteor i DOM
 
-Zanim dojdziemy do prawdziwej zabawy (przemieszczania elementów na stronie), powinniśmy zrozumieć jak Meteor współpracuje z DOM (ang. Document Object Model -- kolekcją elementów HTML które składają się na zawartość strony).
+Zanim dojdziemy do prawdziwej zabawy (przemieszczania elementów na stronie), należy zrozumieć jak Meteor współpracuje z DOM (ang. Document Object Model -- kolekcją elementów HTML które składają się na zawartość strony).
 
 Główną zasadą o której należy pamiętać jest to, że elementy DOM *nie mogą się przemieszczać*. Mogą być wyłącznie usuwane i tworzone (miej na uwadze, że jest to ograniczenie DOM, a nie Meteora). Aby więc spowodawać iluzję zamiany elementów A i B Meteor usunie element B i wstawi całkiem nową kopię (B') przed elementem A.
 
