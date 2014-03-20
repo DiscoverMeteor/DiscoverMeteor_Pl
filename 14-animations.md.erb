@@ -98,13 +98,13 @@ Instancje szablonu pozwalają również na dostęp do danych kolekcji przez wła
 
 ### Ranking Postów
 
-////
+Mówiliśmy poprzednio o rankingu postów ale "ranking" właściwie nie istnieje jako właściwość posta, ponieważ jest jedynie konsekwencją ułożenia postów w kolekcji. Jeżeli chcemy być w stanie animować posty zgodnie z ich rankingiem, będziemy musieli w jakiś sposób wyczarować tą własność znikąd.
 
-////
+Zauważ, że nie możemy wstawić tej własności "ranking" bezpośrednio do bazy danych, ponieważ ranking jest względną własnością zależną od sposobu sortowania postów (np. post może być pierwszy w rankingu jeżeli jest sortowany po dacie publikacji lub trzeci gdy jest posortowany względem punktów).
 
-////
+Idealnie wstawilibyśmy tą własność w kolekcje `newPosts` i `topPosts` ale Meteor jeszcze nie dostarcza wygodnego mechanizmu pozwalającego to osiągnąć.
 
-////
+Zatem wstawimy "ranking" jako ostatni możliwy krok managera szabloku `postList`:
 
 ~~~js
 Template.postsList.helpers({
@@ -120,9 +120,9 @@ Template.postsList.helpers({
 <%= caption "/client/views/posts/posts_list.js" %>
 <%= highlight "2~8" %>
 
-////
+Zamiast prostego zwracania kursora `Posts.find({}, {sort: {submitted: -1}, limit: postsHandle.limit()})` jak w poprzednim helperze `posts`, helper `postsWithRank` używa dostępnego kursora i dodaje własność `_rank` do każdego z jego dokumentów.
 
-////
+Nie zapomnij uaktualnić szablonu `postList`:
 
 ~~~html
 <template name="postsList">
@@ -143,19 +143,19 @@ Template.postsList.helpers({
 
 <% note do %>
 
-### Przewiń wstecz
+### A teraz bądź tak miły i przewiń wstecz
 
-////
+Meteor jest jednym z najbardziej przemyślanych i najnowocześniejszych z dostępnych frameworków webowych, ale jedna z jego funcji przywodzi na myśl lata 90te i kasety magnetowidowe: funkcja `rewind()`.
 
-////
+Za każdym razem, gdy używasz kursora z `forEach()`, `map()`, czy `fetch()` będziesz zmuszony przewinąć kursor do tyłu zanim będzie mógł być ponownie użyty.
 
-////
+W niektórych przypadkach jest lepiej prewencyjnie `przewinąć` kursor niż ryzykować pojawienie się buga.
 
 <% end %>
 
-### Wszystko razem
+### Składając wszystko razem
 
-////
+Można teraz złożyć wszystkie elementy razem używając callbacka szablonu `rendered` managera `post_item.js` do uruchomienia naszej animacji:
 
 ~~~js
 Template.postItem.helpers({
@@ -195,24 +195,24 @@ Template.postItem.events({
 
 <%= commit "14-1", "Dodano animację uporządkowania postów." %>
 
-////
+Nie powinno być trudne rozumienie tego, jeżeli spojrzysz na nasz poprzedni diagram.
 
-////
+Zwróć uwagę, że skoro ustawiamy własność `currentPosition` instancji szablonu w callbacku `defer`, oznacza to że ta własność nie będzie istniała podczas pierwszego renderowania fragmentu szablonu. Nie jest to jednak problemem, ponieważ i tak nie jesteśmy zainteresowani animowaniem pierwszego renderowania.
 
-////
+Teraz otwórz swoją stronę w przeglądarce i zacznij dodawać głosy. Powinieneś zaobserować delikatne przemieszczanie się postów niczym podczas baletu!
 
 ### Animacja Nowych Postów
 
-////
+Nasze posty teraz odpowiednio się przemieszczają, ale nie mieliśmy jeszcze żadnej animacji *nowego posta*. Zamiast prostego wstawiania nowego posta, użyjmy efektu ściemniania podczas wstawiania.
 
-////
+Jest to bardziej skomplikowane, niż wydaje się na pierwszy rzut oka. Problem polega na tym, że callback Meteora `rendered` jest wołany w dwóch osobnych przypadkach:
 
-1. ////
-2. ////
+1. Kiedy nowy szablon jest wstawiany w DOM
+2. Za każdym razem gdy zmianie ulegają dane, z których korzysta szablon.
 
-////
+Wyłącznie przypadek 1 powinien być animowany, chyba że masz na celu zmiany interfejsu użytkownia w choinkę przy każdej zmianie danych.
 
-////
+Upewnijmy się, że tylko animujemy posty kiedy są nowe a nie kiedy są ponownie renderowane z powodu zmiany danych, z których korzystają. Już sprawdzamy istnienie zmiennej instancji (która jest ustawiana tylko po pierszym renderowaniu szablonu), zarem wystarczy wrócić do naszego callbacka `rendered` i dodać blok `else`:
 
 ~~~js
 Template.postItem.helpers({
@@ -253,9 +253,9 @@ Template.postItem.events({
 <%= caption "/client/views/posts/post_item.js" %>
 <%= highlight "19~22,28" %>
 
-<%= commit "14-2", "Ściemnianie elementów po narysowaniu." %>
+<%= commit "14-2", "Ściemnianie elementów podczas ich rysowania." %>
 
-////
+Zauważ, że że `removeClass("invisible")` którą dodaliśmy w funkcji `defer()` będzie uruchamiana podczas każdego renderowania. Ale będzie robiła cokolwiek wyłącznie gdy klasa `.invisible` jest obecna dla elementu, a będzie to prawdziwe wyłącznie podczas pierwszego renderowania elementu.
 
 <% note do %>
 
