@@ -3,30 +3,30 @@ title: Animacje
 slug: animations
 date: 0014/01/01
 number: 14
-contents: Zobacz co dzieje się pod maską Meteora podczas zamiany dwóch elementów DOM.|Naucz się jak animować uporządkowanie postów.|Naucz się jak animować nowe posty.
+contents: Co dzieje się za kulisami gdy Meteor zamienia dwa elementy DOM.|Jak animować zmianę kolejności postów.|Jak animować wstawianie nowych postów.
 paragraphs: 58
 ---
 
-////
+Osiągneliśmy już głosowanie w czasie rzeczywistym, punktację i klasyfikację. Niestety te usprawnienia doprowadziły do nieprzyjemnego interfejsu użytkownika, ponieważ posty skaczą po stronie głównej. Użyjemy animacji aby to wygładzić. 
 
 ### Meteor i DOM
 
-////
+Zanim dojdziemy do prawdziwej zabawy (przemieszczania elementów), musimy zrozumieć jak Meteor współpracuje z DOM (ang. Document Object Model -- kolekcją elementów HTML które składają się na zawartość strony).
 
-////
+Główną zasadą o której należy pamiętać jest to, że elementy *nie mogą się przemieszczać*. Mogą być wyłącznie usuwane i tworzone (miej na uwadze, że jest to ograniczenie DOM, a nie Meteora). Aby więc spowodawać iluzję zamiany elementów A i B Meteor usunie element B i wstawi całkiem nową kopię (B') przed elementem A.
 
-////
+Nie ułatwia to animacji, ponieważ nie można po prostu animować elementu B na nową pozycję, ponieważ B zniknie zaraz po przerenderowaniu strony (co jak wiemy dzieje się natychmiastowo dzięki reaktywności). Zamiast tego należy animować nowo stworzony B', który przemieszcza się z początkowej pozycji B' do nowej pozycji przed A.
 
-////
+Aby zamienić miejscami posty A i B (umieszczone w miejscach odpowiednio p1 i p2) przejdziemy przez kolejne kroki:
 
-1. ////
-2. ////
-3. ////
-4. ////
-5. ////
-6. ////
+1. Usunięcie B
+2. Utworzenie B' przed A w DOM
+3. Przesunięcie B' na pozycję p2
+4. Przesunięcie A na pozycję p1
+5. Animowanie A na pozycję p2
+6. Animowanie B' na pozycję p1
 
-////
+Poniższy diagram wyjaśnia szczegółowo te kroki:
 
 <%= diagram "animation_diagram", "Zamiana dwóch postów", "pull-center" %>
 
