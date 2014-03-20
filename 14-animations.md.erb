@@ -7,15 +7,15 @@ contents: Co dzieje się za kulisami gdy Meteor zamienia dwa elementy DOM.|Jak a
 paragraphs: 58
 ---
 
-Osiągneliśmy już głosowanie w czasie rzeczywistym, punktację i klasyfikację. Niestety te usprawnienia doprowadziły do nieprzyjemnego interfejsu użytkownika, ponieważ posty skaczą po stronie głównej. Użyjemy animacji aby to wygładzić. 
+Osiągneliśmy już głosowanie w czasie rzeczywistym, punktację i ranking. Niestety te usprawnienia doprowadziły do nieprzyjemnego interfejsu użytkownika, ponieważ posty skaczą po stronie głównej. Użyjemy animacji aby je wygładzić. 
 
 ### Meteor i DOM
 
-Zanim dojdziemy do prawdziwej zabawy (przemieszczania elementów), musimy zrozumieć jak Meteor współpracuje z DOM (ang. Document Object Model -- kolekcją elementów HTML które składają się na zawartość strony).
+Zanim dojdziemy do prawdziwej zabawy (przemieszczania elementów na stronie), powinniśmy zrozumieć jak Meteor współpracuje z DOM (ang. Document Object Model -- kolekcją elementów HTML które składają się na zawartość strony).
 
-Główną zasadą o której należy pamiętać jest to, że elementy *nie mogą się przemieszczać*. Mogą być wyłącznie usuwane i tworzone (miej na uwadze, że jest to ograniczenie DOM, a nie Meteora). Aby więc spowodawać iluzję zamiany elementów A i B Meteor usunie element B i wstawi całkiem nową kopię (B') przed elementem A.
+Główną zasadą o której należy pamiętać jest to, że elementy DOM *nie mogą się przemieszczać*. Mogą być wyłącznie usuwane i tworzone (miej na uwadze, że jest to ograniczenie DOM, a nie Meteora). Aby więc spowodawać iluzję zamiany elementów A i B Meteor usunie element B i wstawi całkiem nową kopię (B') przed elementem A.
 
-Nie ułatwia to animacji, ponieważ nie można po prostu animować elementu B na nową pozycję, ponieważ B zniknie zaraz po przerenderowaniu strony (co jak wiemy dzieje się natychmiastowo dzięki reaktywności). Zamiast tego należy animować nowo stworzony B', który przemieszcza się z początkowej pozycji B' do nowej pozycji przed A.
+Nie ułatwia to animacji, ponieważ nie można po prostu animować elementu B na nową pozycję, ponieważ B zniknie zaraz po przerenderowaniu strony (co jak wiemy dzieje się natychmiastowo dzięki reaktywności). Zamiast tego należy animować nowo stworzony B', który przemieszcza się z początkowej pozycji B' do nowej pozycji przed elementem A.
 
 Aby zamienić miejscami posty A i B (umieszczone w miejscach odpowiednio p1 i p2) przejdziemy przez kolejne kroki:
 
@@ -30,25 +30,25 @@ Poniższy diagram wyjaśnia szczegółowo te kroki:
 
 <%= diagram "animation_diagram", "Zamiana dwóch postów", "pull-center" %>
 
-////
+Miej na uwadze, że dla kroków 3 i 4 nie *animujemy* A i B' do ich pozycji ale "teleportujemy" je natychmiastowo. Ponieważ dzieje się to natychmiastowo, daje to iluzję tego, że element B nie został usunięty i odpowiednio umieści oba elementy do annimacji na nowe pozycje.
 
-////
+Na szczęście Meteor zatroszczy się za nas o kroki 1 & 2, zatem musimy martwić się wyłącznie o kroki od 3 do 6.
 
-////
+Co więcej, w krokach 5 i 6 wszystko co robimy, to przesuwanie elementów do ich docelowych miejsc. W związku z tym musimy się martwić wyłącznie o kroki 3 i 4 tj. wysłanie elementów do startowych punktów animacji.
 
-### Odpowiednie czasy przy animacji
+### Dopasowanie czasu animacji
 
-////
+Do tej pory mówiliśmy o tym *jak* animować posty ale nie *kiedy* je animować.
 
-////
+Dla kroków 3 i 4 odpowiedź brzmi: podczas renderowania callback'a `rendered` szablonu w środku managera `post_item.js`, który jest wywoływany przy każdej zmianie własności posta (w naszym przypadku rankingu).
 
-////
+Kroki 5 i 6 są bardziej podchwytliwe. Pomyśl o nich w następujący sposób: jeżeli każesz perfekcyjnie myślącemu robotowi poruszać się na północ przez 5 minut, a następnie po zakończeniu poruszać się na południe przez 5 minut, prawdopodobnie wydedukował by, że skończy w tej samej pozycji i zamiast martwić swoją energię wcale nie zmieniłby pozycji.
 
-////
+Jeżeli chcesz się upewnić, że robot będzie się poruszał przez całe 10 minut, należy *poczekać* aż przebył pierwsze 5 minut, i *wtedy* kazać mu wrócić.
 
-////
+Przeglądarka działa w podobny sposób: jeżeli damy jej 2 instrukcje jednocześnie, nowe współrzędne zajmą miejsce starych i nic by się nie wydarzyło. Inaczej mówiąc, nie bylibyśmy w stanie ich animować.
 
-////
+Meteor nie zapewnia callbacka `justAfterRendered` (ang. `zaraz po renderowaniu`), ale możemy go symulować używając `Meteor.defer()` który bierze funkcję i odracza jej wykonanie aż do momentu zarejestrowania jej jako inne zdarzenie.
 
 ### Pozycjonowanie CSS
 
