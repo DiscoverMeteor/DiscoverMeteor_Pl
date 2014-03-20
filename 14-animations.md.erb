@@ -52,15 +52,15 @@ Meteor nie zapewnia callbacka `justAfterRendered` (ang. `zaraz po renderowaniu`)
 
 ### Pozycjonowanie CSS
 
-////
+Aby animować posty, które są zamieniane kolejnością na stronie, musimy wejść w terytorium CSS. W związku z tym szybko przedstawimy umieszczanie elementów za pomocą CSS.
 
-////
+Elementy na stronie domyślnie używają **statycznego** pozycjonowania. Statycznie pozycjonowane elementy naturalnie wpasowują się w stronę i ich współrzędne nie mogą być zmieniane lub animowane.
 
-////
+**Względne** pozycjonowanie oznacza z innej strony, że element także jest naturanie wpasowany w stronę, ale może być umieszczony z przesunięcięm *względnym do pozycji początkowej*.
 
-////
+**Bezwzględne** pozycjonowanie idzie o jeden krok dalej i pozwala nadać określony współrzędne x/y dla danego elementu względnie do punktu początkowego **dokumentu** lub **pierwszego bezwzględnego lub względnie przesuniętego elementu nadrzędnego**.
 
-////
+Użyjemy pozycjonowania względnego aby animować posty. Zatroszczyliśmy się za Ciebie o kod CSS, ale jeżeli chcesz to zrobić sam, wystarczy dodać poniższy kod do arkusza stylów (ang. stylesheet):
 
 ~~~css
 .post{
@@ -70,9 +70,9 @@ Meteor nie zapewnia callbacka `justAfterRendered` (ang. `zaraz po renderowaniu`)
 ~~~
 <%= caption "client/stylesheets/style.css" %>
 
-////
+Ułatwia to znacznie kroki 5 i 6: wszystko co należy zrobić, to ustawić `top` na `0px` (wartość domyślną) i nasze posty automatycznie przesuną się na ich "normalną" pozycję.
 
-////
+Oznacza to, że jedynym wyzwaniem jest znalezienie miejsca *z którego* je animować (kroki 3 i 4) względnie do ich nowej pozycji. Mówiąc inaczej jak bardzo je przesunąć. Nie jest to również trudne: prawidłowy offset to po prostu poprzednia pozycja postu minus jego nowa pozycja.
 
 <% note do %>
 
