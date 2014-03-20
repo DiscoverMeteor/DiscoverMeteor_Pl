@@ -261,11 +261,11 @@ Zauważ, że że `removeClass("invisible")` którą dodaliśmy w funkcji `defer(
 
 ### CSS i JavaScript
 
-Jak już zapewne zauważyłeś, używamy klasy CSS `.invisible` aby wyswolić animację zamiast bezpośrednio animować własność CSS `opacity` jak robiliśmy w przypadku `top`. Jest to spowodowane tym, że dla `top` potrzebna była animacja własności do określonej wartości, która zależała na danych instancji.
+Jak już zapewne zauważyłeś, używamy klasy CSS `.invisible` aby wyzwolić animację zamiast bezpośrednio animować własność CSS `opacity` jak robiliśmy w przypadku `top`. Jest to spowodowane tym, że dla `top` potrzebna była animacja własności do określonej wartości, która zależała na danych instancji.
 
 Z innej strony, chcemy wyłącznie pokazać element niezależnie od jego danych. Ponieważ przechowywanie CSS z dala od kodu JavaScript jest dobrą praktyką, dodamy wyłącznie tutaj klasę tutaj a ustalimy szczegóły animacji w akruszu stylów (kodzie CSS).
 
 <% end %>
 
-W końcowym efekcie powinniśmy mieć taką animację, jaką chcieliśmy. Uruchom własną aplikację i spróbuj jak to działa! Możesz również zmieniać klasy `.posts` i `posts.invisible` aby sprawdzić, czy istnieją inne ciekawe przejścia animacji. 
+W końcowym efekcie powinniśmy mieć taką animację, jaką chcieliśmy. Teraz uruchom własną aplikację i spróbuj jak to działa! Możesz również zmieniać klasy `.posts` i `posts.invisible` aby sprawdzić, czy istnieją inne ciekawe przejścia animacji. 
 Wskazówka: [CSS easing functions](http://matthewlein.com/ceaser/) jest dobrym miejscem na start!
