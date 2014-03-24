@@ -55,15 +55,15 @@ Meteor.publish('bestPosts', function(limit) {
 
 ### Wielokrotna subskrypcja publikacji
 
-////
+Powyżej przeczytałeś, że można publikować tą samą kolekcję wielokrotnie. Okazuje się, że można osiągnąć bardzo podobny rezultat za pomocą innego wzorca: stworzenie jednej publikacji i jej wielokrotną *subskrypcję*.
  
-////
+W Microscope subskrybujemy publikację `posts` wielokrotnie, ale Iron Router zajmuje się tworzeniem i usuwaniem każdej z nich. Nie ma jednak przeciwskazań, aby *subskrybować* ją wiele razy.
  
-////
+Przykładowo, załóżmy, że chcemy wczytać zarówno najnowsze i najlepsze posty do pamięci równocześnie:
  
 <%= diagram "subscribetwice", "Dwukrotna subskrypcja tej samej publikacji", "pull-center" %>
 
-////
+Ustawiamy pojedyńczą publikację:
  
 ~~~js
 Meteor.publish('posts', function(options) {
@@ -71,16 +71,16 @@ Meteor.publish('posts', function(options) {
 });
 ~~~
 
-////
+A następnie subskrybujemy ją wielokrotnie. Tak naprawdę mniej więcej to samo robimy w Microscope:
  
 ~~~js
 Meteor.subscribe('posts', {submitted: -1, limit: 10});
 Meteor.subscribe('posts', {baseScore: -1, submitted: -1, limit: 10});
 ~~~
 
-////
- 
-////
+Co dokładnie tu się dzieje? Każda przeglądarka otwiera *dwie* różne subskrypcje, każda łączy się do *tej samej* publikacji po stronie serwera.
+
+Każda subskrypcja dostarcza różne argumenty dla tej publikacji, ale zasadniczo za każdym razem (różny) zbiór dokumentów zostaje wydzielony z kolekcji `posts` i wysłany do kolekcji po stronie klienta.
  
 ### Wiele kolekcji w pojedyńczej subskrypcji
 
