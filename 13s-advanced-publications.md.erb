@@ -84,19 +84,19 @@ Każda subskrypcja dostarcza różne argumenty dla tej publikacji, ale zasadnicz
  
 ### Wiele kolekcji w pojedyńczej subskrypcji
 
-////
+W przeciwieństwie do tradycyjnych relacyjnych baz danych takich jak MySQL, która korzysta z łączenia tabel *joins*, bazy danych NoSQL takie jak Mongo koncentrują się wyłącznie na *denormalizacji* i *wstawianiu*. Zobaczmy jak to działa w kontekście Meteora.
  
-////
+Wybierzmy konkretny przykład. Dodaliśmy komentarze do postów i jak do tej pory byliśmy zadowoleni z zamieszczania komentarzy do pojedyńczych postów czytanych przez użytkownika.
  
-////
+Jednakże, przyjmijmy, że chcielibyśmy pokazać komentarze do *wszystkich* postów na stronie początkowej (miejąc na uwadze, że te posty będą się zmieniały gdy będziemy je wyświetlali strona po stronie). Jest to dobry przykład dla którego powodem jest załączanie komentarzy w postach i tak naprawdę przyczyniło się to do tego, żebyśmy zdenormalizowali *liczniki* komentarzy.
  
-////
+Moglibyśmy oczywiście zawsze wstawiać komentarze do postów, pozbywając się kolekcji przechowującej komentarze (`Comments`). Ale jak widzieliśmy w rozdziale *Denormalizacja*, decydując się na to, pozbylibyśmy się dodatkowych korzyści pracy z osobnymi kolekcjami.
  
-////
+Okazuje się, że istnieje sztuczka, za pomocą której można wstawiać komentarze do postów, zostawiając osobne kolekcje.
+
+Przyjmijmy, że zarówno z naszą pierwszą stroną pokazującą listę postów, chcemy zasubkrybować listę najlepszych 2 komentarzy do każdego posta.
  
-////
- 
-////
+Byłoby to trudne do realizacji z niezależną publikacją komentarzy, szczególnie gdyby lista postów była w jakiś sposób ograniczona (przymijmy, że do 10 ostatnich postów). Musielibyśmy napisać publikację, która wyglądała by mniej więcej w taki sposób:
  
 <%= diagram "multiplecollections", "Dwie kolekcje w jednej subskrypcji", "pull-center" %>
 
@@ -106,9 +106,9 @@ Meteor.publish('topComments', function(topPostIds) {
 });
 ~~~
 
-////
+Byłby to problem z punktu widzenia wydajności, ponieważ publikacja musiałaby być usuwana i ponownie tworzona za każdym razym, gdy zmienia się lista `topPostsIds`.
  
-////
+Jest sposób na obejście tego. Możemy wykorzystać fakt, że możemy mieć nie tylko więcej niż jedną *publikację* dla pojedyńczej *kolekcji*, ale także więcej niż jedną *kolekcję* dla jednej *publikacji*:
  
 ~~~js
 Meteor.publish('topPosts', function(limit) {
@@ -145,11 +145,11 @@ Meteor.publish('topPosts', function(limit) {
 });
 ~~~
 
-////
+Zwróć uwagę, że nie zwracami niczego w tej publikacjim ponieważ wysyłamy ręcznie wiadomości do `pod` kolekcji nas samych (korzystając z funkcji `.added()` i jej pochodnych). Z tego powodu nie musimy prosić `_publishCursor` o zrobienie tego dla nas przez zwrócenie kursora.
  
-////
+Od teraz za każdym razem gdy publikujemy posta, równocześnie publikujemy dwa najlepsze komentarze załączone do niego. I to wszystko za pomocą jednego wywołania subskrypcji!
  
-////
+Mimo tego, że do tej pory Meteor nie umożliwia tego podejścia do publikacji w prosty sposób, możesz zerknąć na pakiet `publish-with-relations` na Atmosphere, która stara się ułatwić stosowanie tego wzorca.
  
 ### Łączenie różnych kolekcji
 
