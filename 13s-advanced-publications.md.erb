@@ -153,17 +153,17 @@ Mimo tego, że do tej pory Meteor nie umożliwia tego podejścia do publikacji w
  
 ### Łączenie różnych kolekcji
 
-////
+Do czego możemy jeszcze wykorzystać nowo przyswojoną wiedzę? A więc, jeżeli nie używamy `publishCursor` nie musimy stosować się do ograniczenia, że kolekcja źródłowa na serwerze musi mieć tą samą nazwę, o kolekcja docelowa po stronie klienta.
  
 <%= diagram "linkedcollections", "Jedna kolekcja dla dwóch subskrypcji", "pull-center" %>
 
-////
+Jednym z powodów, dla którego chcielibyśmy to wykorzystać, jest *Dziedziczenie Pojedyńczej Tabeli*.
  
-////
+Przyjmijmy, że chcielibyśmy się odnieść do różnych typów obiektów z naszego posta. Każdy z nich przechowuje niektóre wspólne pola, ale różni się trochę treścią. Przykładowo, moglibyśmy budować silnik blogowy przypominający Tumblr, gdzie każdy post ma ID, datę utworzenia i tytuł; ale dodatkowo może także zawierać rysunek, video, link czy po prostu tekst.
  
-////
+Moglibyśmy zapisywać wszystkie te obiekty w pojedyńczej kolekcji `'Resources'` po stronie serwera, używając atrybutu `type` aby określić jakim są typem obiektu (`video`, '`image`, `link` itd.).
  
-////
+Pomimo tego, że po stronie serwera istnieje pojedyńcza kolekcja `Resources`, moglibyśmy przekształcić ją w wiele kolekcji `Videos`, `Images`, itd. po stronie klienta używając sztuczki jak poniżej.
  
 ~~~js
   Meteor.publish('videos', function() {
@@ -172,12 +172,12 @@ Mimo tego, że do tej pory Meteor nie umożliwia tego podejścia do publikacji w
     var videosCursor = Resources.find({type: 'video'});
     Meteor.Collection._publishCursor(videosCursor, sub, 'videos');
     
-    // _publishCursor nie woła tego za nas w przypadku, gdy robimy to więcej niż raz.
+    // _publishCursor nie woła tego za nas w przypadku, gdy wywołujemy to więcej niż raz.
     sub.ready();
   });
 ~~~
 
-////
+Nakazujemy `publishCursor` opublikować wszystkie nasze filmy na wzór tego, jak zrobił by to kursor zwracany normalnie, ale zamiast publikować kolekcję `resources` po stronie klienta, publikujemy część `resources` do `videos`.
  
-////
+Czy to jest aby na pewno dobre rozwiązanie? Nie jesteśmy tu po to aby to osądzać. Tak, czy inaczej, dobrze wiedzieć jak używać Meteora w pełni jego możliwości!
  
