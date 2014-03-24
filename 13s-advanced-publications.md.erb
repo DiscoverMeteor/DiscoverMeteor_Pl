@@ -34,13 +34,13 @@ Meteor.publish('postDetail', function(postId) {
 });
 ~~~
 
-////
+W momencie gdy klient subskrybuje powyższe dwie publikacje (używając `autorun` aby upewnić się, że właściwy `postId` jest wysyłany do subskrypcji `postDetail`), jego kolekcja `posts` jest uaktualniana danymi pochodzącymi z dwóch źródeł: listy tytułów i nazwisk autorów z pierwszej subskrypcji i pełnymi szczegółami posta z drugiej.
+
+Możesz zdać sobie sprawę, że post publikowany przez `postDetail` jest również publikowany przez `allPosts` (pomimo tego, że jedynie z podzbiorem jego danych). Jednakże, Meteor troszczey się o łączeniu pól i upewnienia się, żeby żaden post nie był duplikowany.
+
+Jest to bardzo duże ułatwienie, ponieważ w tym przypdaku gdy renderujemy listę streszczeń postów, mamy do czynienia z obiektami danych które mają tylko tyle danych do pokazania, ile potrzeba. Jednakże podczas renderowania strony dla pojedyńczego posta, mamy wszystkie potrzebne dane. Oczywiście musimy wziąć pod uwagę, żeby nie oczekiwać po stronie klenta dostępności wszystkich pól we wszystkich postach - jest to częste źródło nieporozumień i błędów.
  
-////
- 
-////
- 
-////
+Należy odnotować, że nie jesteś ograniczony do zmieniających się właściwości dokumentu. Mógłbyś równie dobrze publikować te same własności w obu publikacjach ale uporządkować je w inny sposób.
  
 ~~~js
 Meteor.publish('newPosts', function(limit) {
