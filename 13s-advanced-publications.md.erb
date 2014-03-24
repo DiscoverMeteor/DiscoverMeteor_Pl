@@ -4,23 +4,23 @@ slug: advanced-publications
 date: 0013/01/02
 number: 13.5
 sidebar: true
-contents: Naucz się zaawansowanych metod zarządzania publikacjami.|Poznaj możliwości jakie oferują publikacje i subskrypcje. 
+contents: o zaawansowanych metodach zarządzania publikacjami.|o możliwościach jakie oferują publikacje i subskrypcje. 
 paragraphs: 36
 ---
 
-////
+Do tej pory powinieneś się zaznajomić ze sposobem działania publikacji i subskrypcji. Czas zatem przejść do bardziej zaawansowanych scenariuszy.
  
 ### Wielokrotne publikowanie kolekcji
 
-////
+W [rozdziale wprowadzającym publikacje i subskrypcje](/chapter/publications-and-subscriptions/) poznałeś niektóre ze wzorów stosowania publikacji i subskrypcji i nauczyłeś jak funkcja `_publishCursor` ułatwia ich implementacje podczas tworzenia własnych stron.
  
-////
+Przypomnijmy sobie, co funkcja `publishCursor` faktycznie wykonuje: zbiera wszystkie dokumenty, które pasują do kursora i wysyła je do kolecji po stronie klienta która *ma tą samą nazwę*. Zauważ, że nazwa _publication_ nie jest w żaden sposób wymieniona.
  
-////
+Oznacza to, że możemy mieć _więcej niż jedną pulikację_ łączącą wersję jakichkolwiek kolekcji po stronie klienta i serwera.
  
-////
+Spotkaliśmy się już z tym wzorcem w [rozdziale Dzielenie dokumentu na strony](/chapter/pagination/), gdzie publikowaliśmy dzielony podzbiór wszystkich postów w dołączonych do bieżącego posta.
  
-////
+Innym podobnym zastosowaniem publikacji jest publikacja *przeglądu* większego zbioru dokumentów, jak również szczegółów pojedyńczego elementu.
  
 <%= diagram "doublecollection", "Dwukrotne publikowanie kolekcji", "pull-center" %>
 
