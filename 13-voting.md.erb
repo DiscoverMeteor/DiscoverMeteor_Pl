@@ -108,7 +108,7 @@ if (Posts.find().count() === 0) {
 <%= caption "server/fixtures.js" %>
 <%= highlight "22, 48, 58, 69" %>
 
-////
+Jak zwykle zatrzymaj aplikację, uruchom `meteor reset`, zrestartuj swoją aplikację i utwórz nowe konto użytkownika. Następnie upewnijmy się, że powyższe dwie opcje są zainicjalizowane gdy posty są tworzone.
 
 ~~~js
 //...
@@ -141,7 +141,7 @@ return postId;
 
 ### Budowa szablonów wykorzystywanych do głosowania
 
-////
+Najpierw dodajmy przycisk umożliwiający głosowanie na posta:
 
 ~~~html
 <template name="postItem">
@@ -165,7 +165,7 @@ return postId;
 
 <%= screenshot "13-1", "The upvote button" %>
 
-////
+Następnie, zawołajmy metodę serwera upvote, gdy użytkownik kliknie na przycisk:
 
 ~~~js
 //...
@@ -180,7 +180,7 @@ Template.postItem.events({
 <%= caption "client/views/posts/post_item.js" %>
 <%= highlight "3~8" %>
 
-////
+Na końcu, wrócimy do pliku `collections/posts.js` i następnie dodajmy funkcję po stronie serwera, która doda głos do danego posta.
 
 ~~~js
 Meteor.methods({
