@@ -3,33 +3,33 @@ title: Głosowanie
 slug: voting
 date: 0013/01/01
 number: 13
-contents: Zbuduj system głosowania na posty przez użytkowników.|Oceniaj nasze posty na stronie "najlepszych" postów.|Naucz się jak zaimplementować helper (funcję pomocniczą) szablonu handlebars.|Dowiedz się podstaw bezpieczeństwa danych w Meteorze.|Rozważ kilka interesujących kwestii dotyczących wydajności MongoDB.
+contents: tym jak zbudować system głosowania na posty użytkowników.|jak oceniać nasze posty na stronie "najlepszych" postów.|jak zaimplementować helper (funcję pomocniczą) szablonu handlebars.|podstawach bezpieczeństwa danych w Meteorze.|kilku interesujących kwestiach dotyczących wydajności MongoDB.
 paragraphs: 49
 ---
 
-////
+Poniewaź nasza strona staje się coraz bardziej popularna, znajdowanie najlepszych linków stanie się szybko coraz bardziej skomplikowane. Z tego względu potrzebujemy zbudować system oceniania postów.
 
-////
+Moglibyśmy zbudować skomplikowany system oceniania używając karmy, zanikającej w miarę upływu czasu punktacji i wielu różnych zasad (większość z nich została zaimplementowana w Telescope](http://telesc.pe), większym bracie Microscope). Dla potrzeb naszej aplikacji użyjemy jednak czegoś prostszego i będziemy oceniać posty przez liczbę głosów jakie otrzymały.
 
-////
+Zacznijmy od umożliwieniu użytkownikom głosowania na posty.
 
 ### Model Danych
 
-////
+Będziemy zapisywali listę głosów na każdego posta, co umożliwi decyzję pokazania przycisku do głosowania użytkownikom jak również uniemożliwi pokazanie przycisku dwa razy tej samej osobie. 
 
 <% note do %>
 
 ### Prywatność Danych i Publikacji
 
-////
+Zamierzamy publikować listę głosów dla wszystkich użytkowników, co również umożliwi automatyczny dostęp do danych przez konsolę przeglądarki.
 
-////
+Jest to pewien rodzaju problem prywatności danych, który może pojawić się przez sposób, w jaki działają kolekcje. Na przykład, czy chcemy aby ludzie wiedzieli kto głosował na ich posty? W naszym przypadku upublicznienie tej informacji nie będzie miało żadnych konsekwencji, ale jest ważne aby zdawać sobie z tego sprawę.
 
-////
+Również zauważ, że *gdybyśmy* chcieli ograniczyć pewną część tej informacji, musielibyśmy się upewnić, że klient nie może zmieniać z pól `fields` naszej publikacji, zarówno przez usunięcie tej własności po stronie serwera jak i przez przekazywanie całego obiektu z opcjami z serwera do klienta.
 
 <% end %>
 
-////
+Zdenormalizujemy również całkowitą liczbę głosów na posta aby ułatwić odczytywanie tej liczby. Dodamy więc dwa atrybuty do posta: 'głosujący' (upvoters) i 'głosy' (votes). Zacznijmy przez dodanie ich do pliku z danymi początkowymi (fixtures).
 
 ~~~js
 // dane początkowe
