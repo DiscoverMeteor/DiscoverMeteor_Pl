@@ -263,11 +263,11 @@ Template.postItem.events({
 
 Zmieniamy klasę z `.upvote` do `.upvotable`, więc nie zapomnij również zmienić również funcję obsługującą klikanie na element.
 
-<%= screenshot "13-2", "Greying out upvote buttons." %>
+<%= screenshot "13-2", "ściemnianie przycisków do głosowania." %>
 
-<%= commit "13-2", "Grey out upvote link when not logged in / already voted." %>
+<%= commit "13-2", "Ściemnienie przycisku do głosowania gdy nie zalogowany / już zagłosowano." %>
 
-////
+Następnie, możesz zauważyć, że posty z jednym głosem są oznaczone jako "1 vote**s**" (jeden głos) więc spędźmy trochę czasu na poprawnej odmianie tych etykiet. Odmiana w liczbie mnogiej może być skomplikowana, ale na teraz zróbmy to w sposóp uproszczony. Zaimplementujemy ogólną funkcję pomocniczą szablonu (helper) , który będzie można użyć w dowolnym miejscu:
 
 ~~~js
 Handlebars.registerHelper('pluralize', function(n, thing) {
