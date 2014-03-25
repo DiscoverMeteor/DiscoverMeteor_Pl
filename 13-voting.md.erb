@@ -213,13 +213,13 @@ Meteor.methods({
 
 <%= commit "13-1", "Added basic upvoting algorithm." %>
 
-////
+Ta funkcja jest całkiem prosta. Sprawdzamy prewencyjnie, czy użytkownik jest zalogowany i czy post naprawdę istnieje. Następnie upewniamy się, że użytkownik jeszcze nie zagłosował na posta, i inkrementujemy całkowitą liczbę postów i dodajemy użytkownika do listy użytkowników, którzy zagłosowali.
 
-////
+Ostatni krok jest interesujący, ponieważ użyliśmy kilka specjalnych operatorów Mongo. Jest o wiele więcej do poznania, ale dwa powyżej są bardzo pomocne: `$addToSet` dodaje element do tablicy jeżeli jeszcze w niej nie istnieje a `#inc` inkrementuje liczbę całkowitą.
 
 ### Poprawki interfejsu użytkownika
 
-////
+Jeżeli użytkownik nie jest zalogowany, lub jeżeli już zagłosował na posta, nie będzie mógł zagłosować. Aby odzwierciedlić to w interfejsie użytkownika, użyjemy metody pomocniczej szablonu (helpera) aby warunkowo dodać `wyłączoną` klasę CSS do przycisku umożliwiającego głosowanie.
 
 ~~~html
 <template name="postItem">
@@ -261,7 +261,7 @@ Template.postItem.events({
 <%= caption "client/views/posts/post_item.js" %>
 <%= highlight "8~15, 19" %>
 
-////
+Zmieniamy klasę z `.upvote` do `.upvotable`, więc nie zapomnij również zmienić również funcję obsługującą klikanie na element.
 
 <%= screenshot "13-2", "Greying out upvote buttons." %>
 
