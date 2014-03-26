@@ -358,15 +358,15 @@ Przyjmijmy, że starałeś się oszukiwać i wysłać jeden z twoich postów na 
 ~~~
 <%= caption "Konsola przeglądarki" %>
 
-////
+(Gdzie `postId` jest identyfikatorem jednego z twoich postów)
 
-////
+Ta bezczelna próba oszukania systemu zostałaby przechwycona przez nasz callback `deny()` (w `collections/posts.js`, pamiętasz?) i natychmiast zanegowana.
 
-////
+Ale jeżeli przyjrzysz się temu dokładnie, mógłbyś zauważyć kompensację lagów w akcji. Może to nastąpić tylko na bardzo krótki moment, ale post na chwilę skoczy na pierwszą pozycję listy i wróci na swoją bieżącą pozycję.
 
-////
+Co się stało? W twojej lokalnej kolekcji ` Posts`, `update` zostało zawołane bez żadnego problemu. Dzieje się to natychmiastowo i post szybko przemieszcza się na górę listy. W międzyczasie po stronie serwera `update` jest zanegowane, więc chwilę później (kilka milisekund, jeżeli serwer Meteora jest uruchomiony lokalnie), serwer zwraca błąd nakazując kolekcji na przywrócenie do poprzedniej postaci.
 
-////
+Wynik końcowy: podczas czekania na odpowiedź serwera, interfejs użytkownika nie może zrobić nic jak tylko zaufać lokalnej kolekcji. Gdy tylko serwer zwraca odpowiedź błędu i neguje modyfikację, interfejs użytkownika dostosowuje się do tego.
 
 <% end %>
 
