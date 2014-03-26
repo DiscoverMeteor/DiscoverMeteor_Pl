@@ -372,13 +372,13 @@ Wynik końcowy: podczas czekania na odpowiedź serwera, interfejs użytkownika n
 
 ### Ocenianie postów na frontowej stronie
 
-////
+Teraz skoro mamy ranking dla każdego posta bazujący na liczbie głosów, wyświetlmy listę najlepszych postów. Aby to osiągnąć, zobaczymy jak zarządzać dwiema osobnymi subskrypcjami kolekcji postów i uogólnić szablon `postsList`.
 
-////
+Aby rozpocząć, chcemy mieć *dwie* subskrypcje, każdą dla innego porządku sortowania. Trick polega na tym, że obie subskrypcje zasubskrybują *tą samą* publikację `posts` z różnymi parametrami!
 
-////
+Stworzymy także dwie nowe trasy routingu (ang. routes) `newPosts` oraz `bestPosts`, dostępne odpowiednio jako `/new` i `/best` (jak również `/new/5` i `/best/5` aby podzielić listę na kilka stron).
 
-////
+Aby tego dokonać *rozszerzymy* nasz `PostListController` w dwa osobne kontrolery `NewPostsListsController` oraz `BestPostsListController`. Pozwoli to na ponowne użycie tych samych parametrów routowania zarówno dla `home` i `newPosts`, przez udostępnienie kontrolera `NewPostsListCOntroller` z którego można dziedziczyć. Dodatkowo jest to dobry przykład pokazujący jak elastyczny jest Iron Router.
 
 ~~~js
 PostsListController = RouteController.extend({
