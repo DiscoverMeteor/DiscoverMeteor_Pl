@@ -3,33 +3,33 @@ title: Głosowanie
 slug: voting
 date: 0013/01/01
 number: 13
-contents: Zbuduj system głosowania na posty przez użytkowników.|Oceniaj nasze posty na stronie "najlepszych" postów.|Naucz się jak zaimplementować helper (funcję pomocniczą) szablonu handlebars.|Dowiedz się podstaw bezpieczeństwa danych w Meteorze.|Rozważ kilka interesujących kwestii dotyczących wydajności MongoDB.
+contents: tym jak zbudować system głosowania na posty użytkowników.|jak oceniać nasze posty na stronie "najlepszych" postów.|jak zaimplementować helper (funcję pomocniczą) szablonu handlebars.|podstawach bezpieczeństwa danych w Meteorze.|kilku interesujących kwestiach dotyczących wydajności MongoDB.
 paragraphs: 49
 ---
 
-////
+Poniewaź nasza strona staje się coraz bardziej popularna, znajdowanie najlepszych linków stanie się szybko coraz bardziej skomplikowane. Z tego względu potrzebujemy zbudować system oceniania postów.
 
-////
+Moglibyśmy zbudować skomplikowany system oceniania używając karmy, zanikającej w miarę upływu czasu punktacji i wielu różnych zasad (większość z nich została zaimplementowana w Telescope](http://telesc.pe), większym bracie Microscope). Dla potrzeb naszej aplikacji użyjemy jednak czegoś prostszego i będziemy oceniać posty przez liczbę głosów jakie otrzymały.
 
-////
+Zacznijmy od umożliwieniu użytkownikom głosowania na posty.
 
 ### Model Danych
 
-////
+Będziemy zapisywali listę głosów na każdego posta, co umożliwi decyzję pokazania przycisku do głosowania użytkownikom jak również uniemożliwi pokazanie przycisku dwa razy tej samej osobie. 
 
 <% note do %>
 
 ### Prywatność Danych i Publikacji
 
-////
+Zamierzamy publikować listę głosów dla wszystkich użytkowników, co również umożliwi automatyczny dostęp do danych przez konsolę przeglądarki.
 
-////
+Jest to pewien rodzaju problem prywatności danych, który może pojawić się przez sposób, w jaki działają kolekcje. Na przykład, czy chcemy aby ludzie wiedzieli kto głosował na ich posty? W naszym przypadku upublicznienie tej informacji nie będzie miało żadnych konsekwencji, ale jest ważne aby zdawać sobie z tego sprawę.
 
-////
+Również zauważ, że *gdybyśmy* chcieli ograniczyć pewną część tej informacji, musielibyśmy się upewnić, że klient nie może zmieniać z pól `fields` naszej publikacji, zarówno przez usunięcie tej własności po stronie serwera jak i przez przekazywanie całego obiektu z opcjami z serwera do klienta.
 
 <% end %>
 
-////
+Zdenormalizujemy również całkowitą liczbę głosów na posta aby ułatwić odczytywanie tej liczby. Dodamy więc dwa atrybuty do posta: 'głosujący' (upvoters) i 'głosy' (votes). Zacznijmy przez dodanie ich do pliku z danymi początkowymi (fixtures).
 
 ~~~js
 // dane początkowe
@@ -108,7 +108,7 @@ if (Posts.find().count() === 0) {
 <%= caption "server/fixtures.js" %>
 <%= highlight "22, 48, 58, 69" %>
 
-////
+Jak zwykle zatrzymaj aplikację, uruchom `meteor reset`, zrestartuj swoją aplikację i utwórz nowe konto użytkownika. Następnie upewnijmy się, że powyższe dwie opcje są zainicjalizowane gdy posty są tworzone.
 
 ~~~js
 //...
@@ -141,7 +141,7 @@ return postId;
 
 ### Budowa szablonów wykorzystywanych do głosowania
 
-////
+Najpierw dodajmy przycisk umożliwiający głosowanie na posta:
 
 ~~~html
 <template name="postItem">
@@ -165,7 +165,7 @@ return postId;
 
 <%= screenshot "13-1", "The upvote button" %>
 
-////
+Następnie, zawołajmy metodę serwera upvote, gdy użytkownik kliknie na przycisk:
 
 ~~~js
 //...
@@ -180,7 +180,7 @@ Template.postItem.events({
 <%= caption "client/views/posts/post_item.js" %>
 <%= highlight "3~8" %>
 
-////
+Na końcu, wrócimy do pliku `collections/posts.js` i następnie dodajmy funkcję po stronie serwera, która doda głos do danego posta.
 
 ~~~js
 Meteor.methods({
@@ -213,13 +213,13 @@ Meteor.methods({
 
 <%= commit "13-1", "Added basic upvoting algorithm." %>
 
-////
+Ta funkcja jest całkiem prosta. Sprawdzamy prewencyjnie, czy użytkownik jest zalogowany i czy post naprawdę istnieje. Następnie upewniamy się, że użytkownik jeszcze nie zagłosował na posta, i inkrementujemy całkowitą liczbę postów i dodajemy użytkownika do listy użytkowników, którzy zagłosowali.
 
-////
+Ostatni krok jest interesujący, ponieważ użyliśmy kilka specjalnych operatorów Mongo. Jest o wiele więcej do poznania, ale dwa powyżej są bardzo pomocne: `$addToSet` dodaje element do tablicy jeżeli jeszcze w niej nie istnieje a `#inc` inkrementuje liczbę całkowitą.
 
 ### Poprawki interfejsu użytkownika
 
-////
+Jeżeli użytkownik nie jest zalogowany, lub jeżeli już zagłosował na posta, nie będzie mógł zagłosować. Aby odzwierciedlić to w interfejsie użytkownika, użyjemy metody pomocniczej szablonu (helpera) aby warunkowo dodać `wyłączoną` klasę CSS do przycisku umożliwiającego głosowanie.
 
 ~~~html
 <template name="postItem">
@@ -261,13 +261,13 @@ Template.postItem.events({
 <%= caption "client/views/posts/post_item.js" %>
 <%= highlight "8~15, 19" %>
 
-////
+Zmieniamy klasę z `.upvote` do `.upvotable`, więc nie zapomnij również zmienić również funcję obsługującą klikanie na element.
 
-<%= screenshot "13-2", "Greying out upvote buttons." %>
+<%= screenshot "13-2", "ściemnianie przycisków do głosowania." %>
 
-<%= commit "13-2", "Grey out upvote link when not logged in / already voted." %>
+<%= commit "13-2", "Ściemnienie przycisku do głosowania gdy nie zalogowany / już zagłosowano." %>
 
-////
+Następnie, możesz zauważyć, że posty z jednym głosem są oznaczone jako "1 vote**s**" (jeden głos) więc spędźmy trochę czasu na poprawnej odmianie tych etykiet. Odmiana w liczbie mnogiej może być skomplikowana, ale na teraz zróbmy to w sposóp uproszczony. Zaimplementujemy ogólną funkcję pomocniczą szablonu (helper) , który będzie można użyć w dowolnym miejscu:
 
 ~~~js
 Handlebars.registerHelper('pluralize', function(n, thing) {
@@ -298,23 +298,23 @@ Handlebars.registerHelper('pluralize', function(n, thing) {
 <%= caption "client/views/posts/post_item.html" %>
 <%= highlight "4, 6" %>
 
-<%= screenshot "13-3", "Perfecting Proper Pluralization (now say that 10 times)" %>
+<%= screenshot "13-3", "Dopracowanie liczby mnogiej do perfekcji (ang. Perfecting Proper Pluralization, potrenuj angielski i powiedz to 10 razy)" %>
 
-<%= commit "13-3", "Added pluralize helper to format text better." %>
+<%= commit "13-3", "Dodano helper do stosowania liczby mnogiej aby poprawić formatowanie tekstu." %>
 
-////
+Powinniśmy teraz zobaczyć "1 vote" (1 głos). Jako ćwiczenie zmień helpera aby stosował język polski.
 
 ### Mądrzejszy algorytm głosowania
 
-////
+Nasz kod odpowiedzialny za głosowanie wygląda dobrze, ale może być jeszcze lepszy. W metodzie upvote dwukrotnie odpytujemy bazę Mongo: pierwszy raz, aby pobrać post i drugi aby go uaktualnić.
 
-////
+Prowadzi to do dwóch problemów. Pierwszy jest taki, że jest stosunkowo nieefektywne odpytywać bazę dwukrotnie. Drugi, ważniejszy, że może dojść do wyścigu wykonania kodu (ang. race condition). Prześledź następujący algorytm:
 
-1. ////
-2. ////
-3. ////
+1. Pobierz posty z bazy danych.
+2. Sprawdź, czy użytkownik już zagłosował.
+3. Jeżeli nie, zagłosuj za pomocą użytkownika.
 
-////
+Co się stanie, jeżeli ten sam użytkownik zagłosuje na ten sam post podczas wykonywania tego algortymu? W obecnej postaci umożliwia to zagłosowanie na ten sam post dwukrotnie. Na szczęście Mongo pozwala na połączenie kroków 1-3 w pojedyńczą komendę: 
 
 ~~~js
 Meteor.methods({
@@ -324,9 +324,9 @@ Meteor.methods({
   
   upvote: function(postId) {
     var user = Meteor.user();
-    // ensure the user is logged in
+    // upewnij się, że użytkownik jest zalogowany
     if (!user)
-      throw new Meteor.Error(401, "You need to login to upvote");
+      throw new Meteor.Error(401, "Musisz się zalogować, aby móc głosować");
     
     Posts.update({
       _id: postId, 
@@ -341,44 +341,44 @@ Meteor.methods({
 <%= caption "collections/posts.js" %>
 <%= highlight "12~15" %>
 
-<%= commit "13-4", "Better upvoting algorithm." %>
+<%= commit "13-4", "Ulepszony algorytm głosowania." %>
 
-////
+Powyżej wykonujemy polecenie "znajdź wszystkie posty z danym `id` na które ten użytkownik jeszcze nie zagłosował i uaktualnij je w ten sposób". Jeżeli użytkownik *jeszcze nie* zagłosował, wyszukane zostaną posty z danym `id`. Z drugiej strony, jeżeli użykownił *zagłosował*, wtedy zapytanie nie znajdzie żadnych dokumentów i w konsekwencji nic się nie wydarzy.
 
-////
+Jedynym minusem jest to, że nie możemy powiedzieć użytkownikowi, czy już zagłosował na dany post (ponieważ pozbyliśmy się zapytania do bazy danych, które to sprawdzało). Ale mimo wszystko powinien to zauważyć patrząc na wyłączony przycisk do głosowania w interfejsie użytkownika.
 
 <% note do %>
 
 ### Kompensacja lagów
 
-////
+Przyjmijmy, że starałeś się oszukiwać i wysłać jeden z twoich postów na samą górę listy, przez bezpośrednią zmianę liczby głosów:
 
 ~~~js
 > Posts.update(postId, {$set: {votes: 10000}});
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+(Gdzie `postId` jest identyfikatorem jednego z twoich postów)
 
-////
+Ta bezczelna próba oszukania systemu zostałaby przechwycona przez nasz callback `deny()` (w `collections/posts.js`, pamiętasz?) i natychmiast zanegowana.
 
-////
+Ale jeżeli przyjrzysz się temu dokładnie, mógłbyś zauważyć kompensację lagów w akcji. Może to nastąpić tylko na bardzo krótki moment, ale post na chwilę skoczy na pierwszą pozycję listy i wróci na swoją bieżącą pozycję.
 
-////
+Co się stało? W twojej lokalnej kolekcji ` Posts`, `update` zostało zawołane bez żadnego problemu. Dzieje się to natychmiastowo i post szybko przemieszcza się na górę listy. W międzyczasie po stronie serwera `update` jest zanegowane, więc chwilę później (kilka milisekund, jeżeli serwer Meteora jest uruchomiony lokalnie), serwer zwraca błąd nakazując kolekcji na przywrócenie do poprzedniej postaci.
 
-////
+Wynik końcowy: podczas czekania na odpowiedź serwera, interfejs użytkownika nie może zrobić nic jak tylko zaufać lokalnej kolekcji. Gdy tylko serwer zwraca odpowiedź błędu i neguje modyfikację, interfejs użytkownika dostosowuje się do tego.
 
 <% end %>
 
 ### Ocenianie postów na frontowej stronie
 
-////
+Teraz skoro mamy ranking dla każdego posta bazujący na liczbie głosów, wyświetlmy listę najlepszych postów. Aby to osiągnąć, zobaczymy jak zarządzać dwiema osobnymi subskrypcjami kolekcji postów i uogólnić szablon `postsList`.
 
-////
+Aby rozpocząć, chcemy mieć *dwie* subskrypcje, każdą dla innego porządku sortowania. Trick polega na tym, że obie subskrypcje zasubskrybują *tą samą* publikację `posts` z różnymi parametrami!
 
-////
+Stworzymy także dwie nowe trasy routingu (ang. routes) `newPosts` oraz `bestPosts`, dostępne odpowiednio jako `/new` i `/best` (jak również `/new/5` i `/best/5` aby podzielić listę na kilka stron).
 
-////
+Aby tego dokonać *rozszerzymy* nasz `PostListController` w dwa osobne kontrolery `NewPostsListsController` oraz `BestPostsListController`. Pozwoli to na ponowne użycie tych samych parametrów routowania zarówno dla `home` i `newPosts`, przez udostępnienie kontrolera `NewPostsListCOntroller` z którego można dziedziczyć. Dodatkowo jest to dobry przykład pokazujący jak elastyczny jest Iron Router.
 
 ~~~js
 PostsListController = RouteController.extend({
@@ -440,11 +440,11 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "8,16,21~34,36~49" %>
 
-////
+Zauważ, że mamy teraz więcej niż jedną trasę, wyjęliśmy logikę `nextPath` z kontrolera `PostListController` w `NewPostsListController` i `BestPostsListController`, ponieważ scieżka routingu będzie się różniła w obu przypadkach.
 
-////
+Dodatkowo, gdy sortujemy po liczbie głosów, mamy drugie sortowanie po czasie publikacji postów aby upewnić się, że sortowanie jest poprawne.
 
-////
+Dodamy także linki w nagłówku strony:
 
 ~~~html
 <template name="header">
@@ -484,17 +484,17 @@ Router.map(function() {
 <%= caption "client/views/include/header.html" %>
 <%= highlight "9, 15~21" %>
 
-////
+Mając tą implementację, możemy uzyskać listę najlepszych postów:
 
-<%= screenshot "13-4", "Ranking by points" %>
+<%= screenshot "13-4", "Ranking po liczbie punktów" %>
 
-<%= commit "13-5", "Added routes for post lists, and pages to display them." %>
+<%= commit "13-5", "Dodano trasy dla list postów i stron do ich wyświetlania." %>
 
 ### Lepszy nagłówek
 
-////
+Teraz skoro mamy dwie strony z listą postów, ciężko wiedzieć którą listę w tej chwili przeglądasz. Zmieńmy więc nagłówek strony, żeby ta informacja była bardziej oczywista. Stworzymy menadżera `header.js` oraz funkcję pomocniczą, która używając aktualną ścieżkę routingu i jedną lub więcej tras ustawi aktywną klasę na naszych elementach nawigacyjnych:
 
-////
+Przyczyną, dla której chcemy obsługiwać wielokrotne nazwy tras jest to, że zarówno trasy `home` jako i `newPosts` (które odpowiadają URL odpowiednio `/` i `/new`) wskazują na ten sam szablon. Oznacza to, że nasz klasa `activeRouteClass` powinna być na tyle sprytna, aby uaktywnić tag `<li>` w obu przypadkach.
 
 ~~~html
 <template name="header">
@@ -550,24 +550,24 @@ Template.header.helpers({
 ~~~
 <%= caption "client/views/includes/header.js" %>
 
-<%= screenshot "13-5", "Showing the active page" %>
+<%= screenshot "13-5", "Pokazywanie aktywnej strony" %>
 
 <% note do %>
 
 ### Parametry helpera
 
-////
+Aż do teraz nie używaliśmy tego konkretnego wzorca, ale zarówno jak każdy inny tag Handlebars, helper szablonu może także mieć parametry.
 
-////
+I podczas, gdy oczywiście możesz przekazywać kontretne nazwane parametry do swojej funkcji, możesz także przekazać nieokreśloną liczbę anonimowych parametrów i mieć do nich dostęp w ciele funkcji za pomocą obiektu `arguments`.
 
-////
+W tym ostatnim przypadku, prawdopodobnie będziesz chciał przekształcić obiekt `arguments` w zwykłą tablicę JavaScript i następnie wywołać `pop()` aby usunąć hash dodany na końcu przez Handlebars.
 
 <% end %>
 
-////
+Dla każdego elementu nawigacji, helper `activeRouteClass` przyjmuje listę nazw tras i następnie używa helpera `any()` biblioteki Underscore aby sprawdzić, czy jakakolwiek trasa przechodzi test (tj. czy odpowiadający jej URL jest równy aktualnej ścieżce).
 
-////
+Jeżeli jakiekolwiek trasy są dopasowane do aktualnej ścieżki, `any()` zwróci `true`. Na samym końcu wykorzytamy wzorzec JavaScript o nazwie `boolean && string`, gdzie `false && myString` zwraca `false` ale `true && myString`  zwraca `myString`.
 
-<%= commit "13-6", "Added active classes to the header." %>
+<%= commit "13-6", "Dodane aktywne klasy do nagłówka strony." %>
 
-////
+Teraz gdy użytkownicy mogą głosować na posty w czasie rzeczywistym, zobaczysz, że elementy skaczą w górę i w dół strony podczas zmiany rankingu. Czy nie było by miło, gdyby istniał sposób na wygładzenie tego za pomocą dobrze dopasowanych animacji?
