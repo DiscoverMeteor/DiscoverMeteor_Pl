@@ -298,23 +298,23 @@ Handlebars.registerHelper('pluralize', function(n, thing) {
 <%= caption "client/views/posts/post_item.html" %>
 <%= highlight "4, 6" %>
 
-<%= screenshot "13-3", "Perfecting Proper Pluralization (now say that 10 times)" %>
+<%= screenshot "13-3", "Dopracowanie liczby mnogiej do perfekcji (ang. Perfecting Proper Pluralization, potrenuj angielski i powiedz to 10 razy)" %>
 
-<%= commit "13-3", "Added pluralize helper to format text better." %>
+<%= commit "13-3", "Dodano helper do stosowania liczby mnogiej aby poprawić formatowanie tekstu." %>
 
-////
+Powinniśmy teraz zobaczyć "1 vote" (1 głos). Jako ćwiczenie zmień helpera aby stosował język polski.
 
 ### Mądrzejszy algorytm głosowania
 
-////
+Nasz kod odpowiedzialny za głosowanie wygląda dobrze, ale może być jeszcze lepszy. W metodzie upvote dwukrotnie odpytujemy bazę Mongo: pierwszy raz, aby pobrać post i drugi aby go uaktualnić.
 
-////
+Prowadzi to do dwóch problemów. Pierwszy jest taki, że jest stosunkowo nieefektywne odpytywać bazę dwukrotnie. Drugi, ważniejszy, że może dojść do wyścigu wykonania kodu (ang. race condition). Prześledź następujący algorytm:
 
-1. ////
-2. ////
-3. ////
+1. Pobierz posty z bazy danych.
+2. Sprawdź, czy użytkownik już zagłosował.
+3. Jeżeli nie, zagłosuj za pomocą użytkownika.
 
-////
+Co się stanie, jeżeli ten sam użytkownik zagłosuje na ten sam post podczas wykonywania tego algortymu? W obecnej postaci umożliwia to zagłosowanie na ten sam post dwukrotnie. Na szczęście Mongo pozwala na połączenie kroków 1-3 w pojedyńczą komendę: 
 
 ~~~js
 Meteor.methods({
@@ -324,9 +324,9 @@ Meteor.methods({
   
   upvote: function(postId) {
     var user = Meteor.user();
-    // ensure the user is logged in
+    // upewnij się, że użytkownik jest zalogowany
     if (!user)
-      throw new Meteor.Error(401, "You need to login to upvote");
+      throw new Meteor.Error(401, "Musisz się zalogować, aby móc głosować");
     
     Posts.update({
       _id: postId, 
@@ -341,22 +341,22 @@ Meteor.methods({
 <%= caption "collections/posts.js" %>
 <%= highlight "12~15" %>
 
-<%= commit "13-4", "Better upvoting algorithm." %>
+<%= commit "13-4", "Ulepszony algorytm głosowania." %>
 
-////
+Powyżej wykonujemy polecenie "znajdź wszystkie posty z danym `id` na które ten użytkownik jeszcze nie zagłosował i uaktualnij je w ten sposób". Jeżeli użytkownik *jeszcze nie* zagłosował, wyszukane zostaną posty z danym `id`. Z drugiej strony, jeżeli użykownił *zagłosował*, wtedy zapytanie nie znajdzie żadnych dokumentów i w konsekwencji nic się nie wydarzy.
 
-////
+Jedynym minusem jest to, że nie możemy powiedzieć użytkownikowi, czy już zagłosował na dany post (ponieważ pozbyliśmy się zapytania do bazy danych, które to sprawdzało). Ale mimo wszystko powinien to zauważyć patrząc na wyłączony przycisk do głosowania w interfejsie użytkownika.
 
 <% note do %>
 
 ### Kompensacja lagów
 
-////
+Przyjmijmy, że starałeś się oszukiwać i wysłać jeden z twoich postów na samą górę listy, przez bezpośrednią zmianę liczby głosów:
 
 ~~~js
 > Posts.update(postId, {$set: {votes: 10000}});
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
 ////
 
