@@ -440,11 +440,11 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "8,16,21~34,36~49" %>
 
-////
+Zauważ, że mamy teraz więcej niż jedną trasę, wyjęliśmy logikę `nextPath` z kontrolera `PostListController` w `NewPostsListController` i `BestPostsListController`, ponieważ scieżka routingu będzie się różniła w obu przypadkach.
 
-////
+Dodatkowo, gdy sortujemy po liczbie głosów, mamy drugie sortowanie po czasie publikacji postów aby upewnić się, że sortowanie jest poprawne.
 
-////
+Dodamy także linki w nagłówku strony:
 
 ~~~html
 <template name="header">
@@ -484,17 +484,17 @@ Router.map(function() {
 <%= caption "client/views/include/header.html" %>
 <%= highlight "9, 15~21" %>
 
-////
+Mając tą implementację, możemy uzyskać listę najlepszych postów:
 
-<%= screenshot "13-4", "Ranking by points" %>
+<%= screenshot "13-4", "Ranking po liczbie punktów" %>
 
-<%= commit "13-5", "Added routes for post lists, and pages to display them." %>
+<%= commit "13-5", "Dodano trasy dla list postów i stron do ich wyświetlania." %>
 
 ### Lepszy nagłówek
 
-////
+Teraz skoro mamy dwie strony z listą postów, ciężko wiedzieć którą listę w tej chwili przeglądasz. Zmieńmy więc nagłówek strony, żeby ta informacja była bardziej oczywista. Stworzymy menadżera `header.js` oraz funkcję pomocniczą, która używając aktualną ścieżkę routingu i jedną lub więcej tras ustawi aktywną klasę na naszych elementach nawigacyjnych:
 
-////
+Przyczyną, dla której chcemy obsługiwać wielokrotne nazwy tras jest to, że zarówno trasy `home` jako i `newPosts` (które odpowiadają URL odpowiednio `/` i `/new`) wskazują na ten sam szablon. Oznacza to, że nasz klasa `activeRouteClass` powinna być na tyle sprytna, aby uaktywnić tag `<li>` w obu przypadkach.
 
 ~~~html
 <template name="header">
@@ -550,7 +550,7 @@ Template.header.helpers({
 ~~~
 <%= caption "client/views/includes/header.js" %>
 
-<%= screenshot "13-5", "Showing the active page" %>
+<%= screenshot "13-5", "Pokazywanie aktywnej strony" %>
 
 <% note do %>
 
