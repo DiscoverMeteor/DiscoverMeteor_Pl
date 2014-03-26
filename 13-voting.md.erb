@@ -556,18 +556,18 @@ Template.header.helpers({
 
 ### Parametry helpera
 
-////
+Aż do teraz nie używaliśmy tego konkretnego wzorca, ale zarówno jak każdy inny tag Handlebars, helper szablonu może także mieć parametry.
 
-////
+I podczas, gdy oczywiście możesz przekazywać kontretne nazwane parametry do swojej funkcji, możesz także przekazać nieokreśloną liczbę anonimowych parametrów i mieć do nich dostęp w ciele funkcji za pomocą obiektu `arguments`.
 
-////
+W tym ostatnim przypadku, prawdopodobnie będziesz chciał przekształcić obiekt `arguments` w zwykłą tablicę JavaScript i następnie wywołać `pop()` aby usunąć hash dodany na końcu przez Handlebars.
 
 <% end %>
 
-////
+Dla każdego elementu nawigacji, helper `activeRouteClass` przyjmuje listę nazw tras i następnie używa helpera `any()` biblioteki Underscore aby sprawdzić, czy jakakolwiek trasa przechodzi test (tj. czy odpowiadający jej URL jest równy aktualnej ścieżce).
 
-////
+Jeżeli jakiekolwiek trasy są dopasowane do aktualnej ścieżki, `any()` zwróci `true`. Na samym końcu wykorzytamy wzorzec JavaScript o nazwie `boolean && string`, gdzie `false && myString` zwraca `false` ale `true && myString`  zwraca `myString`.
 
-<%= commit "13-6", "Added active classes to the header." %>
+<%= commit "13-6", "Dodane aktywne klasy do nagłówka strony." %>
 
-////
+Teraz gdy użytkownicy mogą głosować na posty w czasie rzeczywistym, zobaczysz, że elementy skaczą w górę i w dół strony podczas zmiany rankingu. Czy nie było by miło, gdyby istniał sposób na wygładzenie tego za pomocą dobrze dopasowanych animacji?
