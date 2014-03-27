@@ -7,17 +7,17 @@ contents: Dowiedz się wiecej o subskrypcjach w Meteorze i wykorzystaniu ich do 
 paragraphs: 67
 ---
 
-////
+Sprawy z Microscope mają się świetnie i możemy oczekiwać, że stanie się hitem po opublikowaniu serwisu na świat.
 
-////
+Powinniśmy zatem pomyśleć o wpływie liczby postów renderowanych na stronie na wydajność serwisu po starcie!
 
-////
+Wcześniej rozmawialiśmy o tym, jak kolekcja po stronie klienta powinna zawierać podzbiór danych obecny na serwerze i nawet udało się nam to osiągnąć dla kolekcji zawierających powiadomienia i komentarze.
 
-////
+Obecnie jednak nadal publikujemy wszystkie posty za jednym zamachem, do wszystkich połączonych użytkowników. Aby rozwiązać ten problem, potrzebujemy podzielić nasze posty na strony.
 
 ### Dodawanie postów
 
-////
+Po pierwsze, w danych początkowych, załadujmy wystarczającą liczbę postów, tak aby dzielenie na strony miało sens.
 
 ~~~js
 // Dane początkowe
@@ -51,23 +51,23 @@ if (Posts.find().count() === 0) {
 
 ////
 
-<%= screenshot "12-1", "Displaying dummy data. " %>
+<%= screenshot "12-1", "Wyświetlanie wymyślonych danych . " %>
 
-<%= commit "12-1", "Added enough posts that pagination is necessary." %>
+<%= commit "12-1", "Dodane wystarczająco postów aby potrzebne było dzielenie dokumentu na strony." %>
 
 ### Nieskończone dzielenie dokumentu na strony.
 
-////
+Zaimplementujemy proste "nieskończone" dzielenie dokumentu na strony. Oznacza to, że wyświetlimy, przyjmijmy 10 postów na ekranie z linkem âpokaż więcejâ umieszczonym pod spodem. Kliknięcie na ten link doda kolejne 10 postów do listy i tak dalej *w nieskończoność*. Oznacza to, że możemy kontrolować nasz cały system dzielenia na strony przez pojedyńczy parametr zawierający liczbę postów do wyświetlenia na ekranie.
 
-////
+Teraz będziemy musieli znaleźć sposób na przekazanie serwerowi o tym parametrze, tak aby wiedział ile postów wysłać klientowi. Tak się składa, że subskrybujemy już publikację `posts` w routerze, więc wykorzystamy to i pozwolimy routerowi na kontrolę nad dzieleniem na strony.
 
-////
+Najłatwiejszym sposobem na ustawienie tego jest po prostu umieszczenie parametru oznaczającego granicę postów w ścieżce dającej URL w formie `http://localhost:3000/25`. Dodatkowym bonusem używania URL w porównaniu do innych metod jest to, że jeżeli wyświetlasz obecnie 25 postów i odświeżysz stronę przez pomyłkę, nadal będziesz widział 25 postów na stronie po przeładowaniu strony. 
 
-////
+Aby zrobić to dobrze, musimy zmienić sposób, w jaki subskrybujemy na posty. Tak, jak poprzednio w rozdziale *Komentarze*, będziemy musieli przenieść nasz kod odpowiedzialny za subskrypcje z poziomu *routera* na poziom *ścieżki routera*.
 
-////
+Możliwe, że wyda się to być zbyt dużą liczbą nowych informacji do przyswojenia, ale stanie się to zrozumiałe po przeczytaniu kodu.
 
-////
+Po pierwsze, przestaniemy subskrybować do publikacji `posts` w bloku `Router.configure()`. Po prostu usuń `Meteor.subscribe('posts')` pozostawiając jedynie subskrypcję `notifications`:
 
 ~~~js
 Router.configure({
@@ -81,7 +81,7 @@ Router.configure({
 <%= caption "lib/router.js" %>
 <%= highlight "5" %>
 
-////
+Dodamy następnie parametr `postsLimit` to ścieżki routingu. Dodanie `?` po nazwie parametru oznacza, że jest opcjonalny. Tak więc ścieżka nie tylko będzie pasowała do `http://localhost:3000/50`, ale również do zwykłego `http://localhost:3000`.
 
 ~~~js
 Router.map(function() {
@@ -95,11 +95,11 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "5" %>
 
-////
+Istotne jest zanotowanie, że ścieżka w formie `/:parametr?` będzie pasowała do każdej możliwej ścieżki. Ponieważ każda trasa będzie parsowana kolejno i sprawdzana czy pasuje do bieżącej ścieżki musimy się upewnić, że ścieżki są ułożone w kolejności od najbardziej specyficznej do najbardziej ogólnej.
 
-////
+Inaczej mówiąc, ścieżki routingu, które mają być dopasowane do najbardziej szczegółowych tras takich jak `/posts/:_id` powinny być pierwsze, a ścieżka `postsList` powinna być przesunięta na ostatnią pozycję, ponieważ pasuje w sumie do wszystkiego.
 
-////
+Teraz czas na zmierzenie się z ciężkim problem subskrypcji i znajdowania właściwych danych. Musimy obsłużyć przypadek, gdzie parametr `postsLimit` nie jest obecny, więc przypiszemy mu wartość domyślną. Użyjemy â5â aby zapewnić dostatecznie dużo miejsca na dzielenie na strony.
 
 ~~~js
 Router.map(function() {
@@ -117,7 +117,7 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "6~9" %>
 
-////
+Zauważysz, że przkazujemy teraz obiekt JavaScript ({limit: postsLimit}) jak i nazwę publikacji `posts`. Ten obiekt będzie służył jako parametr `opcje` dla `Posts.find()` po stronie serwera. Przejdźmy zatem do kodu wykonywanego po stronie serwera i zaimplementujmy:
 
 ~~~js
 Meteor.publish('posts', function(options) {
@@ -139,13 +139,13 @@ Meteor.publish('notifications', function() {
 
 ### Przekazywanie parametrów
 
-////
+Nasz kod publikacji w rzeczywistości przekazuje serwerowi, że może zaufać dowolnemu obiektowi JavaScript wysyłanego przez klienta (w naszym przypadku `{limit: postsLimit}`) który służy jako `opcje` dla polecenia `find()`. Umożliwia to użytkownikom przesłanie wybranych opcji przez konsolę przeglądarki.
 
-////
+W naszym przypadku, jest to stosunkowo nieszkodliwe, ponieważ wszystko, co użytkownik mógłby zrobić, to zmienić kolejność postów lub zmienić liczbę wyświetlanych (co chcemy zrobić na początek).
 
-////
+Nie powinno się jednak używać tego wzorca podczas zapisywania prywatnych danych na niepublikowanych polach, ponieważ użytkownik odpowiednio modyfikując opcję `fields` mógłby mieć do nich dostęp i powinieneś również unikać używania go dla argumentu selektora `find()` dla tych samych powodów bezpieczeństwa.
 
-////
+Bardziej bezpieczne byłoby przekazywanie pojedyńczych parametrów zamiast całego obiektu, aby upewnić się że masz pełną kontrolę nad dostępem do danych:
 
 ~~~js
 Meteor.publish('posts', function(sort, limit) {
