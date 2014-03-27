@@ -7,17 +7,17 @@ contents: Dowiedz się wiecej o subskrypcjach w Meteorze i wykorzystaniu ich do 
 paragraphs: 67
 ---
 
-////
+Sprawy z Microscope mają się świetnie i możemy oczekiwać, że stanie się hitem po opublikowaniu serwisu na świat.
 
-////
+Powinniśmy zatem pomyśleć o wpływie liczby postów renderowanych na stronie na wydajność serwisu po starcie!
 
-////
+Wcześniej rozmawialiśmy o tym, jak kolekcja po stronie klienta powinna zawierać podzbiór danych obecny na serwerze i nawet udało się nam to osiągnąć dla kolekcji zawierających powiadomienia i komentarze.
 
-////
+Obecnie jednak nadal publikujemy wszystkie posty za jednym zamachem, do wszystkich połączonych użytkowników. Aby rozwiązać ten problem, potrzebujemy podzielić nasze posty na strony.
 
 ### Dodawanie postów
 
-////
+Po pierwsze, w danych początkowych, załadujmy wystarczającą liczbę postów, tak aby dzielenie na strony miało sens.
 
 ~~~js
 // Dane początkowe
@@ -51,24 +51,23 @@ if (Posts.find().count() === 0) {
 
 ////
 
-<%= screenshot "12-1", "Displaying dummy data. " %>
+<%= screenshot "12-1", "Wyświetlanie wymyślonych danych . " %>
 
-<%= commit "12-1", "Added enough posts that pagination is necessary." %>
+<%= commit "12-1", "Dodane wystarczająco postów aby potrzebne było dzielenie dokumentu na strony." %>
 
 ### Nieskończone dzielenie dokumentu na strony.
 
-////
+Zaimplementujemy proste "nieskończone" dzielenie dokumentu na strony. Oznacza to, że wyświetlimy, przyjmijmy 10 postów na ekranie z linkem âpokaż więcejâ umieszczonym pod spodem. Kliknięcie na ten link doda kolejne 10 postów do listy i tak dalej *w nieskończoność*. Oznacza to, że możemy kontrolować nasz cały system dzielenia na strony przez pojedyńczy parametr zawierający liczbę postów do wyświetlenia na ekranie.
 
-////
+Teraz będziemy musieli znaleźć sposób na przekazanie serwerowi o tym parametrze, tak aby wiedział ile postów wysłać klientowi. Tak się składa, że subskrybujemy już publikację `posts` w routerze, więc wykorzystamy to i pozwolimy routerowi na kontrolę nad dzieleniem na strony.
 
-////
+Najłatwiejszym sposobem na ustawienie tego jest po prostu umieszczenie parametru oznaczającego granicę postów w ścieżce dającej URL w formie `http://localhost:3000/25`. Dodatkowym bonusem używania URL w porównaniu do innych metod jest to, że jeżeli wyświetlasz obecnie 25 postów i odświeżysz stronę przez pomyłkę, nadal będziesz widział 25 postów na stronie po przeładowaniu strony. 
 
-////
+Aby zrobić to dobrze, musimy zmienić sposób, w jaki subskrybujemy na posty. Tak, jak poprzednio w rozdziale *Komentarze*, będziemy musieli przenieść nasz kod odpowiedzialny za subskrypcje z poziomu *routera* na poziom *ścieżki routera*.
 
-////
+Możliwe, że wyda się to zbyt dużą liczbą noych informacji do przyswojenia, ale stanie się to jaśniejsze po przeczytaniu kodu.
 
-////
-
+Po pierwsze, przestaniemy subskrybować do publikacji `posts` w bloku `Router.configure()`. Po prostu usuń `Meteor.subscribe('posts')` pozostawiając jedynie subskrypcję `notifications`.
 ~~~js
 Router.configure({
   layoutTemplate: 'layout',
