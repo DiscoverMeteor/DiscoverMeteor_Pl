@@ -4,19 +4,19 @@ slug: creating-a-meteorite-package
 date: 0009/01/02
 number: 9.5
 sidebar: true
-contents: Tworzenie pakietu lokalnej aplikacji.|Pisanie testów dla pakietu.|Publikacja pakietu w Atmosphere.
+contents: Tworzenie lokalnego pakietu aplikacji.|Pisanie testów dla twojego pakietu.|Publikacja pakietu na Atmosphere.
 paragraphs: 22
 ---
 
-////
+Napisaliśmy nasz kod obsługi błędów umożliwiając jego wielokrotne wykorzystanie. Dlaczego więc nie spakować go i nie stworzyć z niego inteligentnego pakietu i nie podzielić się z nim z resztą społeczności Meteor'a?
 
-////
+Najpierw musimy stworzyć strukturę plików dla naszego pakietu, w którym będzie rezydować. Umieszczamy nasz pakiet w katalogu `packages/errors/`. Tworzy to niestandardowy pakiet, który jest automatycznie przygotowany do użycia. (Mogłeś zauważyć, że Meteorite instaluje pakiety poprzez tworzenie simlink'ów w katalogu `packages/`).
 
-////
+Następnie tworzymy w tym katalogu plik `package.js`. Plik ten informuje Meteor'a o tym jak pakiet powinien być używany oraz dostarcza informacji o zmiennych, które eksportuje.
 
 ~~~js
 Package.describe({
-  summary: "Szablon do wyświetlania błędów aplikacji uźytkownikowi."
+  summary: "Szablon do wyświetlania użytkownikowi błędów aplikacji."
 });
 
 Package.on_use(function (api, where) {
@@ -107,7 +107,7 @@ Router.before(function() { Errors.clearSeen(); });
 ~~~js
 Meteor.call('post', post, function(error, id) {
   if (error) {
-    // display the error to the user
+    // wyświetl błąd użytkownikowi
     Errors.throw(error.reason);
 
 ~~~
@@ -116,7 +116,7 @@ Meteor.call('post', post, function(error, id) {
 ~~~js
 Posts.update(currentPostId, {$set: postProperties}, function(error) {
   if (error) {
-    // display the error to the user
+    // wyświetl błąd użytkownikowi
     Errors.throw(error.reason);
 ~~~
 <%= caption "client/views/posts/post_edit.js" %>
