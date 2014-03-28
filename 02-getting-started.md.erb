@@ -154,37 +154,37 @@ Jeżeli chcesz poznać więcej szczegółów, zachęcamy by zapoznać się z [of
 
 <% note do %>
 
-### Czy Meteor używa MVC?
+### Czy Meteor jest frameworkiem MVC?
 
-////
+Jeżeli używałeś wcześniej innych frameworków, takich jak Ruby on Rails, możesz się zastanawiać czy Meteor zaadoptował wzorzec MVC
 
-////
+Krótka odpowiedź to: nie. W przeciwieństwie do Rails'ów, Meteor nie narzuca żadnej predefiniowanej struktury dla Twojej aplikacji. Także w tej książce poprostu układamy kod w sposób, który ma dla nas największy sens, nie martwiąc się przy tym za bardzo o akronimy.
 
 <% end %>
 
-### No public?
+### Nie ma katalogu public?
 
-////
+Ok, skłamaliśmy. Nie potrzebujemy katalogu `public/` z tego prostego powodu że Microscope nie potrzebuje żadnych statycznych zasobów. Ale odkąd większość aplikacji napisanych w Meteor'ze zawiera co najmniej kilka obrazków, uznaliśmy że warto poruszyć ten temat.
 
-////
+Przy okazji, mogłeś już zauważyć ukryty katalog `.meteor`. To jest miejsce w którym Meteor przechowuje swój własny kod - modyfikacja rzeczy znajdujących się tam to zazwyczaj bardzo zły pomysł. Prawdę ówiąc nie potrzebujesz nigdy zaglądać do tego katalogu. Jedynym wyjątkiem są pliki `.meteor/packages` and `.meteor/release`, które odpowiednio są używane do wylistowania twoich pakietów i wersji Meteor'a którą używasz. Kiedy dodajesz pakiet albo zmieniasz wersję Meteor'a, może być pomocne sprawdzenie zmian w tych plikach.
 
 <% note do %>
 
-### Underscores vs CamelCase
+### Podkreślenia vs CamelCase
 
-////
+Jedyne co mamy do powiedzenia na temat debaty pomiędzy podkreśleniami (`my_variable`) kontra camelCase (`myVariable`) jest to że naprawdę nie ma znaczenia którą konwencję przyjmiesz, jeżeli tylko się do niej konsekwentnie stosujesz.
 
-////
+W tej książce używamy camelCase, ponieważ jest to zwyczajowy zapis JavaScript'u (koniec końców, jest to JavaScript, a nie java_script)
 
 ////
 
 <% end %>
 
-### Taking Care of CSS
+### Zatroszcz się o CSS
 
-////
+To nie jest książka o CSS. Aby nie zwalniać zajmując się szczegółami styli, zdecydowaliśmy zrobić cały zestaw styli dostępny od początku, tak żebyś nie musiał się nim przejmować od początku.
 
-////
+CSS automatycznie jest zminimalizowany i załadowany przez Meteor'a, i w odróżnieniu do innych statycznych zasobów idzie do katalogu `/client`, a nie `/public`, także włóż do pliku `style.css`:
 
 ~~~css
 .grid-block, .main, .post, .comments li, .comment-form {
@@ -288,9 +288,9 @@ body {
 
 <% note do %>
 
-### A Note on CoffeeScript
+### Informacja CoffeeScript
 
-////
+W tej książce będziemy pisać w czystym JavaScript'i. Jednakże jeżeli preferujesz CoffeeScript, Meteor umożliwia użycie go. Poprostu dodaj pakiet CoffeeScript i będziesz mógł go używać:
 
 `mrt add coffeescript`
 
