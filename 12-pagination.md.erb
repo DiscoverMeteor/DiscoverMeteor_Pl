@@ -292,11 +292,11 @@ Ostatnią rzeczą do zrobienia jest zmiana ścieżki `postsList` prowadzącą do
 
 ### Dodawanie linku 'Pokaż więcej'
 
-////
+Mamy teraz działające dzielenie dokumentu na strony i kod wygląda dobrze. Jest tylko jeden problem: nie ma innego sposobu na *używanie* tego dzielenia na strony niż ręczna zmiana URL. Zdecydowanie nie polepsza to używania go, więc weźmy się do pracym aby go polepszyć.
 
-////
+To, co chcemy osiągnąć jest wystarczająco proste. Dodamy przycisk *wczytaj więcej* na dole listy postów, co zwiększy o 5 liczbę postów wyświetlanych po każdym kliknięciu. Więc jeżeli jesteśmy na URL `http://localhost:3000/5`, kliknięcie na *wczytaj więcej* powinno przenieść na `http://localhost:3000/10`. Jeżeli zdołałeś przeczytać do te pory tą książkę, powinieneś dać sobie radę z prostą arytmetyką!
 
-////
+Tak, jak poprzednio, dodamy logikę dzielenia na strony do naszej ścieżki. Pamietasz, gdy jawnie nazwaliśmy kontekst danych zamiast używać anonimowego kursora? Nie ma zasady, która mówiłaby, że funkcja `data` może przekazywać jedynie kursory, więc użyjemy tej samej techniki aby wygenerować przycisk *wczytaj więcej*.
 
 ~~~js
 PostsListController = RouteController.extend({
