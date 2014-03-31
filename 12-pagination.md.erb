@@ -247,9 +247,9 @@ Ze względu na te wszytkie kwestie, tradycyjne dzielenie na dokumetu na strony n
 
 ### Implementacja kontrolera Routera
 
-////
+Mogłeś zauważyć, że powtórzyliśmy dwukrotnie linię `var limit = parseInt(this.params.postsLimit) || 5;`. Dodatkowo, numer zakodowany numer â€œ5â€ nie jest idealny. To nie koniec świata, ale ponieważ zawsze warto stosować się do zasady DRY (Don't Repeat Yourself), sprawdźmy jak możemy zrobić refaktoryzację kodu.
 
-////
+Wprowadźmy nową funkcję Iron Routera, *Kontrolerow ścieżki*. Kontroler ścieżki umożliwia na zebranie razem funkcjonalności w jeden spójny pakiet, z którego może dziedziczyć jakakolwiek ścieżka. Teraz użyjemy kontrolera do pojedyńczej ścieżki, a w następnym rozdziale dowiesz się jak pomocna będzie ta funkcjonalność.
 
 ~~~js
 PostsListController = RouteController.extend({
@@ -280,15 +280,15 @@ Router.map(function() {
 ~~~
 <%= caption "lib/router.js" %>
 
-////
+Przejdźmy przez ten krok. Początkowo tworzymy kontroler przez rozszerzenie `RouteController`'a. Następnie używamy właściwości `Template` jak poprzednio, a następnie nowej właściwości `increment`.
 
-////
+Następnie definiujemy nową funkcję `linit`, która zwróci obecny limit i funkcję `findOptions` która zwróci obiekt z opcjami. Może się wydawać dodatkowym niepotrzebnym krokiem, ale zrobimy z niego później użytek.
 
-////
+Następnie, zdefiniujemy nowe funkcje `waitOn` i `data` jak poprzednio, przy czym używają one obecnie funkcji `findOptions`.
 
-////
+Ostatnią rzeczą do zrobienia jest zmiana ścieżki `postsList` prowadzącą do naszego nowego kontrolera z własnością `controller`.
 
-<%= commit "12-3", "Refactored postsLists route into a RouteController." %>
+<%= commit "12-3", "Zrefaktoryzowana ścieżka postsLists do RouteController'a'." %>
 
 ### Dodawanie linku 'Pokaż więcej'
 
