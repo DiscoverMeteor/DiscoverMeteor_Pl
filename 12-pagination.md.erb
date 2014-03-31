@@ -155,9 +155,9 @@ Meteor.publish('posts', function(sort, limit) {
 
 <% end %>
 
-////
+Teraz kiedy subskrybujemy posty na poziomie konkretnej ścieżki URL, miałoby sens ustawić kontekst danych w tym samym miejscu. Odejdźmy trochę od poprzedniego schematu i zmieńmy funkcję `data` w ten sposób, aby zwracała obiekt JavaScript zamiast zwracania kursora. To pozwala na utworzenia *nazwanego* kontekstu danych, który nazwiemy `posts`.
 
-////
+Oznacza to, że zamiast pośredniego dostępu jako `this` w środku szabklonu, nasz kontekst danych będzie dostępny jako `posts`. Oprócz tej małej zmiany, kod powinien wyglądać znajomo:
 
 ~~~js
 Router.map(function() {
@@ -181,9 +181,9 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "8~13" %>
 
-////
+Teraz skoro ustawiamy kontekst danych na poziomie routera możemy bezpiecznie pozbyć się nagłówka szablonu `posts` w pliku `posts_lists.js`. Skoro nazwaliśmy kontekst danych `posts` (tak samo jak helper), nie podrzebujemy nawet dotykać szablonu `postList`!
 
-////
+Zbierzmy wszystko razem. Oto jak powinien wyglądać nowy i poprawiony kod `router.js`:
 
 ~~~js
 Router.configure({
@@ -215,33 +215,33 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "5, 11~21" %>
 
-<%= commit "12-2", "Augmented the postsList route to take a limit." %>
+<%= commit "12-2", "Zmieniona trasa postsList pozwalająca na ograniczenie liczby postów." %>
 
-////
+Wypróbujmy nowy system dzielenia postów. Mamy teraz możliwość wyświetlania dowolnej liczby postów na stronie głównej za pomocą zmiany parametru URL. Przykładowo, sþróbuj odwiedzić `http://localhost:3000/3`. Powinieneś ujrzeć coś podobnego do:
 
-<%= screenshot "12-2", "Controlling the number of posts on the homepage. " %>
+<%= screenshot "12-2", "Kontrola liczby postów na stronie głównej. " %>
 
 <% note do %>
 
 ### Dlaczego nie osobne strony?
 
-////
+Dlaczego używamy *nieskończonego dzielenia na strony* zamiast pokazywać kolejne strony zawierające po 10 postów każda, jak Google pokazujące wynik zapytania? Robimy to ze względu na reakcje Meteora w czasie rzeczywistym.
 
-////
+Wyobraźmy sobie, że dzielimy naszą kolekcję `Posts` używając systemu używanego przez Google i jesteśmy na stronie 2, która pokazuje posty od 10 do 20. Co dzieje się, gdy użytkownik usunie nagle pierwsze 10 postów?
 
-////
+Ponieważ nasza aplikacja działa w czasie rzeczywistym, nasz zbiór danych uległby zmianie. Post 10 stałby się postem 9 i wypadł z widoku, a post 11 byłby widoczny, Końcowy rezultat byłby taki, że użytkownik zobaczyłby nagle zmieniające się posty bez widocznej przyczyny!
 
-////
+Nawet jeżeli tolerowalibyśmy tą niedogodność UX, tradycyjne dzielenie dokumentu jest również trudne do zrealizowania z przyczyn technicznych.
 
-////
+Wróćmy do poprzedniego przykładu. Publikujemy posty od 10 do 20 z kolekcji `Posts`, ale jak znaleźć te posty po stronie klienta? Nie możesz wybrać postów 10 do 20, skoro po stronie klienta jest tylko 10 postów.
 
-////
+Jednym rozwiązaniem byłoby publikowanie 10 postów po stronie serwera i następnie wywoływanie `Posts.find()` po stronie klienta, aby przechwycić *wszystkie* publikowane posty.
 
-////
+Działa to, gdy masz tylko jedną subskrypcję. Ale co się stanie jeżeli będziesz miał więcej niż jedną subskrypcję postów, a stanie się to wrótce?
 
-////
+Powiedzmy, że jedna subskrypcja pyta o posty od 10 do 20, a inna o 30 do 40. Masz teraz 20 postów załadowane po stronie klenta, nie mając pojęcia które należą do odpowiedniej subskrypcji.
 
-////
+Ze względu na te wszytkie kwestie, tradycyjne dzielenie na dokumetu na strony nie ma większego sensu przy korzystaniu z Meteora.
 
 <% end %>
 
