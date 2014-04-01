@@ -42,15 +42,15 @@ Jednak nic nie wywołuje renderowania szablonu po zmianie `currentLikeCount`. Po
 
 ### Śledzenie reaktywności: Obliczenia
 
-////
+Reaktywność Meteora działa za pośrednictwem *zależności*, struktur danych, które śledzą zbiór komputacji.
 
-////
+Jak widzieliśmy we wcześniejszym pasku bocznym reaktywności, komputacja jest blokiem kodu, który używa reaktywnych danych. W naszym przypadku istnieje komputacja pośrednio utworzona dla szablonu `postItem`. Każdy helper managera tego szablonu pracuję z tą komputacją.
 
-////
+Możesz myśleć o komputacji, jako o sekcji kodu, która "troszczy się" o reaktywne dane. Gdy dane zmieniają się, to ta komputacja zostaje o tym poinformowana (przez `invalidate()`) i to ta komputacja decyduje o tym, czy wykonać jakąś akcję.
 
 ### Przemiana zwykłej zmiennej w funkcję reaktywną
 
-////
+Aby zmienić naszą zmienną `currentLikeCount` w reaktywne źródło danych, musimy śledziź wszystkie komputacje, które używają jej w zależności. Wymaga to zmiany ze zmiennej na funkcję (która zwróci wartość):
 
 ~~~js
 var _currentLikeCount = 0;
@@ -76,9 +76,9 @@ Meteor.setInterval(function() {
 ~~~
 <%= highlight "1~7,14~17" %>
 
-////
+Co osiągneliśmy to ustawienie zależności `_currentLikeCountListeners`, która śledzi wszystkie komputacje w której użyty był `currentLikeCount()`. Gdy wartość `_currentLikeCountListeners` ulega zmianie, wołamy funkcję `changed()` na tej zależności, która unieważnia wszystkie śledzone komputacje.
 
-////
+Wtedy komputacje mogą kontynuować i reagować na zmiany odpowiednio do każdego przypadku. W przypadku komputacji szablonu oznacza to, że szablon się renderuje.
 
 ### Obliczenie szablonów i kontrola ich renderowania
 
