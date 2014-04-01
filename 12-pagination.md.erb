@@ -432,7 +432,7 @@ Meteor.publish('singlePost', function(id) {
 <%= caption "server/publications.js" %>
 <%= highlight "5~7" %>
 
-////
+Zasubskrybujemy teraz odpowiednie posty po stronie klienta. Subskrybujemy już publikację `comments` w funkcji `waitOn` ścieżki `postPage`, zatem możemy w prosty sposób dodać w tym samym miejscu subskrypcję do ścieżki `postEdit`, ponieważ wymaga ona tych samych danych.
 
 ~~~js
 Router.map(function() {
@@ -465,6 +465,6 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "7~12,18~20" %>
 
-<%= commit "12-6","Use a single post subscription to ensure that we can always see the right post." %>
+<%= commit "12-6","Użycie pojedyńczej subskrypcji posta, aby upewnić siœ, żee widzimy wlaściwy post." %>
 
-////
+Mając ukończoną implementację dzielenia postów na strony, nasza aplikacja pozbyła się problemu skalowania i użytkownicy są pewni dodawania większej liczby linków, niż poprzednio. Nie było by dobrze znaleźć sposób na ustalenie rankingu linków? Jest to dokładnie temat następnego rozdziału *Głosowanie*.
