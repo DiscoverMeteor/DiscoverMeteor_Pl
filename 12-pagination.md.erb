@@ -155,9 +155,9 @@ Meteor.publish('posts', function(sort, limit) {
 
 <% end %>
 
-////
+Teraz kiedy subskrybujemy posty na poziomie konkretnej ścieżki URL, miałoby sens ustawić kontekst danych w tym samym miejscu. Odejdźmy trochę od poprzedniego schematu i zmieńmy funkcję `data` w ten sposób, aby zwracała obiekt JavaScript zamiast zwracania kursora. To pozwala na utworzenia *nazwanego* kontekstu danych, który nazwiemy `posts`.
 
-////
+Oznacza to, że zamiast pośredniego dostępu jako `this` w środku szabklonu, nasz kontekst danych będzie dostępny jako `posts`. Oprócz tej małej zmiany, kod powinien wyglądać znajomo:
 
 ~~~js
 Router.map(function() {
@@ -181,9 +181,9 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "8~13" %>
 
-////
+Teraz skoro ustawiamy kontekst danych na poziomie routera możemy bezpiecznie pozbyć się nagłówka szablonu `posts` w pliku `posts_lists.js`. Skoro nazwaliśmy kontekst danych `posts` (tak samo jak helper), nie podrzebujemy nawet dotykać szablonu `postList`!
 
-////
+Zbierzmy wszystko razem. Oto jak powinien wyglądać nowy i poprawiony kod `router.js`:
 
 ~~~js
 Router.configure({
@@ -215,41 +215,41 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "5, 11~21" %>
 
-<%= commit "12-2", "Augmented the postsList route to take a limit." %>
+<%= commit "12-2", "Zmieniona trasa postsList pozwalająca na ograniczenie liczby postów." %>
 
-////
+Wypróbujmy nowy system dzielenia postów. Mamy teraz możliwość wyświetlania dowolnej liczby postów na stronie głównej za pomocą zmiany parametru URL. Przykładowo, sþróbuj odwiedzić `http://localhost:3000/3`. Powinieneś ujrzeć coś podobnego do:
 
-<%= screenshot "12-2", "Controlling the number of posts on the homepage. " %>
+<%= screenshot "12-2", "Kontrola liczby postów na stronie głównej. " %>
 
 <% note do %>
 
 ### Dlaczego nie osobne strony?
 
-////
+Dlaczego używamy *nieskończonego dzielenia na strony* zamiast pokazywać kolejne strony zawierające po 10 postów każda, jak Google pokazujące wynik zapytania? Robimy to ze względu na reakcje Meteora w czasie rzeczywistym.
 
-////
+Wyobraźmy sobie, że dzielimy naszą kolekcję `Posts` używając systemu używanego przez Google i jesteśmy na stronie 2, która pokazuje posty od 10 do 20. Co dzieje się, gdy użytkownik usunie nagle pierwsze 10 postów?
 
-////
+Ponieważ nasza aplikacja działa w czasie rzeczywistym, nasz zbiór danych uległby zmianie. Post 10 stałby się postem 9 i wypadł z widoku, a post 11 byłby widoczny, Końcowy rezultat byłby taki, że użytkownik zobaczyłby nagle zmieniające się posty bez widocznej przyczyny!
 
-////
+Nawet jeżeli tolerowalibyśmy tą niedogodność UX, tradycyjne dzielenie dokumentu jest również trudne do zrealizowania z przyczyn technicznych.
 
-////
+Wróćmy do poprzedniego przykładu. Publikujemy posty od 10 do 20 z kolekcji `Posts`, ale jak znaleźć te posty po stronie klienta? Nie możesz wybrać postów 10 do 20, skoro po stronie klienta jest tylko 10 postów.
 
-////
+Jednym rozwiązaniem byłoby publikowanie 10 postów po stronie serwera i następnie wywoływanie `Posts.find()` po stronie klienta, aby przechwycić *wszystkie* publikowane posty.
 
-////
+Działa to, gdy masz tylko jedną subskrypcję. Ale co się stanie jeżeli będziesz miał więcej niż jedną subskrypcję postów, a stanie się to wrótce?
 
-////
+Powiedzmy, że jedna subskrypcja pyta o posty od 10 do 20, a inna o 30 do 40. Masz teraz 20 postów załadowane po stronie klenta, nie mając pojęcia które należą do odpowiedniej subskrypcji.
 
-////
+Ze względu na te wszytkie kwestie, tradycyjne dzielenie na dokumetu na strony nie ma większego sensu przy korzystaniu z Meteora.
 
 <% end %>
 
 ### Implementacja kontrolera Routera
 
-////
+Mogłeś zauważyć, że powtórzyliśmy dwukrotnie linię `var limit = parseInt(this.params.postsLimit) || 5;`. Dodatkowo, numer zakodowany numer â€œ5â€ nie jest idealny. To nie koniec świata, ale ponieważ zawsze warto stosować się do zasady DRY (Don't Repeat Yourself), sprawdźmy jak możemy zrobić refaktoryzację kodu.
 
-////
+Wprowadźmy nową funkcję Iron Routera, *Kontrolerow ścieżki*. Kontroler ścieżki umożliwia na zebranie razem funkcjonalności w jeden spójny pakiet, z którego może dziedziczyć jakakolwiek ścieżka. Teraz użyjemy kontrolera do pojedyńczej ścieżki, a w następnym rozdziale dowiesz się jak pomocna będzie ta funkcjonalność.
 
 ~~~js
 PostsListController = RouteController.extend({
@@ -280,23 +280,23 @@ Router.map(function() {
 ~~~
 <%= caption "lib/router.js" %>
 
-////
+Przejdźmy przez ten krok. Początkowo tworzymy kontroler przez rozszerzenie `RouteController`'a. Następnie używamy właściwości `Template` jak poprzednio, a następnie nowej właściwości `increment`.
 
-////
+Następnie definiujemy nową funkcję `linit`, która zwróci obecny limit i funkcję `findOptions` która zwróci obiekt z opcjami. Może się wydawać dodatkowym niepotrzebnym krokiem, ale zrobimy z niego później użytek.
 
-////
+Następnie, zdefiniujemy nowe funkcje `waitOn` i `data` jak poprzednio, przy czym używają one obecnie funkcji `findOptions`.
 
-////
+Ostatnią rzeczą do zrobienia jest zmiana ścieżki `postsList` prowadzącą do naszego nowego kontrolera z własnością `controller`.
 
-<%= commit "12-3", "Refactored postsLists route into a RouteController." %>
+<%= commit "12-3", "Zrefaktoryzowana ścieżka postsLists do RouteController'a'." %>
 
 ### Dodawanie linku 'Pokaż więcej'
 
-////
+Mamy teraz działające dzielenie dokumentu na strony i kod wygląda dobrze. Jest tylko jeden problem: nie ma innego sposobu na *używanie* tego dzielenia na strony niż ręczna zmiana URL. Zdecydowanie nie polepsza to używania go, więc weźmy się do pracym aby go polepszyć.
 
-////
+To, co chcemy osiągnąć jest wystarczająco proste. Dodamy przycisk *wczytaj więcej* na dole listy postów, co zwiększy o 5 liczbę postów wyświetlanych po każdym kliknięciu. Więc jeżeli jesteśmy na URL `http://localhost:3000/5`, kliknięcie na *wczytaj więcej* powinno przenieść na `http://localhost:3000/10`. Jeżeli zdołałeś przeczytać do te pory tą książkę, powinieneś dać sobie radę z prostą arytmetyką!
 
-////
+Tak, jak poprzednio, dodamy logikę dzielenia na strony do naszej ścieżki. Pamietasz, gdy jawnie nazwaliśmy kontekst danych zamiast używać anonimowego kursora? Nie ma zasady, która mówiłaby, że funkcja `data` może przekazywać jedynie kursory, więc użyjemy tej samej techniki aby wygenerować przycisk *wczytaj więcej*.
 
 ~~~js
 PostsListController = RouteController.extend({
@@ -327,25 +327,23 @@ PostsListController = RouteController.extend({
 <%= caption "lib/router.js" %>
 <%= highlight "16~23" %>
 
-////
+Przyjrzyjmy się głębiej na trick wykorzystywany przez routera. Pamiętaj, że ścieżka `postList` (która dziedziczy z kontrolera `PostListController` nad którym obecnie pracujemy, bierze parametr `postLimit`.
 
-////
+Z tego względu, gdy wprowadzamy `{postsLimit: this.limit() + this.increment}` do `this.route.path()`, nakazujemy ścieżce `postsList` zbudować własną ścieżkę używając powyższego obiektu JavaScript jako kontekstu danych.
 
-////
+Innymi słowy, jest to dokładnie to samo, co użycie helpera Handlebars `{{pathFor 'postsList'}}`, z tym, że zamieniamy pośrednio dostępne `this` przez własny stworzony kontekst danych.
 
-////
+Wykorzystujemy tą ścieżkę i dodajemy ją do kontekstu danych dla naszego szablonu, ale *wyłącznie* wtedy, gdy jest więcej postów do wyświetlenia. Sposób, w jaki to robimy, jest trochę podchwytliwy.
 
-////
+Wiemy, e `this.limit()` zwraca bieżącą liczbę postów, którą chcielibyśmy pokazać, która może być zawarta w bieżącym URL, lub jest wartością domyślną (5), jeżeli URL nie zawiera żadnego parametru.
 
-////
+Z drugiej strony, `this.posts()` odnosi się do bieżącego kursora, zatem `this.posts.fetch().length` odnosi się do liczby postów znajdujących się w obrębie danego kursora.
 
-////
+Zatem, jeżeli pytamy o `n` postów i dostajemy `n`, będziemy pokazywali przycisk *wczytaj więcej*. Jeżeli zapytamy o `n` i dostaniemy *mniej* niż `n`, oznacza to, że osiągneliśmy limit i nie powinniśmy wyświetlać tego przycisku.
 
-////
+Niestety nie ma prostych rozwiązań tego problemu, z tego względu zostaniemy na razie z tą niezbyt perfekcyjną implementacją.
 
-////
-
-////
+Wszystko, co pozostało do zrobienia, to dodanie linka *wczytaj więcej* pod listą postów, upewniając się, żeby pokazać go gdy jest więcej postów dostępnych do wczytania.
 
 ~~~html
 <template name="postsList">
@@ -365,34 +363,34 @@ PostsListController = RouteController.extend({
 
 ////
 
-<%= screenshot "12-3", "The “load more” button. " %>
+<%= screenshot "12-3", "Przycisk “wczytaj więcej”. " %>
 
-<%= commit "12-4", "Added nextPath() to the controller and use it to step through posts." %>
+<%= commit "12-4", "Dodany nextPath() do kontrolera i użycie go do przechodzenia przez posty." %>
 
 <% note do %>
 
 ### Liczba postów a ich długość
 
-////
+Możesz się zastanawiać, dlaczego użyliśmy `this.posts.fetch().length` zamiast `this.posts.count()`. Jest to tymczasowe obejście buga (https://github.com/meteor/meteor/issues/654) obecnego w Metorze podczas pisania tej książki. Miejmy nadzieję, że zostanie poprawiony szybko!
 
 <% end %>
 
 ### Lepszy pasek postępu
 
-////
+Dzielenie liczby postów na strony działa teraz prawidłowo, ale ma wadę: za każdym razem po wciśnięciu przycisku `wczytaj więcej` router wysyła zapytanie do bazy o posty, zostajemy przekierowani do szablony `loading` podczas oczekiwania na nowe dane. W wyniku tego zostajemy odesłani na samą górę strony i musimy przesuwać ją za każdym razem z powrotem.
 
-////
+Byłoby o wiele lepiej, gdybyśmy mogli zostać na tej samej stronie podczas wykonywania całej operacji i wyświetlali wskaźnik wczytywania danych. Dokładnie do tego służy pakiet `iron-router-progress`.
 
-////
+Podobnie to Safari działającej w iOS lub stron takich jak Medium czy YouTube, `iron-router-progress` dodaje cienki pasek postępu na górze strony. Do zaimplementowanie tego wystarczy dodanie pakietu do Twojej aplikacji:
 
 ~~~bash
 mrt add iron-router-progress
 ~~~
 <%= caption "bash console" %>
 
-////
+Dzięki pracy wykonywanej przez smart packages, nasz wskaźnik wygląda od razu perfekcyjnie! Będzie aktywowany dla każdej ścieżki i automatycznie zakończony gdy dane skończą się ładować.
 
-////
+Zrobimy tylko jedną zmianę. Wyłączymy pakiet `iron-router-progress` dla ścieżki `postSubmit`, ponieważ nie musi ona czekać na żadne dane (jest to po prostu pusty formularz):
 
 ~~~js
 Router.map(function() {
@@ -408,19 +406,19 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "7" %>
 
-<%= commit "12-5", "Use the iron-router-progress package to make pagination nicer." %>
+<%= commit "12-5", "Użycie pakietu iron-router-progress aby polepszyć widok przy dzieleniu postów na strony." %>
 
 ### Dostęp do dowolnego postu
 
-////
+Obecnie domyślnie wczytujemy pięć najnowszych postów. Co stanie się, jeżeli ktoś przejdzie bezpośrednio do strony posta?
 
-<%= screenshot "12-4", "An empty template." %>
+<%= screenshot "12-4", "Pusty szablon." %>
 
-////
+Jeżeli to sprawdzisz, zobaczysz pusty szablon. To ma sens: nakazaliśmy routerowi subskrypcję do publikacji `posts` podczas wczytywania ścieżki `postsList`, ale nie wskazaliśmy żadnych instrukcji dla ścieżki `postPage`.
 
-////
+Wszystko, co poznaliśmy do tej pory, to sposób subskrypcji listy `n` najnowszych postów. Jak zapytać serwer o konkretny post? Poznasz teraz mały sekret: można mieć więcej niż jedną publikację każdej kolekcji!
 
-////
+Aby zatem odzyskać nasze zagubione posty, utworzymy nową, oddzielną publikację `singlePost`, która publikuje tylko jeden post znaleziony po `_id`.
 
 ~~~js
 Meteor.publish('posts', function(options) {
@@ -434,7 +432,7 @@ Meteor.publish('singlePost', function(id) {
 <%= caption "server/publications.js" %>
 <%= highlight "5~7" %>
 
-////
+Zasubskrybujemy teraz odpowiednie posty po stronie klienta. Subskrybujemy już publikację `comments` w funkcji `waitOn` ścieżki `postPage`, zatem możemy w prosty sposób dodać w tym samym miejscu subskrypcję do ścieżki `postEdit`, ponieważ wymaga ona tych samych danych.
 
 ~~~js
 Router.map(function() {
@@ -467,6 +465,6 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "7~12,18~20" %>
 
-<%= commit "12-6","Use a single post subscription to ensure that we can always see the right post." %>
+<%= commit "12-6","Użycie pojedyńczej subskrypcji posta, aby upewnić siœ, żee widzimy wlaściwy post." %>
 
-////
+Mając ukończoną implementację dzielenia postów na strony, nasza aplikacja pozbyła się problemów związanych ze skalowaniem. Użytkownicy są pewni dodawać większą liczby linków, niż poprzednio. Czy nie było by dobrze znaleźć sposób na ustalenie rankingu linków? Jest to dokładnie temat następnego rozdziału *Głosowanie*.
