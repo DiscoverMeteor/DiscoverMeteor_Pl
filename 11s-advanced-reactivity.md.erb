@@ -4,17 +4,17 @@ slug: advanced-reactivity
 date: 0011/01/02
 number: 11.5
 sidebar: true
-contents: Naucz się jak tworzyć reaktywne źródła danych w Meteorze.|Zaimplementuj prosty przykład reaktywnego źródła danych.|Dowiedz się jak zależności (Deps) mają się do AngularJS.
+contents: jak tworzyć reaktywne źródła danych w Meteorze.| jak zaimplementować prosty przykład reaktywnego źródła danych.| jak zależności (Deps) mają się do AngularJS.
 paragraphs: 29
 ---
 
-////
+Żadko zachodzi potrzeba do napisania samemu kodu do śledzenia zależności, ale z pewnością warto zrozumieć ten mechanizm aby śledzić sposób jego działania.
 
-////
+Wyobraź sobie, że chcemy śledzić liczbę przyjaciół danego użytkownika Facebooka, którzy 'polubili' każdy post na Microscope. Przyjmijmy, że już zaimplementowaliśmy logowanie użytkownika za pomocą Facebooka, wywołaliśmy odpowiednie funkcje API i parsowaliśmy odpowienie dane. Posiadamy asynchroniczną funkcję po stronie klienta, która zwraca liczbę polubień posta, `getFacebookLikeCount(user, url, callback)`.
 
-////
+Ważną sprawą do zapamiętania jest, jak taka funkcja jest *niereaktywna* i w jakim stopniu nie jest czasu rzeczywistego. Funkcja wywoła żądanie HTTP do Facebooka, odczyta trochę danych i udostępni je aplikacji w asynchronicznym callbacku. Nie wywoła się ponownie sama gdy liczba polubień ulegnie zmianie i nasze UI nie uaktualni się podczas zmiany danych.
 
-////
+Aby to naprawić, możemy zacząć przez ustawienie `setInterval` aby wołać funkcję co kilka sekund.
 
 ~~~js
 currentLikeCount = 0;
@@ -30,7 +30,7 @@ Meteor.setInterval(function() {
 }, 5 * 1000);
 ~~~
 
-////
+Za każdym razem, gdy sprawdzamy zmienną `currentLikeCount`, możemy oczekiwać na zwrócenie prawidłowej liczby z pięciosekundowym marginesem błędu. Możemy użyć tą zmienną w helperze jak poniżej:
 
 ~~~js
 Template.postItem.likeCount = function() {
@@ -38,7 +38,7 @@ Template.postItem.likeCount = function() {
 }
 ~~~
 
-////
+Jednak nic nie wywołuje renderowania szablonu po zmianie `currentLikeCount`. Pomimo tego, że zmienna ta jest pseudo- czasu rzeczywistego, nie jest jeszcze *reaktywna* i nie może się w odpowiedni sposób komunikować z resztą ekosystemu Meteora.
 
 ### Śledzenie reaktywności: Obliczenia
 
