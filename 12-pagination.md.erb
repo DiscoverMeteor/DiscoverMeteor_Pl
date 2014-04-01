@@ -339,13 +339,11 @@ Wiemy, e `this.limit()` zwraca bieżącą liczbę postów, którą chcielibyśmy
 
 Z drugiej strony, `this.posts()` odnosi się do bieżącego kursora, zatem `this.posts.fetch().length` odnosi się do liczby postów znajdujących się w obrębie danego kursora.
 
-////
+Zatem, jeżeli pytamy o `n` postów i dostajemy `n`, będziemy pokazywali przycisk *wczytaj więcej*. Jeżeli zapytamy o `n` i dostaniemy *mniej* niż `n`, oznacza to, że osiągneliśmy limit i nie powinniśmy wyświetlać tego przycisku.
 
-////
+Niestety nie ma prostych rozwiązań tego problemu, z tego względu zostaniemy na razie z tą niezbyt perfekcyjną implementacją.
 
-////
-
-////
+Wszystko, co pozostało do zrobienia, to dodanie linka *wczytaj więcej* pod listą postów, upewniając się, żeby pokazać go gdy jest więcej postów dostępnych do wczytania.
 
 ~~~html
 <template name="postsList">
@@ -365,34 +363,34 @@ Z drugiej strony, `this.posts()` odnosi się do bieżącego kursora, zatem `this
 
 ////
 
-<%= screenshot "12-3", "The “load more” button. " %>
+<%= screenshot "12-3", "Przycisk “wczytaj więcej”. " %>
 
-<%= commit "12-4", "Added nextPath() to the controller and use it to step through posts." %>
+<%= commit "12-4", "Dodany nextPath() do kontrolera i użycie go do przechodzenia przez posty." %>
 
 <% note do %>
 
 ### Liczba postów a ich długość
 
-////
+Możesz się zastanawiać, dlaczego użyliśmy `this.posts.fetch().length` zamiast `this.posts.count()`. Jest to tymczasowe obejście buga (https://github.com/meteor/meteor/issues/654) obecnego w Metorze podczas pisania tej książki. Miejmy nadzieję, że zostanie poprawiony szybko!
 
 <% end %>
 
 ### Lepszy pasek postępu
 
-////
+Dzielenie liczby postów na strony działa teraz prawidłowo, ale ma wadę: za każdym razem po wciśnięciu przycisku `wczytaj więcej` router wysyła zapytanie do bazy o posty, zostajemy przekierowani do szablony `loading` podczas oczekiwania na nowe dane. W wyniku tego zostajemy odesłani na samą górę strony i musimy przesuwać ją za każdym razem z powrotem.
 
-////
+Byłoby o wiele lepiej, gdybyśmy mogli zostać na tej samej stronie podczas wykonywania całej operacji i wyświetlali wskaźnik wczytywania danych. Dokładnie do tego służy pakiet `iron-router-progress`.
 
-////
+Podobnie to Safari działającej w iOS lub stron takich jak Medium czy YouTube, `iron-router-progress` dodaje cienki pasek postępu na górze strony. Do zaimplementowanie tego wystarczy dodanie pakietu do Twojej aplikacji:
 
 ~~~bash
 mrt add iron-router-progress
 ~~~
 <%= caption "bash console" %>
 
-////
+Dzięki pracy wykonywanej przez smart packages, nasz wskaźnik wygląda od razu perfekcyjnie! Będzie aktywowany dla każdej ścieżki i automatycznie zakończony gdy dane skończą się ładować.
 
-////
+Zrobimy tylko jedną zmianę. Wyłączymy pakiet `iron-router-progress` dla ścieżki `postSubmit`, ponieważ nie musi ona czekać na żadne dane (jest to po prostu pusty formularz):
 
 ~~~js
 Router.map(function() {
@@ -408,19 +406,19 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "7" %>
 
-<%= commit "12-5", "Use the iron-router-progress package to make pagination nicer." %>
+<%= commit "12-5", "Użycie pakietu iron-router-progress aby polepszyć widok przy dzieleniu postów na strony." %>
 
 ### Dostęp do dowolnego postu
 
-////
+Obecnie domyślnie wczytujemy pięć najnowszych postów. Co stanie się, jeżeli ktoś przejdzie bezpośrednio do strony posta?
 
-<%= screenshot "12-4", "An empty template." %>
+<%= screenshot "12-4", "Pusty szablon." %>
 
-////
+Jeżeli to sprawdzisz, zobaczysz pusty szablon. To ma sens: nakazaliśmy routerowi subskrypcję do publikacji `posts` podczas wczytywania ścieżki `postsList`, ale nie wskazaliśmy żadnych instrukcji dla ścieżki `postPage`.
 
-////
+Wszystko, co poznaliśmy do tej pory, to sposób subskrypcji listy `n` najnowszych postów. Jak zapytać serwer o konkretny post? Poznasz teraz mały sekret: można mieć więcej niż jedną publikację każdej kolekcji!
 
-////
+Aby zatem odzyskać nasze zagubione posty, utworzymy nową, oddzielną publikację `singlePost`, która publikuje tylko jeden post znaleziony po `_id`.
 
 ~~~js
 Meteor.publish('posts', function(options) {
