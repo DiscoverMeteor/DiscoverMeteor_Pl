@@ -327,17 +327,17 @@ PostsListController = RouteController.extend({
 <%= caption "lib/router.js" %>
 <%= highlight "16~23" %>
 
-////
+Przyjrzyjmy się głębiej na trick wykorzystywany przez routera. Pamiętaj, że ścieżka `postList` (która dziedziczy z kontrolera `PostListController` nad którym obecnie pracujemy, bierze parametr `postLimit`.
 
-////
+Z tego względu, gdy wprowadzamy `{postsLimit: this.limit() + this.increment}` do `this.route.path()`, nakazujemy ścieżce `postsList` zbudować własną ścieżkę używając powyższego obiektu JavaScript jako kontekstu danych.
 
-////
+Innymi słowy, jest to dokładnie to samo, co użycie helpera Handlebars `{{pathFor 'postsList'}}`, z tym, że zamieniamy pośrednio dostępne `this` przez własny stworzony kontekst danych.
 
-////
+Wykorzystujemy tą ścieżkę i dodajemy ją do kontekstu danych dla naszego szablonu, ale *wyłącznie* wtedy, gdy jest więcej postów do wyświetlenia. Sposób, w jaki to robimy, jest trochę podchwytliwy.
 
-////
+Wiemy, e `this.limit()` zwraca bieżącą liczbę postów, którą chcielibyśmy pokazać, która może być zawarta w bieżącym URL, lub jest wartością domyślną (5), jeżeli URL nie zawiera żadnego parametru.
 
-////
+Z drugiej strony, `this.posts()` odnosi się do bieżącego kursora, zatem `this.posts.fetch().length` odnosi się do liczby postów znajdujących się w obrębie danego kursora.
 
 ////
 
