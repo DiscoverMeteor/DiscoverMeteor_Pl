@@ -114,13 +114,13 @@ $rootScope.$watch('currentLikeCount', function(likeCount) {
 });
 ~~~
 
-////
+Oczywiście tak rzadko, jak ustawia się komputacje w Meteorze, zarówno w Angular nie woła się często `$watch` ponieważ instrukcje `ng-model` i {{expressions}} automatycznie ustawiają obserwatorów, którzy troszczą się o odświeżanie po każdej zmianie.
 
-////
+Po zmianie takiej reaktywnej zmiennej, musi być zawołana `scope.$apply()`. Funkcja ta przechodzi przez każdego obserwatora `scope` ale wywołuje wyłącznie funkcje obserwujące obserwatorów, których *zmieniła się* wartość wyrażenia.
 
-////
+Zatem `scope.$apply()` jest podobne do `dependency.changed()`, z tym wyjątkiem, że działa z poziomu `scope` raczej niż daje pełną kontrolę nad tym, które funkcje oberwujące mają być przeliczone. Mówiąc o tym, ten lekki brak całkowitej kontroli daje Angular możliwość bycia sprytnym i wydajnym w sposobie w jakim ustalone zostaje które funkcje obserwujące mają być przeliczone.
 
-////
+Z Angular, kod naszej funkcji`getFacebookLikeCount()` wyglądałby mniej więcej tak:
 
 ~~~js
 Meteor.setInterval(function() {
@@ -135,4 +135,4 @@ Meteor.setInterval(function() {
 ~~~
 <%= highlight "5~6" %>
 
-////
+Trzeba przyznać, że Meteor troszczy się o szczegóły za nas i pozwala na czerpanie pełnych korzyści z reaktywności bez wkładania w to większego wysiłku. Mamy nadzieję, że nauka o tym okaże się pomocna, gdy zechcesz rozwinąć aplikację i pchnąć ją poza granice obecnej implementacji. 
