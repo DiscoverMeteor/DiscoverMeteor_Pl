@@ -8,13 +8,13 @@ contents: jak tworzyć reaktywne źródła danych w Meteorze.| jak zaimplementow
 paragraphs: 29
 ---
 
-Żadko zachodzi potrzeba do napisania samemu kodu do śledzenia zależności, ale z pewnością warto zrozumieć ten mechanizm aby śledzić sposób jego działania.
+Rzadko zachodzi potrzeba napisania samemu kodu do śledzenia zależności, ale z pewnością warto zrozumieć ten mechanizm aby później móc śledzić sposób jego działania.
 
-Wyobraź sobie, że chcemy śledzić liczbę przyjaciół danego użytkownika Facebooka, którzy 'polubili' każdy post na Microscope. Przyjmijmy, że już zaimplementowaliśmy logowanie użytkownika za pomocą Facebooka, wywołaliśmy odpowiednie funkcje API i parsowaliśmy odpowienie dane. Posiadamy asynchroniczną funkcję po stronie klienta, która zwraca liczbę polubień posta, `getFacebookLikeCount(user, url, callback)`.
+Wyobraź sobie, że chcemy śledzić liczbę przyjaciół danego użytkownika Facebooka, którzy 'polubili' każdy post na Microscope. Przyjmijmy, że już zaimplementowaliśmy logowanie użytkownika za pomocą Facebooka, wywołaliśmy odpowiednie funkcje API i parsowaliśmy odpowienie dane. Mamy asynchroniczną funkcję po stronie klienta, która zwraca liczbę polubień posta, `getFacebookLikeCount(user, url, callback)`.
 
-Ważną sprawą do zapamiętania jest, jak taka funkcja jest *niereaktywna* i w jakim stopniu nie jest czasu rzeczywistego. Funkcja wywoła żądanie HTTP do Facebooka, odczyta trochę danych i udostępni je aplikacji w asynchronicznym callbacku. Nie wywoła się ponownie sama gdy liczba polubień ulegnie zmianie i nasze UI nie uaktualni się podczas zmiany danych.
+Ważną sprawą wartą zapamiętania jest, w jakim stopniu taka funkcja jest *niereaktywna* i w jakim stopniu nie jest czasu rzeczywistego. Funkcja wywołuje żądanie HTTP do Facebooka, odczyta trochę danych i udostępni je aplikacji w asynchronicznym callbacku. Nie wywoła się ponownie sama gdy liczba polubień ulegnie zmianie i nasze UI nie uaktualni się podczas zmiany danych.
 
-Aby to naprawić, możemy zacząć przez ustawienie `setInterval` aby wołać funkcję co kilka sekund.
+Aby to naprawić, możemy zacząć przez ustawienie odpowiedniego czasu `setInterval`, aby wołać funkcję co kilka sekund.
 
 ~~~js
 currentLikeCount = 0;
@@ -82,31 +82,31 @@ Wtedy komputacje mogą kontynuować i reagować na zmiany odpowiednio do każdeg
 
 ### Obliczenie szablonów i kontrola ich renderowania
 
-////
+Główną przyczyną, dla której każdy szablon posiada własną komputację jest kontrola liczby odświeżania, która zachodzi na ekranie.
 
-////
+Gdy wołamy szablon z innego szablonu, druga komputacja zostaje wstawiona w pierwszą. Zatem jeżeli reaktywne dane z wewnętrznego szablonu zmieniają się, ten wewnętrzny szablon jest odświeżony, natomiast *zewnętrzny* szablon pozostaje nienaruszony. W ten sposób komputacje kontrolują zakres zmian na reaktywne dane.
 
-////
+Meteor wspomaga także trochę podstawowy mechanizm zagnieżdżania szablonów. 
 
-////
+Po pierwsze, helper `{{#constant}}` *wyłącza* reaktywność. Jakiekolwiek dane, które są zbierane przez helpery szablonu są używane tylko raz. Nawet jeżeli szablon go zawierający jest odświeżony, dane HTML stałego bloku zostają nienaruszone. Umożliwia to wykorzystanie stałych regionów do zarządzania widgetami pochodzących od osób trzecich, które nie spodziewają się odświeżenia DOM pod nimi.
 
-////
+Po drugie, helper `{{#isolate}}` ustawia *nową* komputację w środku szablonu. Innymi słowy ma taki sam efekt jak zagnieżdżony szablon.
 
-////
+Zatem jeżeli jeden z reaktywnych źródeł danych będący w obrębie bloku isolate zmieni się, izolowany obszer ulegnie odświeżeniu, ale reszta zawierającego go szablonu nie. Jednakże gdy szablon zewnętrzny się odświeży, odświeży się także izolowany obszar.
 
-### Porównianie zależności (Deps) do Angular.js
+### Porównianie zależności do Angular
 
-////
+[Angular](http://angularjs.org/) jest reaktywną biblioteką działającą po stronie klienta, rozwijaną przez dobrych ludzi z Google. Zilustrujemy podejście zastosowane w Meteorze do śledzenia zależności w Angular, jako że dwa rozwiązania bardzo różnią się od siebie.
 
-////
+Widzieliśmy, że model Meteora używa bloków kodu nazywanych komputacjami. Komputaje te są śledzone przez specjalne reaktywne źródła danych (funkcje), które troszczą się o unieważnienie ich gdy zachodzi taka potrzeba. Zatem źródło danych _jasno_ informuje wszystkie swoje zależności, gdy potrzebują zawołać `invalidate()`. Zauważ, że ogólnie dzieje się to, gdy dane uległy zmianie, ale można być także wywołać unieważnienie z innych powodów.
 
-////
+Dodatkowo, pomimo tego, że komputacje są ponownie uruchamiane podczas unieważnienia, można ustawić je tak, aby zachowywały się w dowolny sposób. Daje to wysoki poziom kontroli nad reaktywnością. 
 
-////
+W Angular, reaktywność jest zarządzana przez obiekt `scope`. Można o nim myśleć jako o zwykłym obiekcie JavaScript z kilkoma specjalnymi metodami.
 
-////
+Jeżeli chcesz reaktywnie zależeć na zmiennej w `scope`, wywołujesz `scope.$watch`, dostarczając wyrażenia które chcesz monitorować (t.j. na której części `scope` Ci zależy) i funkcję obserwująca (listener), która ma być wywoływana po każdej zmianie wyrażenia. Możesz zatem otwarcie zdefiniować co zrobić za każdą zmianą wartości wyrażenia.
 
-////
+Wracając do przykładu Facebooka, napisalibyśmy:
 
 ~~~js
 $rootScope.$watch('currentLikeCount', function(likeCount) {
