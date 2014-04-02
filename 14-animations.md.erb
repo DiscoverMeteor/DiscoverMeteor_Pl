@@ -3,64 +3,64 @@ title: Animacje
 slug: animations
 date: 0014/01/01
 number: 14
-contents: Zobacz co dzieje się pod maską Meteora podczas zamiany dwóch elementów DOM.|Naucz się jak animować uporządkowanie postów.|Naucz się jak animować nowe posty.
+contents: Co dzieje się za kulisami Meteora podczas zamiany dwóch elementów DOM.|Jak animować zmianę kolejności postów.|Jak animować wstawianie nowych postów.
 paragraphs: 58
 ---
 
-////
+Opanowaliśmy już głosowanie w czasie rzeczywistym, punktację i ranking. Niestety te usprawnienia doprowadziły do nieprzyjemnego interfejsu użytkownika, ponieważ posty skaczą po stronie głównej. Użyjemy animacji aby pozbyć się tego efektu i wygładzić interfejs. 
 
 ### Meteor i DOM
 
-////
+Zanim dojdziemy do prawdziwej zabawy (przemieszczania elementów na stronie), należy zrozumieć jak Meteor współpracuje z DOM (ang. Document Object Model -- kolekcją elementów HTML które składają się na zawartość strony).
 
-////
+Główną zasadą o której należy pamiętać jest to, że elementy DOM *nie mogą się przemieszczać*. Mogą być wyłącznie usuwane i tworzone (miej na uwadze, że jest to ograniczenie DOM, a nie Meteora). Aby więc spowodawać iluzję zamiany elementów A i B Meteor usunie element B i wstawi całkiem nową kopię (B') przed elementem A.
 
-////
+Nie ułatwia to animacji, ponieważ nie można po prostu animować elementu B na nową pozycję, ponieważ B zniknie zaraz po przerenderowaniu strony (co jak wiemy dzieje się natychmiastowo dzięki reaktywności). Zamiast tego należy animować nowo stworzony B', który przemieszcza się z początkowej pozycji B' do nowej pozycji przed elementem A.
 
-////
+Aby zamienić miejscami posty A i B (umieszczone w miejscach odpowiednio p1 i p2) przejdziemy przez kolejne kroki:
 
-1. ////
-2. ////
-3. ////
-4. ////
-5. ////
-6. ////
+1. Usunięcie B
+2. Utworzenie B' przed A w DOM
+3. Przesunięcie B' na pozycję p2
+4. Przesunięcie A na pozycję p1
+5. Animowanie A na pozycję p2
+6. Animowanie B' na pozycję p1
 
-////
+Poniższy diagram wyjaśnia szczegółowo te kroki:
 
 <%= diagram "animation_diagram", "Zamiana dwóch postów", "pull-center" %>
 
-////
+Miej na uwadze, że dla kroków 3 i 4 nie *animujemy* A i B' do ich pozycji ale "teleportujemy" je natychmiastowo. Ponieważ dzieje się to natychmiastowo, daje to iluzję tego, że element B nie został usunięty i odpowiednio umieści oba elementy do annimacji na nowe pozycje.
 
-////
+Na szczęście Meteor zatroszczy się za nas o kroki 1 & 2, zatem musimy martwić się wyłącznie o kroki od 3 do 6.
 
-////
+Co więcej, w krokach 5 i 6 wszystko co robimy, to przesuwanie elementów do ich docelowych miejsc. W związku z tym musimy się martwić wyłącznie o kroki 3 i 4 tj. wysłanie elementów do startowych punktów animacji.
 
-### Odpowiednie czasy przy animacji
+### Dopasowanie czasu animacji
 
-////
+Do tej pory mówiliśmy o tym *jak* animować posty ale nie *kiedy* je animować.
 
-////
+Dla kroków 3 i 4 odpowiedź brzmi: podczas renderowania callback'a `rendered` szablonu w środku managera `post_item.js`, który jest wywoływany przy każdej zmianie własności posta (w naszym przypadku rankingu).
 
-////
+Kroki 5 i 6 są bardziej podchwytliwe. Pomyśl o nich w następujący sposób: jeżeli każesz perfekcyjnie myślącemu robotowi poruszać się na północ przez 5 minut, a następnie po zakończeniu poruszać się na południe przez 5 minut, prawdopodobnie wydedukował by, że skończy w tej samej pozycji i zamiast martwić swoją energię wcale nie zmieniłby pozycji.
 
-////
+Jeżeli chcesz się upewnić, że robot będzie się poruszał przez całe 10 minut, należy *poczekać* aż przebył pierwsze 5 minut, i *wtedy* kazać mu wrócić.
 
-////
+Przeglądarka działa w podobny sposób: jeżeli damy jej 2 instrukcje jednocześnie, nowe współrzędne zajmą miejsce starych i nic by się nie wydarzyło. Inaczej mówiąc, nie bylibyśmy w stanie ich animować.
 
-////
+Meteor nie zapewnia callbacka `justAfterRendered` (ang. `zaraz po renderowaniu`), ale możemy go symulować używając `Meteor.defer()` który bierze funkcję i odracza jej wykonanie aż do momentu zarejestrowania jej jako inne zdarzenie.
 
 ### Pozycjonowanie CSS
 
-////
+Aby animować posty, które są zamieniane kolejnością na stronie, musimy wejść w terytorium CSS. W związku z tym szybko przedstawimy umieszczanie elementów za pomocą CSS.
 
-////
+Elementy na stronie domyślnie używają **statycznego** pozycjonowania. Statycznie pozycjonowane elementy naturalnie wpasowują się w stronę i ich współrzędne nie mogą być zmieniane lub animowane.
 
-////
+**Względne** pozycjonowanie oznacza z innej strony, że element także jest naturanie wpasowany w stronę, ale może być umieszczony z przesunięcięm *względnym do pozycji początkowej*.
 
-////
+**Bezwzględne** pozycjonowanie idzie o jeden krok dalej i pozwala nadać określony współrzędne x/y dla danego elementu względnie do punktu początkowego **dokumentu** lub **pierwszego bezwzględnego lub względnie przesuniętego elementu nadrzędnego**.
 
-////
+Użyjemy pozycjonowania względnego aby animować posty. Zatroszczyliśmy się za Ciebie o kod CSS, ale jeżeli chcesz to zrobić sam, wystarczy dodać poniższy kod do arkusza stylów (ang. stylesheet):
 
 ~~~css
 .post{
@@ -70,41 +70,41 @@ paragraphs: 58
 ~~~
 <%= caption "client/stylesheets/style.css" %>
 
-////
+Ułatwia to znacznie kroki 5 i 6: wszystko co należy zrobić, to ustawić `top` na `0px` (wartość domyślną) i nasze posty automatycznie przesuną się na ich "normalną" pozycję.
 
-////
+Oznacza to, że jedynym wyzwaniem jest znalezienie miejsca *z którego* je animować (kroki 3 i 4) względnie do ich nowej pozycji. Mówiąc inaczej jak bardzo je przesunąć. Nie jest to również trudne: prawidłowy offset to po prostu poprzednia pozycja postu minus jego nowa pozycja.
 
 <% note do %>
 
-### Position:absolute
+### Pozycja bezwględna (Position:absolute)
 
-////
+Moglibyśmy również użyć `position:absolute` z względnym elementem nadrzędnym do pozycjonowania elementów. Wielkim minusem bezwzględnie pozycjonowanych elementów jest to, że są całkowicie usuwane z przepływu strony, powodując zwinięcie nadrzędnego kontenera tak jak gdyby byłby pusty.
 
-////
+To w konsekwencji oznacza, że potrzebowalibyśmy sztucznie ustawić wysokość kontenera za pomocą JavaScript zamiast postawić przeglądarce na naturalne rozmieszczenie elementów. W związku z tym, gdzie tylko można najlepiej używać pozycjonowania względnego.
 
 <% end %>
 
-### Total Recall
+### Pamięć absolutna.
 
-////
+Pozostaje jeszcze jeden problem. Podczas gdy element A zostaje w DOM i może dzięki temu "pamiętać" poprzednią pozcyję, element B przeżywa reinkarnację jako element B' i ma wyczyszczoną pamięć o poprzedniej pozycji.
 
-////
+Na szczęście Meteor radzi sobie z tym problemem przez udostępnienie objektu **instancji szablonu** w callbacku `rendered`. Za oficjalną [dokumentacją Meteora](http://docs.meteor.com/#template_rendered):
 
-> //// 
+> W callbacku `this` odności się do obiektu instancji szablonu, który jest unikatowy do tego wystąpienia szablonu i zachowany przy renderowaniu.
 
-////
+Zatem co zrobimy, to odnajdziemy obecną pozycję posta na stronie i następnie zapamiętamy tą pozycję w obiekcie instancji szablonu. W ten sposób, nawet wtedy gdy post jest usuwany i ponownie tworzony jesteśmy w stanie określić skąd go animować.
 
-////
+Instancje szablonu pozwalają również na dostęp do danych kolekcji przez własność `data`. Okaże się to pomocne do ustalenia rankingu posta.
 
-### Ocena Postów
+### Ranking Postów
 
-////
+Mówiliśmy poprzednio o rankingu postów ale "ranking" właściwie nie istnieje jako właściwość posta, ponieważ jest jedynie konsekwencją ułożenia postów w kolekcji. Jeżeli chcemy być w stanie animować posty zgodnie z ich rankingiem, będziemy musieli w jakiś sposób wyczarować tą własność znikąd.
 
-////
+Zauważ, że nie możemy wstawić tej własności "ranking" bezpośrednio do bazy danych, ponieważ ranking jest względną własnością zależną od sposobu sortowania postów (np. post może być pierwszy w rankingu jeżeli jest sortowany po dacie publikacji lub trzeci gdy jest posortowany względem punktów).
 
-////
+Idealnie wstawilibyśmy tą własność w kolekcje `newPosts` i `topPosts` ale Meteor jeszcze nie dostarcza wygodnego mechanizmu pozwalającego to osiągnąć.
 
-////
+Zatem wstawimy "ranking" jako ostatni możliwy krok managera szabloku `postList`:
 
 ~~~js
 Template.postsList.helpers({
@@ -120,9 +120,9 @@ Template.postsList.helpers({
 <%= caption "/client/views/posts/posts_list.js" %>
 <%= highlight "2~8" %>
 
-////
+Zamiast prostego zwracania kursora `Posts.find({}, {sort: {submitted: -1}, limit: postsHandle.limit()})` jak w poprzednim helperze `posts`, helper `postsWithRank` używa dostępnego kursora i dodaje własność `_rank` do każdego z jego dokumentów.
 
-////
+Nie zapomnij uaktualnić szablonu `postList`:
 
 ~~~html
 <template name="postsList">
@@ -143,19 +143,19 @@ Template.postsList.helpers({
 
 <% note do %>
 
-### Przewiń wstecz
+### A teraz bądź tak miły i przewiń wstecz
 
-////
+Meteor jest jednym z najbardziej przemyślanych i najnowocześniejszych z dostępnych frameworków webowych, ale jedna z jego funcji przywodzi na myśl lata 90te i kasety magnetowidowe: funkcja `rewind()`.
 
-////
+Za każdym razem, gdy używasz kursora z `forEach()`, `map()`, czy `fetch()` będziesz zmuszony przewinąć kursor do tyłu zanim będzie mógł być ponownie użyty.
 
-////
+W niektórych przypadkach jest lepiej prewencyjnie `przewinąć` kursor niż ryzykować pojawienie się buga.
 
 <% end %>
 
-### Wszystko razem
+### Składając wszystko razem
 
-////
+Można teraz złożyć wszystkie elementy razem używając callbacka szablonu `rendered` managera `post_item.js` do uruchomienia naszej animacji:
 
 ~~~js
 Template.postItem.helpers({
@@ -195,24 +195,24 @@ Template.postItem.events({
 
 <%= commit "14-1", "Dodano animację uporządkowania postów." %>
 
-////
+Nie powinno być trudne rozumienie tego, jeżeli spojrzysz na nasz poprzedni diagram.
 
-////
+Zwróć uwagę, że skoro ustawiamy własność `currentPosition` instancji szablonu w callbacku `defer`, oznacza to że ta własność nie będzie istniała podczas pierwszego renderowania fragmentu szablonu. Nie jest to jednak problemem, ponieważ i tak nie jesteśmy zainteresowani animowaniem pierwszego renderowania.
 
-////
+Teraz otwórz swoją stronę w przeglądarce i zacznij dodawać głosy. Powinieneś zaobserować delikatne przemieszczanie się postów niczym podczas baletu!
 
 ### Animacja Nowych Postów
 
-////
+Nasze posty teraz odpowiednio się przemieszczają, ale nie mieliśmy jeszcze żadnej animacji *nowego posta*. Zamiast prostego wstawiania nowego posta, użyjmy efektu ściemniania podczas wstawiania.
 
-////
+Jest to bardziej skomplikowane, niż wydaje się na pierwszy rzut oka. Problem polega na tym, że callback Meteora `rendered` jest wołany w dwóch osobnych przypadkach:
 
-1. ////
-2. ////
+1. Kiedy nowy szablon jest wstawiany w DOM
+2. Za każdym razem gdy zmianie ulegają dane, z których korzysta szablon.
 
-////
+Wyłącznie przypadek 1 powinien być animowany, chyba że masz na celu zmiany interfejsu użytkownia w choinkę przy każdej zmianie danych.
 
-////
+Upewnijmy się, że tylko animujemy posty kiedy są nowe a nie kiedy są ponownie renderowane z powodu zmiany danych, z których korzystają. Już sprawdzamy istnienie zmiennej instancji (która jest ustawiana tylko po pierszym renderowaniu szablonu), zarem wystarczy wrócić do naszego callbacka `rendered` i dodać blok `else`:
 
 ~~~js
 Template.postItem.helpers({
@@ -253,18 +253,19 @@ Template.postItem.events({
 <%= caption "/client/views/posts/post_item.js" %>
 <%= highlight "19~22,28" %>
 
-<%= commit "14-2", "Ściemnianie elementów po narysowaniu." %>
+<%= commit "14-2", "Ściemnianie elementów podczas ich rysowania." %>
 
-////
+Zauważ, że że `removeClass("invisible")` którą dodaliśmy w funkcji `defer()` będzie uruchamiana podczas każdego renderowania. Ale będzie robiła cokolwiek wyłącznie gdy klasa `.invisible` jest obecna dla elementu, a będzie to prawdziwe wyłącznie podczas pierwszego renderowania elementu.
 
 <% note do %>
 
 ### CSS i JavaScript
 
-////
+Jak już zapewne zauważyłeś, używamy klasy CSS `.invisible` aby wyzwolić animację zamiast bezpośrednio animować własność CSS `opacity` jak robiliśmy w przypadku `top`. Jest to spowodowane tym, że dla `top` potrzebna była animacja własności do określonej wartości, która zależała na danych instancji.
 
-////
+Z innej strony, chcemy wyłącznie pokazać element niezależnie od jego danych. Ponieważ przechowywanie CSS z dala od kodu JavaScript jest dobrą praktyką, dodamy wyłącznie tutaj klasę tutaj a ustalimy szczegóły animacji w akruszu stylów (kodzie CSS).
 
 <% end %>
 
-////
+W końcowym efekcie powinniśmy mieć taką animację, jaką chcieliśmy. Teraz uruchom własną aplikację i spróbuj jak to działa! Możesz również zmieniać klasy `.posts` i `posts.invisible` aby sprawdzić, czy istnieją inne ciekawe przejścia animacji. 
+Wskazówka: [CSS easing functions](http://matthewlein.com/ceaser/) jest dobrym miejscem na start!
