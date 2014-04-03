@@ -4,15 +4,15 @@ slug: denormalization
 date: 0010/01/02
 number: 10.5
 sidebar: true
-contents: Czym jest denormalizacja.|Porównanie bazy danych Mongo z tradycyjnymi relacyjnymi bazami danych.|W jakich przypadkach *nie* powinno się denormalizować danych. 
+contents: Denormalizacji.|Porównaniu bazy danych Mongo z tradycyjnymi relacyjnymi bazami danych.|W jakich przypadkach *nie* powinno się denormalizować danych. 
 paragraphs: 15
 ---
 
-////
+Denormalizacja danych oznacza przechowywanie danych w formie innej niż "normalna". Innymi słowy, denormalizacja oznacza posiadanie kilku kopii tych samych danych.
 
-////
+W ostatnim rozdziale, zdenormalizowaliśmy licznik przechowujący liczbę komentarzy do obiektu posta aby zapobiec wczytywaniu za każdym razem wszystkich komentarzy. Dla przypadku modelowania danych jest to zbędne, ponieważ równie dobrze moglibyśmy policzyć zbiór komentarzy w dowolnej chwili, aby dostać tą wartość (pomijając wpływ na wydajność tego rozwiązania).
 
-////
+Denormalizacja często oznacz dodatkową pracę dla developera. W naszym przypadku, za każdym razem gdy dodajemy lub usuwamy komentarz, musimy także pamiętać o uaktualnieniu odpowiedniego posta, aby upewnić się, że pole `commentsCount` ma prawidłową wartość. Jest to dokładnie przyczyna dlaczego relacyjne bazy danych, takie jak MySQL nie są przychylne takim praktykom.
 
 ////
 
