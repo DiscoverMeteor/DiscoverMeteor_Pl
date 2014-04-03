@@ -26,13 +26,13 @@ Jest to jednak warte rozważenia, jeżeli stopień skomplikowania kodu takiej pu
 
 <% end %>
 
-////
+Oczywiście takie rozważania są specyficzne dla konkretnych zastosowań: jeżeli piszesz kod, gdzie integralność danych jest najważniejsza, unikanie niezgodności danych ma większy priorytet niż strata na wydajności.
 
 ### Wstawianie dokumentów lub używanie wielu kolekcji
 
-////
+Jeżeli jesteś zaawansowanym użytkownikiem Mongo, mogłeś się zdziwić, że utworzyliśmy drugą kolekcję tylko dla komentarzy: dlaczego po prostu nie wstawiać komentarzy do listy znajdującej się w dokumencie posta?
 
-////
+Okazuje się, że z wielu narzędzi Meteor pozwala nam pracować lepiej gdy operujemy na poziomie kolekcji. Na przykład:
 
 1. ////
 2. ////
