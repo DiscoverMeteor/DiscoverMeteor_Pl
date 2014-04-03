@@ -3,21 +3,21 @@ title: Powiadomienia
 slug: notifications
 date: 0011/01/01
 number: 11
-contents: Dodaj kolekcję powiadomienia aby powiadamiać użytkowników o działaniach innych użytkowników.|Naucz się jak udostępnić wyłącznie pożądane powiadomienia dla danego użytkownia.|Naucz się więcej o publikacjach i subskrypcjach.
+contents: Jak dodać kolekcję powiadomienia aby powiadamiać użytkowników o działaniach innych użytkowników.|Jak udostępnić powiadomienia pożądane wyłącznie dla danego użytkownia.|Naucz się więcej o publikacjach i subskrypcjach.
 paragraphs: 25
 ---
 
-////
+Teraz kiedy użykownicy mogą komentować na posty innych użytkowników, byłoby dobrze móc powiadamiać o rozpoczętej konwersacji.
 
-////
+Aby tego dokonać, damy znać właścicielowi posta, że dodano komentarz i dostarczymy mu link, aby mógł go przeczytać.
 
-////
+Jest to funkcjonalność, w której Meteor naprawdę błyszczy: ponieważ wszystko w Meteorze domyślnie dzieje się w czasie rzeczywistym, będziemy wyświetlali te notyfikacje _natychmiastowo_. Nie chcemy czekać na użytownika, aby odświeżył stronę czy sprawdzał to w jakikolwiek sposób, możemy po prostu pokazać nową notyfikację bez potrzeby pisania żadnego dodatkowego kodu.
 
 ### Tworzenie powiadomień
 
-////
+Utworzymy powiadomienie gdy ktoś skomentuje Twój post. W przyszłości powiadomienia mogą być rozszerzone, aby wziąć pod uwagę wiele innych scenariuszy, ale teraz wystarczy to aby na bieżąco informować użytkowników o tym, co się dzieje.
 
-////
+Stwórzmy kolekcję `Notifications`, oraz funkcję `createCommentNotification`, która wstawi pasujące powiadomienie do jednego z Twoich postów:
 
 ~~~js
 Notifications = new Meteor.Collection('notifications');
