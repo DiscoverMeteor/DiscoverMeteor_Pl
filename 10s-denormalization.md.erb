@@ -14,15 +14,15 @@ W ostatnim rozdziale, zdenormalizowaliśmy licznik przechowujący liczbę koment
 
 Denormalizacja często oznacz dodatkową pracę dla developera. W naszym przypadku, za każdym razem gdy dodajemy lub usuwamy komentarz, musimy także pamiętać o uaktualnieniu odpowiedniego posta, aby upewnić się, że pole `commentsCount` ma prawidłową wartość. Jest to dokładnie przyczyna dlaczego relacyjne bazy danych, takie jak MySQL nie są przychylne takim praktykom.
 
-////
+Jednakże normalne podejście do tego problemu ma także swoje minusy: bez pola `commentsCount`, potrzebowalibyśmy wysyłać _wszystkie_ komentarze do klienta za każdym razem, tylko po to, aby je policzyć, czyli to co robiliśmy na początku. Denormalizacja pozwala uniknąć tego całkowicie.
 
 <% note do %>
 
 ### Specjalna publikacja
 
-////
+*Byłoby* również możliwe utworzenie specjalnej publikacji, która wysyła wyłącznie liczniki komenterzy, którymi jesteśmy zainteresowani (tj. liczników komentarzy które aktualnie widzimy, za pomocą zapytań aggregate po stronie serwera).
 
-////
+Jest to jednak warte rozważenia, jeżeli stopień skomplikowania kodu takiej publikacji byłby mniejszy, niż wysiłek włożony w denormalizację...
 
 <% end %>
 
