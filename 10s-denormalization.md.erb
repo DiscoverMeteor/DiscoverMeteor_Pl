@@ -32,19 +32,19 @@ Oczywiście takie rozważania są specyficzne dla konkretnych zastosowań: jeże
 
 Jeżeli jesteś zaawansowanym użytkownikiem Mongo, mogłeś się zdziwić, że utworzyliśmy drugą kolekcję tylko dla komentarzy: dlaczego po prostu nie wstawiać komentarzy do listy znajdującej się w dokumencie posta?
 
-Okazuje się, że z wielu narzędzi Meteor pozwala nam pracować lepiej gdy operujemy na poziomie kolekcji. Na przykład:
+Okazuje się, że dla wielu narzędzi które oferuje Meteor, pracowuje się lepiej gdy operujemy na poziomie kolekcji. Na przykład:
 
-1. ////
-2. ////
-3. ////
-4. ////
+1. Helper `{{#each}}` jest bardzo wydajny, jeżeli chodzi o iterację po kursorze (wyniku `collection.find()`). Nie jest to prawdą, gdy iteruje po tablicy objektów w środku większego obiektu.
+2. `allow` i `deny` operują na poziomie dokumentu, ułatwia to potwierdzenie, że jakiekolwiek modyfikacje pojedyńczych komentarzy są poprawne i obsługa byłaby bardziej skomplikowana na poziomie posta.
+3. DDP operuje na poziomie atrybutów dokumentu najwyższego poziomu -- oznacza to, że jeżeli `comments` byłyby własnością `post`, za każdym razem, gdy komentarz byłby dodawany do posta, serwer musiałby wysyłać całą uaktualnioną listę komentarzy tego posta do wszystkich podłączonych klientów.
+4. Publikacje i subskrypcje można o wiele łatwiej kontrolować na poziomie dokumentów. Na przykład, jeżeli chcielibyśmy dzielić na strony komentarze do posta, byłoby to trudne do zrealizowania gdyby komentarze nie były umieszczone w odrębnej kolekcji. 
 
-////
+Mongo proponuje zagnieżdżanie dokumentów aby zredukować liczbę kosztownych zapytań o pobranie dokumentów. Jednakże nie należy się tym zbytnio przejmować biorąc pod uwagę architekturę Meteora: większość czasu pytamy o dokumenty po stronie klienta, gdzie dostęp do bazy danych jest właściwie darmowy.
 
 <% note do %>
 
 ### Wady denormalizacji
 
-////
+Istnieje dobry argument na to, że *nie należy* denormalizować danych. Polecamy przeczytać [Why You Should Never Use MongoDB](http://www.sarahmei.com/blog/2013/11/11/why-you-should-never-use-mongodb/) autorstwa Sarah Mei, która przedstawia dobry przykład przeciwko denormalizacji.
 
 <% end %>
