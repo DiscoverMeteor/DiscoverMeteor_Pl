@@ -215,7 +215,9 @@ Poza potencjalnymi problemami związanymi z zachowaniem prywatności, nie stać 
 
 Rozwiązaliśmy ten problem za pomocą **publikacji**. Możemy użyć publikacji aby bardzo szczegółowo określić, którą część kolekcji chcemy dzielić z każdą przeglądarką.
 
-Osiągnięcie tego jest proste, poniewż funkcja `publish` ma dostęp do `_id` bieżącego użytkownika dostępną jako `this.userId`:
+Aby to osiągnąć, musimy zwrócić inny kursor niż `Notifications.find()` w naszej publikacji. Mianowicie, chcemy zwrócić kursor, która odpowiada bieżącemu powiadomieniu użytkownika.
+
+Osiągnięcie tego jest proste, ponieważ funkcja `publish` ma dostęp do `_id` bieżącego użytkownika dostępną jako `this.userId`:
 
 ~~~js
 Meteor.publish('notifications', function() {
@@ -226,7 +228,7 @@ Meteor.publish('notifications', function() {
 
 <%= commit "11-3", "Synchronizowanie wyłącznie tych powiadomień, które są przeznaczone dla danego użytkownika." %>
 
-////
+Teraz, gdy sprawdzimy dwie niezależnie uruchomione przeglądarki, powinniśmy zobaczyć dwie różne kolekcje powiadomień:
 
 ~~~js
 ❯ Notifications.find().count();
@@ -240,6 +242,6 @@ Meteor.publish('notifications', function() {
 ~~~
 <%= caption "Browser console (user 2)" %>
 
-////
+Tak naprawdę, lista publikacji powinna zmieniać się nawet po wylogowaniu i ponownym zalogowaniu się do aplikacji. Dzieje się tak dlatego, ponieważ publikacje po każdej zmianie konta użytkownika są publikowane ponownie.  
 
-////
+Nasza aplikacja staje się coraz bardziej funkcjonalna i im więcej użytkowników przyłącza się i zaczyna publikować linki, tym większe ryzyko nieskończonie ładującej się stronie głównej. Zajmiemy się tym w następnym rozdziale przez zaimplementowanie dzielenia dokumentu na strony.
