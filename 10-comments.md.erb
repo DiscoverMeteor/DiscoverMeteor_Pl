@@ -4,13 +4,13 @@ slug: comments
 complete: 100
 date: 0010/01/01
 number: 10
-contents: Wyświetlanie istniejących komentarzy.|Dodanie formularza do wprowadzania nowych postów.|Jak wczytywać komentarze wyłącznie bieżącego posta.|Dodanie licznika komentarzy do postów.
+contents: Wyświetlaniu istniejących komentarzy.|Dodaniu formularza do wprowadzania nowych postów.|Wczytywaniu komentarzy wyłącznie do bieżącego posta.|Dodaniu licznika komentarzy do postów.
 paragraphs: 34
 ---
 
-////
+Głównym celem serwisu wiadomości społecznościowych jest utworzenie społeczności użytkowników i będzie ciężko to osiągnąć bez dostarczenia sposobu komunikacji między ludźmi. Zatem dodajmy komentarze w tym rozdziale!
 
-////
+Zaczniemy od utworzenia nowej kolekcji do przechowywania komentarzy i dodanie podstawowych danych początkowych (fixture) do tej kolekcji.
 
 ~~~js
 Comments = new Meteor.Collection('comments');
@@ -75,7 +75,7 @@ if (Posts.find().count() === 0) {
 ~~~
 <%= caption "server/fixtures.js" %>
 
-////
+Nie zapomnijmy opublikować i subskrybować nowo utworzoną kolekcję:
 
 ~~~js
 Meteor.publish('posts', function() {
@@ -103,11 +103,11 @@ Router.configure({
 
 <%= commit "10-1", "Dodana kolekcja komentarzy, publikacja/subskrypcja i dane początkowe." %>
 
-////
+Zauważ, że aby uruchomić powyższy kod ustawiający dane początkowe, będziesz musiał wykonać `meteor reset` aby wyczyścić bazę danych. Po resecie nie zapomnij utworzyć nowego konta i się do niego zalogować!
 
-////
+Na początek stworzyliśmy kilku (całkowicie wymyślonych) użytowników, wstawiliśmy ich dane do bazy danych i użyliśmy ich `id` aby później pobrać ich z bazy. Następnie dodaliśmy komentarz każdemu użytkownikowi do pierwszego posta, łącząc komentarz do posta (z `postId`) i użytkownika (z `userId`). Dodaliśmy także datę dodania posta i jego treść, jak również zdenormalizowane pole `author` wskazujące na autora komentarza.
 
-////
+Również zmieniliśmy router, aby obsługiwał zarówno posty jak i komentarze.
 
 ### Wyświetlanie komentarzy
 
