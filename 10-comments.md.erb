@@ -111,7 +111,7 @@ Również zmieniliśmy router, aby obsługiwał zarówno posty jak i komentarze.
 
 ### Wyświetlanie komentarzy
 
-////
+Dobrze, że teraz wszystkie komentarze mamy w bazie danych, ale również potrzebujemy pokazać je na stronie zawierającą dyskusję. Mam nadzieję, że ten proces jest już tobie znajomy i masz pojęcie o kolejnych krokach:
 
 ~~~html
 <template name="postPage">
@@ -137,9 +137,9 @@ Template.postPage.helpers({
 <%= caption "client/views/posts/post_page.js" %>
 <%= highlight "2~4" %>
 
-////
+Wstawiamy blok `{{#each comments}}` w szablonie posta, zatem `this` jest postem w helperze `comments`. Aby znaleźć odpowiednie komentarze, sprawdzamy te, które są połączone z danym postem przez atrybut `postId`.
 
-////
+Biorąc po uwagę, że poznaliśmy już Handlebars i funkcje pomocnicze szablonu (helper), renderowanie komentarza nie powinno nastręczać większych kłopotów. Utworzymy nowy katalog `comments` w `views` aby zapisać całą informację o komentarzu: 
 
 ~~~html
 <template name="comment">
@@ -154,8 +154,9 @@ Template.postPage.helpers({
 ~~~
 <%= caption "client/views/comments/comment.html" %>
 
-////
-
+Zaimplementujmy szybko helper szablonu, aby wyświetlić naszą datę publikacji `submitted` w czytelnym formacie 
+ (chyba że jesteś jednym z ludzi, którzy płynnie odczytują timestamp UNIX i kody hexadecymalne?)
+ 
 ~~~js
 Template.comment.helpers({
   submittedText: function() {
@@ -165,7 +166,7 @@ Template.comment.helpers({
 ~~~
 <%= caption "client/views/comments/comment.js" %>
 
-////
+Następnie, wyświetlimy liczbę komentarzy do każdego posta:
 
 ~~~html
 <template name="postItem">
@@ -185,7 +186,7 @@ Template.comment.helpers({
 <%= caption "client/views/posts/post_item.html" %>
 <%= highlight "6,7" %>
 
-////
+I dodamy helper `commentsCount` do naszego managera `postItem`:
 
 ~~~js
 Template.postItem.helpers({
@@ -207,15 +208,15 @@ Template.postItem.helpers({
 
 <%= commit "10-2", "Wyświetlanie komentarzy na `postPage`." %>
 
-////
+Powinniśmy teraz być w stanie wyświetlić komentarze z danych początkowych i zobaczyć coś podobnego do:
 
 <%= screenshot "10-1", "Wyświetlanie komentarzy" %>
 
 ### Wysyłanie komentarzy
 
-////
+Dodajmy teraz możliwość dodawania komentarzy dla użytkowników. Proces, przez który przejdziemy będzie bardzo podobny do tego, w jakim pozwoliliśmy użytkownikom tworzyć nowe posty.
 
-////
+Zaczniemy od dodania przycisku wstawiania pod każdym postem:
 
 ~~~html
 <template name="postPage">
@@ -237,7 +238,7 @@ Template.postItem.helpers({
 <%= caption "client/views/posts/post_page.html" %>
 <%= highlight "11~15" %>
 
-////
+I następnie utworzenia formularza szablonu komentarza:
 
 ~~~html
 <template name="commentSubmit">
