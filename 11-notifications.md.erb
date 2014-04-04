@@ -3,21 +3,21 @@ title: Powiadomienia
 slug: notifications
 date: 0011/01/01
 number: 11
-contents: Dodaj kolekcję powiadomienia aby powiadamiać użytkowników o działaniach innych użytkowników.|Naucz się jak udostępnić wyłącznie pożądane powiadomienia dla danego użytkownia.|Naucz się więcej o publikacjach i subskrypcjach.
+contents: Jak dodać kolekcję powiadomienia aby powiadamiać użytkowników o działaniach innych użytkowników.|Jak udostępnić powiadomienia pożądane wyłącznie dla danego użytkownia.|Naucz się więcej o publikacjach i subskrypcjach.
 paragraphs: 25
 ---
 
-////
+Teraz kiedy użykownicy mogą komentować na posty innych użytkowników, byłoby dobrze móc powiadamiać o rozpoczętej konwersacji.
 
-////
+Aby tego dokonać, damy znać właścicielowi posta, że dodano komentarz i dostarczymy mu link, aby mógł go przeczytać.
 
-////
+Jest to funkcjonalność, w której Meteor naprawdę błyszczy: ponieważ wszystko w Meteorze domyślnie dzieje się w czasie rzeczywistym, będziemy wyświetlali te notyfikacje _natychmiastowo_. Nie chcemy czekać na użytownika, aby odświeżył stronę czy sprawdzał to w jakikolwiek sposób, możemy po prostu pokazać nową notyfikację bez potrzeby pisania żadnego dodatkowego kodu.
 
 ### Tworzenie powiadomień
 
-////
+Utworzymy powiadomienie gdy ktoś skomentuje Twój post. W przyszłości powiadomienia mogą być rozszerzone, aby wziąć pod uwagę wiele innych scenariuszy, ale teraz wystarczy to aby na bieżąco informować użytkowników o tym, co się dzieje.
 
-////
+Stwórzmy kolekcję `Notifications`, oraz funkcję `createCommentNotification`, która wstawi pasujące powiadomienie do jednego z Twoich postów:
 
 ~~~js
 Notifications = new Meteor.Collection('notifications');
@@ -41,11 +41,11 @@ createCommentNotification = function(comment) {
 ~~~
 <%= caption "collections/notifications.js" %>
 
-////
+Tak jak posty lub komentarze, kolekcja `Notifications` będzie współdzielona po stronie klienta i serwera. Ponieważ potrzebujemy uaktualniać powiadomienia po tym, kiedy użytkownik je zobaczył, włączamy również uaktualnienia, jak zwykle upewniając się, że ograniczamy uprawnienia do uaktualnień własnych danych użytkownika.
 
-////
+Utworzyliśmy także prostą funkcję, która sprawdza post który jest aktualnie komentowany i buduje listę użytkowników, którzy mają być powiadomieni i wstawia nową notyfikację.
 
-////
+Już tworzymy komentarze po stronie serwera, zatem możemy rozwinąć funkcję je tworzącą, aby wywoływała naszą funkcję. Zamienimy `return Comments.insert(comment);` przez `comment._id = Comments.insert(comment)` aby zaoszczędzić `_id` nowo utworzonego komentarza w zmiennej, a następnie zawołać naszą funkcję `createCommentNotification`:
 
 ~~~js
 Comments = new Meteor.Collection('comments');
@@ -68,7 +68,7 @@ Meteor.methods({
 <%= caption "collections/comments.js" %>
 <%= highlight "8~14" %>
 
-////
+Opublikujemy także powiadomienia i utworzymy dla nich subskrypcje po stronie klienta.
 
 ~~~js
 // [...]
@@ -95,7 +95,7 @@ Router.configure({
 
 ### Wyświetlanie powiadomień
 
-////
+Możemy teraz kontynuować i dodać listę powiadomień do nagłówka.
 
 ~~~html
 <template name="header">
@@ -129,7 +129,7 @@ Router.configure({
 <%= caption "client/views/includes/header.html" %>
 <%= highlight "12~19" %>
 
-////
+I utworzyć szablony `notifications` i `notification` (będą dzieliły wspólny plik `notifications.html`):
 
 ~~~html
 <template name="notifications">
@@ -161,9 +161,9 @@ Router.configure({
 ~~~
 <%= caption "client/views/notifications/notifications.html" %>
 
-////
+Jak widać, zaplanowaliśmy, że każde powiadomienie ma zawierać link do posta, do którego dodano komentarz i nazwę użytkownika, który dodał komentarz. 
 
-////
+Następnie, musimy się upewnić, że zaznaczyliśmy prawidłową listę powiadomień w naszym managerze i uaktualnić powiadomienie jako `czytaj` gdy użytkownik kliknie na link, na który wzkazują.
 
 ~~~js
 Template.notifications.helpers({
@@ -191,17 +191,17 @@ Template.notification.events({
 
 <%= commit "11-2", "Display notifications in the header." %>
 
-////
+Możesz myśleć, że powiadomienia nie różnią się zbytnio od błedów i masz rację. Ich struktura jest podobna. Jest jednak jedna duża różnica między nimi: utworzyliśmy odpowiednią synchronizowaną kolekcję miedzy klientem i serwerem. Oznacza to, że nasze powiadomienia są *zapamiętywane* i tak długo jak używamy tego samego konta, będzie istniało po odświeżeniach przeglądarki i między różnymi urządzeniami, które przeglądają stronę.
 
-////
+Wypróbuj to: otwórz drugą przeglądarkę (powiedzmy Firefox), utwórz nowe konto użytkownika, i skomentuj posta, którego utworzyłeś za pomocą głównego konta (które zostawiłeś otwarte w Chrome). Powinieneś zobaczyć mniej więcej to:
 
 <%= screenshot "11-1", "Displaying notifications." %>
 
 ### Kontrola dostępu do powiadomień
 
-////
+Powiadomienia działają dobrze. Jest jednak jeden problem: nasze powiadomienia są dostępne dla wszystkich.
 
-////
+Jeżeli masz nadal otwartą drugą przeglądarkę, spróbuj uruchomić następujący kod w konsoli przeglądarki:
 
 ~~~js
 ❯ Notifications.find().count();
@@ -209,15 +209,15 @@ Template.notification.events({
 ~~~
 <%= caption "Browser console" %>
 
-////
+Nowy użytkownik (ten, który *skomentował*) nie powinien otrzymać żadnego powiadomienia. Powiadomienie, które widzą w kolekcji `Notifications` należy do niego.
 
-////
+Poza potencjalnymi problemami związanymi z zachowaniem prywatności, nie stać nas na to, aby załadować wszystkie powiadomienia w każdej przeglądarce innych użytkowników. Na wystarczająco dużym serwisie, mogłoby to zapełnić dostępną pamięć przeglądarki i spowodować poważne problemy związane ze spadkiem wydajności.
 
-////
+Rozwiązaliśmy ten problem za pomocą **publikacji**. Możemy użyć publikacji aby bardzo szczegółowo określić, którą część kolekcji chcemy dzielić z każdą przeglądarką.
 
-////
+Aby to osiągnąć, musimy zwrócić inny kursor niż `Notifications.find()` w naszej publikacji. Mianowicie, chcemy zwrócić kursor, która odpowiada bieżącemu powiadomieniu użytkownika.
 
-////
+Osiągnięcie tego jest proste, ponieważ funkcja `publish` ma dostęp do `_id` bieżącego użytkownika dostępną jako `this.userId`:
 
 ~~~js
 Meteor.publish('notifications', function() {
@@ -226,9 +226,9 @@ Meteor.publish('notifications', function() {
 ~~~
 <%= caption "server/publications.js" %>
 
-<%= commit "11-3", "Only sync notifications that are relevant to the user." %>
+<%= commit "11-3", "Synchronizowanie wyłącznie tych powiadomień, które są przeznaczone dla danego użytkownika." %>
 
-////
+Teraz, gdy sprawdzimy dwie niezależnie uruchomione przeglądarki, powinniśmy zobaczyć dwie różne kolekcje powiadomień:
 
 ~~~js
 ❯ Notifications.find().count();
@@ -242,6 +242,6 @@ Meteor.publish('notifications', function() {
 ~~~
 <%= caption "Browser console (user 2)" %>
 
-////
+Tak naprawdę, lista publikacji powinna zmieniać się nawet po wylogowaniu i ponownym zalogowaniu się do aplikacji. Dzieje się tak dlatego, ponieważ publikacje po każdej zmianie konta użytkownika są publikowane ponownie.  
 
-////
+Nasza aplikacja staje się coraz bardziej funkcjonalna i im więcej użytkowników przyłącza się i zaczyna publikować linki, tym większe ryzyko nieskończonie ładującej się stronie głównej. Zajmiemy się tym w następnym rozdziale przez zaimplementowanie dzielenia dokumentu na strony.
