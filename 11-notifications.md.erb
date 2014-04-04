@@ -41,11 +41,11 @@ createCommentNotification = function(comment) {
 ~~~
 <%= caption "collections/notifications.js" %>
 
-////
+Tak jak posty lub komentarze, kolekcja `Notifications` będzie współdzielona po stronie klienta i serwera. Ponieważ potrzebujemy uaktualniać powiadomienia po tym, kiedy użytkownik je zobaczył, włączamy również uaktualnienia, jak zwykle upewniając się, że ograniczamy uprawnienia do uaktualnień własnych danych użytkownika.
 
-////
+Utworzyliśmy także prostą funkcję, która sprawdza post który jest aktualnie komentowany i buduje listę użytkowników, którzy mają być powiadomieni i wstawia nową notyfikację.
 
-////
+Już tworzymy komentarze po stronie serwera, zatem możemy rozwinąć funkcję je tworzącą, aby wywoływała naszą funkcję. Zamienimy `return Comments.insert(comment);` przez `comment._id = Comments.insert(comment)` aby zaoszczędzić `_id` nowo utworzonego komentarza w zmiennej, a następnie zawołać naszą funkcję `createCommentNotification`:
 
 ~~~js
 Comments = new Meteor.Collection('comments');
@@ -68,7 +68,7 @@ Meteor.methods({
 <%= caption "collections/comments.js" %>
 <%= highlight "8~14" %>
 
-////
+Opublikujemy także powiadomienia i utworzymy dla nich subskrypcje po stronie klienta.
 
 ~~~js
 // [...]
@@ -95,7 +95,7 @@ Router.configure({
 
 ### Wyświetlanie powiadomień
 
-////
+Możemy teraz kontynuować i dodać listę powiadomień do nagłówka.
 
 ~~~html
 <template name="header">
@@ -129,7 +129,7 @@ Router.configure({
 <%= caption "client/views/includes/header.html" %>
 <%= highlight "12~19" %>
 
-////
+I utworzyć szablony `notifications` i `notification` (będą dzieliły wspólny plik `notifications.html`):
 
 ~~~html
 <template name="notifications">
@@ -161,9 +161,9 @@ Router.configure({
 ~~~
 <%= caption "client/views/notifications/notifications.html" %>
 
-////
+Jak widać, zaplanowaliśmy, że każde powiadomienie ma zawierać link do posta, do którego dodano komentarz i nazwę użytkownika, który dodał komentarz. 
 
-////
+Następnie, musimy się upewnić, że zaznaczyliśmy prawidłową listę powiadomień w naszym managerze i uaktualnić powiadomienie jako `czytaj` gdy użytkownik kliknie na link, na który wzkazują.
 
 ~~~js
 Template.notifications.helpers({
@@ -191,17 +191,17 @@ Template.notification.events({
 
 <%= commit "11-2", "Display notifications in the header." %>
 
-////
+Możesz myśleć, że powiadomienia nie różnią się zbytnio od błedów i masz rację. Ich struktura jest podobna. Jest jednak jedna duża różnica między nimi: utworzyliśmy odpowiednią synchronizowaną kolekcję miedzy klientem i serwerem. Oznacza to, że nasze powiadomienia są *zapamiętywane* i tak długo jak używamy tego samego konta, będzie istniało po odświeżeniach przeglądarki i między różnymi urządzeniami, które przeglądają stronę.
 
-////
+Wypróbuj to: otwórz drugą przeglądarkę (powiedzmy Firefox), utwórz nowe konto użytkownika, i skomentuj posta, którego utworzyłeś za pomocą głównego konta (które zostawiłeś otwarte w Chrome). Powinieneś zobaczyć mniej więcej to:
 
 <%= screenshot "11-1", "Displaying notifications." %>
 
 ### Kontrola dostępu do powiadomień
 
-////
+Powiadomienia działają dobrze. Jest jednak jeden problem: nasze powiadomienia są dostępne dla wszystkich.
 
-////
+Jeżeli masz nadal otwartą drugą przeglądarkę, spróbuj uruchomić następujący kod w konsoli przeglądarki:
 
 ~~~js
 ❯ Notifications.find().count();
