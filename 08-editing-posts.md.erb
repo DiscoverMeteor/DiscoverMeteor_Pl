@@ -192,9 +192,9 @@ ownsDocument = function(userId, doc) {
 ~~~
 <%= caption "lib/permissions.js" %>
 
-////
+W rozdziale [Tworzenie postów](/chapter/creating-posts) pozbyliśmy się metod `allow()`, ponieważ wstawialiśmy nowe posty wyłącznie za pomocą metody serwerowej (która i tak omija `allow()`).
 
-////
+Teraz jednak edytujemy i usuwamy posty po stronie klienta, wróćmy zatem do pliku `posts.js` i dodajmy blok `allow()`:
 
 ~~~js
 Posts = new Meteor.Collection('posts');
@@ -210,13 +210,13 @@ Meteor.methods({
 <%= caption "collections/posts.js" %>
 <%= highlight "3~6" %>
 
-<%= commit "8-2", "Added basic permission to check the post's owner." %>
+<%= commit "8-2", "Dodanie podstawowych praw dostępu do sprawdzenia właściciela posta." %>
 
-### Limiting Edits
+### Ograniczanie edycji
 
-////
+Fakt, że możesz edytować własne posty nie oznacza, że powinieneś edytować *każde* pole. Na przykład, nie chcemy aby użytkownicy mogli tworzyć posta i następnie przypisać go innej osobie.
 
-////
+Używamy callbacka Meteora `deny()` aby upewnić się, że użytkownicy mogę edytować wyłącznie niektóre pola:
 
 ~~~js
 Posts = new Meteor.Collection('posts');
