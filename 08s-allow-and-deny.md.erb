@@ -44,7 +44,7 @@ Oznacza to, że jeżeli miałbyś napisać metodę serwerową `deletePost`, któ
 
 ### Używanie funkcji deny (odmawianie dostępu) jako callbacka
 
-////
+Ostatecznie możesz użyć `deny` jako callbacka "onX" (jeżeli coś zajdzie). Na przykład, możesz osiągnąć dodanie znacznika czasu modyfikacji posta `lastModified` za pomocą następującego kodu:
 
 ~~~js
 Posts.deny({
@@ -56,6 +56,6 @@ Posts.deny({
 });
 ~~~
 
-////
+Ponieważ callbacki `deny` są uruchamiane dla *każdej* udanej modyfikacji za pomocą `update`, wiemy, że ten callback będzie uruchomiony i jest w stanie zmienić dokument w uporządkowany sposób.
 
-////
+Trzeba przyznać, że ten sposób jest trochę hackowaniem systemu, więc możesz rozważyć dokonywanie zmian za pomocą metod po stronie serwera. Mimo wszystko, wiedza ta jest przydatna i można mieć nadzieję, że w przyszłości będzie dostępny callback `beforeUpdate`.
