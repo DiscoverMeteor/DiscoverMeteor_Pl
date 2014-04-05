@@ -372,17 +372,17 @@ Meteor.publish('comments', function(postId) {
 
 <%= commit "10-4", "Utworzona prosta publikacja/subskrypcja komentarzy." %>
 
-////
+Jest tylko jeden problem: gdy powrócimy do strony domowej, twierdzi że wszystkie posty mają 0 komentarzy:
 
 <%= screenshot "10-3", "Wszystkie komentarze zniknęły!" %>
 
 ### Liczenie komentarzy
 
-////
+Przyczyna takiego stanu rzeczy wyda się wkrótce jasna: w jednym momencie możemy mieć tylko wczytane komentarze *jednego* posta, zatem gdy wołamy `Comments.find({postId: this._id})` w helperze `commentsCount` w managerze `postItem`, Meteor nie odnajduje potrzebnych danych do obliczenia liczby komentarzy po stronie klienta. 
 
-////
+Najlepszym sposobem na poradzenie sobie z tym, jest *zdenormalizowanie* liczby komentarzy do posta (nie przejmuj się, jeżeli nie wiesz o co chodzi, następny rozdział tłumaczy to szczegółowo). Zobaczysz, że powoduje to w małym stopniu zwiększenie złożoności kodu, ale wzrost wydajności jaki uzyskujemy przez uniknięcie publikowania _wszystkich_ komentarzy jest tego warty.
 
-////
+Osiągniemy to przez dodanie zmiennej `commentsCount` do struktury danych `post`. Aby rozpocząć, uaktualnimy nasze dane początkowe (ang. fixtures) (i użyjemy `meteor reset` aby je przeładować -- nie zapomnij ponownie utworzyć konta użytkownika po dokonaniu tej operacji):
 
 ~~~js
 var telescopeId = Posts.insert({
@@ -405,7 +405,7 @@ Posts.insert({
 ~~~
 <%= caption "server/fixtures.js" %>
 
-////
+Następnie upewnimy się, że wszystkie nowe posty mają 0 komentarzy:
 
 ~~~js
 // pick out the whitelisted keys
@@ -420,7 +420,7 @@ var postId = Posts.insert(post);
 ~~~
 <%= caption "collections/posts.js" %>
 
-////
+I następnie uaktualniamy odpowiedni licznik `commentsCount` gdy tworzymy nowy komentarz za pomocą operatora `$inc` Mongo (który zwiększa pole numeryczne o 1):
 
 ~~~js
 // uaktualnienie posta o liczbę komentarzy
@@ -430,8 +430,8 @@ return Comments.insert(comment);
 ~~~
 <%= caption "collections/comments.js "%>
 
-////
+Na koniec, możemy usunąć helper `commentsCount` z `client/views/posts/post_item.js`, skoro to pole jest dostępne teraz bezpośrednio w poście.
 
 <%= commit "10-5", "Zdenormalizowana liczba komentarzy do posta." %>
 
-////
+Teraz skoro użytkownicy mogą ze sobą rozmawiać, byłoby szkoda, gdyby przegapili nowe komentarze na ich posty. I proszę, następny rozdział właśnie pokaże, jak zaimplementować powiadomienia, aby tego uniknąć!
