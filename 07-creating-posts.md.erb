@@ -42,7 +42,7 @@ Użyjemy funkcji routera `data`, aby ustawić kontekst danych szablonu `postPage
 
 ### Dodawanie linka do nagłówka.
 
-////
+Po zdefiniowaniu ścieżki, możemy dodać link do strony umożliwiającej dodanie posta w nagłówku:
 
 ~~~html
 <template name="header">
@@ -69,7 +69,7 @@ Użyjemy funkcji routera `data`, aby ustawić kontekst danych szablonu `postPage
 <%= caption "client/views/includes/header.html" %>
 <%= highlight "11~16" %>
 
-////
+Ustawienie ścieżki oznacza, że jeżeli użytkownik przejdzie do URL `/submit`, Meteor wyświetli szablon `postSubmit`. Napiszmy zatem ten szablon:
 
 ~~~html
 <template name="postSubmit">
@@ -106,13 +106,13 @@ Użyjemy funkcji routera `data`, aby ustawić kontekst danych szablonu `postPage
 ~~~
 <%= caption "client/views/posts/post_submit.html" %>
 
-////
+Uwaga: jest tu wiele znaczników pochodzących z Bootstrap Twittera. Podczas gdy tylko elementy formularza są istotne, dodatkowe znaczniki pomogą w upiększeniu naszej aplikacji. Powinna wyglądać teraz podobnie do:
 
-<%= screenshot "7-1", "The post submit form" %>
+<%= screenshot "7-1", "Formularz dodawania posta" %>
 
-////
+Jest to prosty formularz. Nie musimy się martwić o wykonanie konkretnej akcji, ponieważ będziemy przechwytywali zdarzenie `wyślij` na forumlarzu i uaktualniali dane za pomocą JavaScript. (Nie ma sensu dostarczać na wszelki wypadek rozwiązania nie-JavaScript, gdy weźmiesz pod uwagę, że aplikacja Meteora jest całkowicie niefunkcjonalna po wyłączeniu obsługi JavaScript).
 
-### Creating Posts
+### Tworzenie postów
 
 ////
 
