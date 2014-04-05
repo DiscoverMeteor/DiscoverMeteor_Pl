@@ -18,15 +18,15 @@ Używanie tych callbacków pozwala na bardziej deklaratywne modyfikowanie bazy d
 
 ### Wiele callbacków
 
-////
+Możemy zdefiniować tyle callbacków `allow`, ile tylko potrzeba. Potrzebujemy, aby _przynajmniej jeden z nich_ zwracał wartość `true` dla bieżącej zmiany. Zatem gdy `Posts.insert` jest wołany w przeglądarce (nieważne, czy z kodu aplikacji po stronie klienta, czy z konsoli przeglądarki), serwer z kolei zawoła cokolwiek jest zezwolone-`insert` sprawdza wzystkie po kolei, aż znajdzie jeden, który zwróci `true`. Jeżeli nie znajdzie żadnego, nie pozwoli na wprowadzenie danych i zwróci klientowi błąd `403`.
 
-////
+Podobnie możemy zdefiniować jeden lub więcej callbacków `deny`. Jeżeli _jakikolwiek_ z tych callbacków zwróci wartość `true`, zmiana będzie odwołana i zostanie zwrócony błąd `403`. Logika tego jest taka, że dla udanego `insert` zostanie zawołany jeden lub więcej callbacków `insert` oraz _kazdy_ callback `deny`.
 
 <%= diagram "allow_deny", "Uwaga: n/e oznacza Not Executed (niewykonane)" %>
 
-////
+Innymi słowy, Meteor przesuwa listę callbacków zaczynając najpierw od `deny`, następnie przechodzi do `allow` i woła każdy po kolei, aż do momentu gdy jeden z nich zwróci `true`.
 
-////
+Praktycznym przykładem tego wzorca jest posiadanie dwóch callbacków `allow()`, jeden sprawdza, czy post należy do konkretnego użytkownika, a drugi sprawdza, czy użytkownik ma prawa administratora. Jeżeli bieżącuy użytkownik jest administratorem, zapewnia to możliwość edytowania dowolnego posta, ponieważ przynajmniej jeden z tych callbacków zwróci `true`.
 
 ### Kompensacja lagów
 
