@@ -4,13 +4,13 @@ slug: comments
 complete: 100
 date: 0010/01/01
 number: 10
-contents: Wyświetlanie istniejących komentarzy.|Dodanie formularza do wprowadzania nowych postów.|Jak wczytywać komentarze wyłącznie bieżącego posta.|Dodanie licznika komentarzy do postów.
+contents: Wyświetlaniu istniejących komentarzy.|Dodaniu formularza do wprowadzania nowych postów.|Wczytywaniu komentarzy wyłącznie do bieżącego posta.|Dodaniu licznika komentarzy do postów.
 paragraphs: 34
 ---
 
-////
+Głównym celem serwisu wiadomości społecznościowych jest utworzenie społeczności użytkowników i będzie ciężko to osiągnąć bez dostarczenia sposobu komunikacji między ludźmi. Zatem dodajmy komentarze w tym rozdziale!
 
-////
+Zaczniemy od utworzenia nowej kolekcji do przechowywania komentarzy i dodanie podstawowych danych początkowych (fixture) do tej kolekcji.
 
 ~~~js
 Comments = new Meteor.Collection('comments');
@@ -75,7 +75,7 @@ if (Posts.find().count() === 0) {
 ~~~
 <%= caption "server/fixtures.js" %>
 
-////
+Nie zapomnijmy opublikować i subskrybować nowo utworzoną kolekcję:
 
 ~~~js
 Meteor.publish('posts', function() {
@@ -103,15 +103,15 @@ Router.configure({
 
 <%= commit "10-1", "Dodana kolekcja komentarzy, publikacja/subskrypcja i dane początkowe." %>
 
-////
+Zauważ, że aby uruchomić powyższy kod ustawiający dane początkowe, będziesz musiał wykonać `meteor reset` aby wyczyścić bazę danych. Po resecie nie zapomnij utworzyć nowego konta i się do niego zalogować!
 
-////
+Na początek stworzyliśmy kilku (całkowicie wymyślonych) użytowników, wstawiliśmy ich dane do bazy danych i użyliśmy ich `id` aby później pobrać ich z bazy. Następnie dodaliśmy komentarz każdemu użytkownikowi do pierwszego posta, łącząc komentarz do posta (z `postId`) i użytkownika (z `userId`). Dodaliśmy także datę dodania posta i jego treść, jak również zdenormalizowane pole `author` wskazujące na autora komentarza.
 
-////
+Również zmieniliśmy router, aby obsługiwał zarówno posty jak i komentarze.
 
 ### Wyświetlanie komentarzy
 
-////
+Dobrze, że teraz wszystkie komentarze mamy w bazie danych, ale również potrzebujemy pokazać je na stronie zawierającą dyskusję. Mam nadzieję, że ten proces jest już tobie znajomy i masz pojęcie o kolejnych krokach:
 
 ~~~html
 <template name="postPage">
@@ -137,9 +137,9 @@ Template.postPage.helpers({
 <%= caption "client/views/posts/post_page.js" %>
 <%= highlight "2~4" %>
 
-////
+Wstawiamy blok `{{#each comments}}` w szablonie posta, zatem `this` jest postem w helperze `comments`. Aby znaleźć odpowiednie komentarze, sprawdzamy te, które są połączone z danym postem przez atrybut `postId`.
 
-////
+Biorąc po uwagę, że poznaliśmy już Handlebars i funkcje pomocnicze szablonu (helper), renderowanie komentarza nie powinno nastręczać większych kłopotów. Utworzymy nowy katalog `comments` w `views` aby zapisać całą informację o komentarzu: 
 
 ~~~html
 <template name="comment">
@@ -154,8 +154,9 @@ Template.postPage.helpers({
 ~~~
 <%= caption "client/views/comments/comment.html" %>
 
-////
-
+Zaimplementujmy szybko helper szablonu, aby wyświetlić naszą datę publikacji `submitted` w czytelnym formacie 
+ (chyba że jesteś jednym z ludzi, którzy płynnie odczytują timestamp UNIX i kody hexadecymalne?)
+ 
 ~~~js
 Template.comment.helpers({
   submittedText: function() {
@@ -165,7 +166,7 @@ Template.comment.helpers({
 ~~~
 <%= caption "client/views/comments/comment.js" %>
 
-////
+Następnie, wyświetlimy liczbę komentarzy do każdego posta:
 
 ~~~html
 <template name="postItem">
@@ -185,7 +186,7 @@ Template.comment.helpers({
 <%= caption "client/views/posts/post_item.html" %>
 <%= highlight "6,7" %>
 
-////
+I dodamy helper `commentsCount` do naszego managera `postItem`:
 
 ~~~js
 Template.postItem.helpers({
@@ -207,15 +208,15 @@ Template.postItem.helpers({
 
 <%= commit "10-2", "Wyświetlanie komentarzy na `postPage`." %>
 
-////
+Powinniśmy teraz być w stanie wyświetlić komentarze z danych początkowych i zobaczyć coś podobnego do:
 
 <%= screenshot "10-1", "Wyświetlanie komentarzy" %>
 
 ### Wysyłanie komentarzy
 
-////
+Dodajmy teraz możliwość dodawania komentarzy dla użytkowników. Proces, przez który przejdziemy będzie bardzo podobny do tego, w jakim pozwoliliśmy użytkownikom tworzyć nowe posty.
 
-////
+Zaczniemy od dodania przycisku wstawiania pod każdym postem:
 
 ~~~html
 <template name="postPage">
@@ -237,7 +238,7 @@ Template.postItem.helpers({
 <%= caption "client/views/posts/post_page.html" %>
 <%= highlight "11~15" %>
 
-////
+I następnie utworzenia formularza szablonu komentarza:
 
 ~~~html
 <template name="commentSubmit">
@@ -260,7 +261,7 @@ Template.postItem.helpers({
 
 <%= screenshot "10-2", "Formularz do dodawania komentarza" %>
 
-////
+Aby opublikować komentarz, wołamy metodę `comment` w managerze `commentSubmit`, który działa podobnie do managera `postSubmit`:
 
 ~~~js
 Template.commentSubmit.events({
@@ -285,7 +286,7 @@ Template.commentSubmit.events({
 ~~~
 <%= caption "client/views/comments/comment_submit.js" %>
 
-////
+Zupełnie tak samo, jak zaimplementowaliśmy metodę `post` po stronie serwera, zaimplementujemy metodę `comment`, która utworzy komentarz, sprawdzi, że wszystko przebiegło prawidłowo i wstawi nowy komentarz do kolekcji `comments`.
 
 ~~~js
 Comments = new Meteor.Collection('comments');
@@ -319,21 +320,21 @@ Meteor.methods({
 
 <%= commit "10-3", "Utworzony formularz do dodawania koentarzy." %>
 
-////
+Nie dzieje się tutaj nic szczególnego, jest tu proste sprawdzenie, że użytkownik jest zalogowany, komentarz ma treść i że jest połączony z postem.
 
 ### Kontrola subskrypcji komentarzy
 
-////
+Obecna sytuacja jest taka, że publikujemy wszystkie komentarze wszystkich postów do wszystkich podłączonych klientów. Wydaję się to trochę nieekonomiczne. Używamy w końcu tylko małego podzbioru danych w określonym momencie. Polepszmy zatem publikacje i subskrypcje aby dokładnie kontrolować, które komentarze są publikowane.
 
-////
+Jeżeli pomyślimy o tym więcej, jedynym momentem, w którym potrzebujemy subskrybować publikację `comments`, jest chwila w której użytkownik wchodzi na stronę konkretnego posta i potrzebujemy wczytać jedynie podzbiór komentarzy do niego. 
 
-////
+Pierwszym krokiem będzie zmiana sposobu subskrypcji komentarzy. Aż do teraz, subskrypcje były tworzone na poziomie *routera*, co oznaczało, że wczytywaliśmy wszystkie dane raz podczas inicjalizacji routera.
 
-////
+Chcemy teraz, żeby nasza subskrypcja zależała od parametru ścieżki i że parametr może się oczywiście zmienić w dowolnym momencie. Z tego względu musimy przenieść kod subskrypcji z poziomu *routera* do poziomu *scieżki*.
 
-////
+Ma to jeszcze inne konsekwencje: zamiast wczytywać dane gdy inicjalizujemy aplikację, od teraz będziemy je wczytywali za każdym razem po wejściu na konkretną ścieżkę (inaczej URL). Oznacza to, że będziesz teraz doświadczał doczytywania danych przy przeglądaniu aplikacji. Jest to niemożliwe do uniknięcia, chyba że zamierzasz początkowo wczytać wszystkie dostępne dane.
 
-////
+Oto jak wygląda nowa funkcja `waitOn` na poziomie ścieżki:
 
 ~~~js
 Router.map(function() {
@@ -355,7 +356,7 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "7~9" %>
 
-////
+Zauważysz, że przekazujemy `this.params._id` jako argument do subskrypcji. Użyjmy teraz tej nowej informacji do upewnienia się, że ograniczyliśmy zbiór danych do komentarzy należących do bieżącego posta:
 
 ~~~js
 Meteor.publish('posts', function() {
@@ -371,17 +372,17 @@ Meteor.publish('comments', function(postId) {
 
 <%= commit "10-4", "Utworzona prosta publikacja/subskrypcja komentarzy." %>
 
-////
+Jest tylko jeden problem: gdy powrócimy do strony domowej, twierdzi że wszystkie posty mają 0 komentarzy:
 
 <%= screenshot "10-3", "Wszystkie komentarze zniknęły!" %>
 
 ### Liczenie komentarzy
 
-////
+Przyczyna takiego stanu rzeczy wyda się wkrótce jasna: w jednym momencie możemy mieć tylko wczytane komentarze *jednego* posta, zatem gdy wołamy `Comments.find({postId: this._id})` w helperze `commentsCount` w managerze `postItem`, Meteor nie odnajduje potrzebnych danych do obliczenia liczby komentarzy po stronie klienta. 
 
-////
+Najlepszym sposobem na poradzenie sobie z tym, jest *zdenormalizowanie* liczby komentarzy do posta (nie przejmuj się, jeżeli nie wiesz o co chodzi, następny rozdział tłumaczy to szczegółowo). Zobaczysz, że powoduje to w małym stopniu zwiększenie złożoności kodu, ale wzrost wydajności jaki uzyskujemy przez uniknięcie publikowania _wszystkich_ komentarzy jest tego warty.
 
-////
+Osiągniemy to przez dodanie zmiennej `commentsCount` do struktury danych `post`. Aby rozpocząć, uaktualnimy nasze dane początkowe (ang. fixtures) (i użyjemy `meteor reset` aby je przeładować -- nie zapomnij ponownie utworzyć konta użytkownika po dokonaniu tej operacji):
 
 ~~~js
 var telescopeId = Posts.insert({
@@ -404,7 +405,7 @@ Posts.insert({
 ~~~
 <%= caption "server/fixtures.js" %>
 
-////
+Następnie upewnimy się, że wszystkie nowe posty mają 0 komentarzy:
 
 ~~~js
 // pick out the whitelisted keys
@@ -419,7 +420,7 @@ var postId = Posts.insert(post);
 ~~~
 <%= caption "collections/posts.js" %>
 
-////
+I następnie uaktualniamy odpowiedni licznik `commentsCount` gdy tworzymy nowy komentarz za pomocą operatora `$inc` Mongo (który zwiększa pole numeryczne o 1):
 
 ~~~js
 // uaktualnienie posta o liczbę komentarzy
@@ -429,8 +430,8 @@ return Comments.insert(comment);
 ~~~
 <%= caption "collections/comments.js "%>
 
-////
+Na koniec, możemy usunąć helper `commentsCount` z `client/views/posts/post_item.js`, skoro to pole jest dostępne teraz bezpośrednio w poście.
 
 <%= commit "10-5", "Zdenormalizowana liczba komentarzy do posta." %>
 
-////
+Teraz skoro użytkownicy mogą ze sobą rozmawiać, byłoby szkoda, gdyby przegapili nowe komentarze na ich posty. I proszę, następny rozdział właśnie pokaże, jak zaimplementować powiadomienia, aby tego uniknąć!
