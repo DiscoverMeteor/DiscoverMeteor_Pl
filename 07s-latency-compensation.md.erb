@@ -10,7 +10,7 @@ paragraphs: 28
 
 W ostatnim rozdziale wprowadziliśmy nowy koncept w świecie Metora: **Metody**,
 
-<%= diagram "latency1", "Without latency compensation", "pull-right" %>
+<%= diagram "latency1", "Bez kompensacji lagów", "pull-right" %>
 
 Metoda w Meteorze umożliwia uruchomienie serii komand na serwerze w uporządkowany sposób. W naszym przykładzie, użytliśmy Metody ponieważ chcieliśmy upewnić się, że nowe posty zostaną otagowane imieniem autora i jego id oraz bieżącym czasem serwera.
 
@@ -24,11 +24,11 @@ Jeżeli tak działałby Meteor, występowałby bardzo krótki lag (przerwa) mię
 
 ### Kompensacja Lagów
 
-<%= diagram "latency2", "With latency compensation", "pull-right" %>
+<%= diagram "latency2", "Z kompensacją lagów", "pull-right" %>
 
-////
+Aby obejść ten problem, Meteor wprowadza koncept **Kompensacji lagów**. Gdy zdefiniowaliśmy metodę `posts`, umieściliśmy ją w pliku znajdującym się w folderze `collections/`. Oznacza to, że jest dostępna zarówno dla serwera *oraz klienta* -- oraz to, że będzie uruchomiona na obu w tym samym czasie!
 
-////
+Gdy wywołujesz metodę serwerową, klient wysyła wywołanie do serwera i jednocześnie *symuluje* wykonanie akcji metody na kolekcjach znajdujących się u klienta. Nasza sekwencja zdarzeń wygląda teraz następująco:
 
 - *+0ms:* ////
 - *+0ms:* ////
