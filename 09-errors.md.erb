@@ -7,19 +7,19 @@ contents: Utworzenie lepszego mechanizmu wyświetlania błędów i komunikatów.
 paragraphs: 31
 ---
 
-////
+Używanie standardowego mechanizmu przeglądarki, czyli okna dialogowego `alert()` aby ostrzegać użytkownika o problemie z dodaniem danych wydaje się nieco niezadowalające i z pewnością nie tworzy świetnego interfejsu użytkownika. Możemy to udoskonalić. 
 
-////
+Zamiast tego rozwiązania, zbudujemy wszechstronny mechanizm raportowania błędów, który będzie wykonywał lepiej zadanie przekazywania błędów bez zatrzymywania pracy użytkownika. 
 
 ### Wprowadzenie do lokalnych kolekcji
 
-////
+Zaimplementujemy prosty system, który śledzi, które błędy użytkownik zobaczył i wyświetla nowe błędy w odpowienim miejscu "migoczących wiadomości" na stronie. Ten wzorzec UX jest użyteczny, gdy chcemy poinformować użytkownika, że coś się stało bez przerywania ich pracy.
 
-////
+Utworzymy coś podobnego do migoczących powiadomień znanych z aplikakcji Ruby on Rails, ale jest bardziej subtelne, bo zaimplementowane po stronie klienta i rozpoznające kiedy użytkownik zobaczył wiadomość.
 
-////
+Aby rozpocząć, utworzymy kolekcję, w której będziemy zapamiętywać błędy. Pod warunkiem, że błędy są przeznaczone tylko do bieżącej sesji i nie muszą być w żaden sposób zapisywane, zrobimy coś nowego i stworzymy _lokalną kolekcję_. Oznacza to, że kolekcja `Errors` będzie istniała tylko w przeglądarce po stronie klienta i nie będzie starała się synchronizować z serwerem.
 
-////
+Aby tego dokonać, stworzymy komunikat błędu w pliku znajdującym się tylko po stronie klienta, z nazwą kolekcji ustawioną na `null`. Tworzymy funkcję `throwError` która po prostu wstawia błąd w nowo utworzoną lokalną kolekcję:
 
 ~~~js
 // Local (client-only) collection
