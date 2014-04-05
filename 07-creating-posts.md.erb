@@ -144,20 +144,20 @@ Końcowym rezultatem jest to, że po wciśnieciu przycisku `wyślij` przez użyt
 
 ### Dodanie kilku środków bezpieczeństwa
 
-////
+Tworzenie postów ma się dobrze, ale nie chcemy na to pozwolić dowolnemu użytkownikowi: chcemy, aby się zalogowali przed dodaniem posta. Oczywiście możemy zacząć od ukrycia formularza wprowadzania nowego posta dla niezalogowanych użytkowników. Mimo to, użytkownik mógłby ukrycie utworzyć post w konsoli przeglądarki bez zalogowania się, a nie możemy sobie na to pozwolić.
 
-////
+Na szczęście bezpieczeństwo danych jest wbudowane w podstawy kolekcji Meteora: jest to po prostu domyślnie wyłączone, gdy tworzysz nowy projekt. Pozwala to na łatwy start i budowanie własnej aplikacji zostawiając nudne sprawy na sam koniec.
 
-////
+Nasza aplikacja już nie potrzebuje tej pomocy, zatem usuńmy pakiet `insecure`:
 
 ~~~bash
 $ meteor remove insecure
 ~~~
 <%= caption "Terminal" %>
 
-////
+Po wykonaniu tej komendy zauważyszm że formularz posta przestanie działać. Dzieje się to, ponieważ bez pakietu `insecure`wstawianie danych po stronie klienta _przestaje być dozwolone_. Musimy dodać Metorowi wyraźne zasady pozwalające na wstawianie postów przez klienta lub wstawiać posty po stronie serwera.
 
-### Allowing Post Inserts
+### Zezwolenie na wstawianie postów
 
 ////
 
