@@ -206,16 +206,16 @@ Template.error.rendered = function() {
 
 <%= commit "9-3", "Monitorowanie które błędy były wyświetlone i czyszczenie ich w routerze." %>
 
-////
+Callback `rendered` jest wywołany ponownie po renderowaniu szablonu w przeglądarce. W środku callback'a `this` odnosi się do bieżącej instancji szablonu, a `this.data` pozwala na dostęp do danych aktualnie renderowanego obiektu (w naszym przypadku, komunikatu błędu). 
 
-////
+Świetnie! Dużo pracy było wykonane, aby zaimplementować coś, czego użytkownicy miejmy nadzieję nigdy nie zobaczą!
 
 <% note do %>
 
 ### Callback `rendered`
 
-////
+Callback `rendered` szablonu jest wywoływany za każdym razem po renderowaniu szablonu w przeglądarce. Zawiera to oczywiście pierwsze renderowanie, gdy pojawia się na ekranie, ale warto zapamiętać, że callback będzie także wywoływany za każdym razem, gdy szablon jest renderowany ponownie tj. za każdym razem, gdy jego dane ulegną zmianie.
 
-////
+Callback `rendered` jest ogolnie wywoływany przynajmniej dwukrotnie: za pierwszym razem, gdy aplikakcja zostaje załadowana i za drugim razem gdy dane kolekcji zostają wczytane. Powinieneś być zatem ostrożny przy wstawianiu kodu, który nie powinien zostać uruchomiony dwukrotnie (np. alert, czy kod śledzący zdarzenia na stronie).
 
 <% end %>
