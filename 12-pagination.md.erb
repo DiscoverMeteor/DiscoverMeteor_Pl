@@ -7,9 +7,9 @@ contents: Dowiedz się wiecej o subskrypcjach w Meteorze i wykorzystaniu ich do 
 paragraphs: 67
 ---
 
-Sprawy z Microscope mają się świetnie i możemy oczekiwać, że stanie się hitem po opublikowaniu serwisu na świat.
+Sprawy z Microscope mają się świetnie i możemy oczekiwać, że aplikacja stanie się hitem po opublikowaniu jej na świat.
 
-Powinniśmy zatem pomyśleć o wpływie liczby postów renderowanych na stronie na wydajność serwisu po starcie!
+Z tego względu powinniśmy pomyśleć o wpływie jaką ma liczba postów renderowanych na stronie na wydajność serwisu po starcie!
 
 Wcześniej rozmawialiśmy o tym, jak kolekcja po stronie klienta powinna zawierać podzbiór danych obecny na serwerze i nawet udało się nam to osiągnąć dla kolekcji zawierających powiadomienia i komentarze.
 
@@ -49,7 +49,7 @@ if (Posts.find().count() === 0) {
 <%= caption "server/fixtures.js" %>
 <%= highlight "15~24" %>
 
-////
+Po wywołaniu komendy `meteor reset` powinieneś zobaczyć coś podobnego do:
 
 <%= screenshot "12-1", "Wyświetlanie wymyślonych danych . " %>
 
@@ -361,7 +361,7 @@ Wszystko, co pozostało do zrobienia, to dodanie linka *wczytaj więcej* pod lis
 <%= caption "client/views/posts/posts_list.html" %>
 <%= highlight "7~10" %>
 
-////
+Oto jak powinna wyglądać teraz lista postów:
 
 <%= screenshot "12-3", "Przycisk “wczytaj więcej”. " %>
 
