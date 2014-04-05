@@ -128,13 +128,13 @@ Jak do tej pory większość kodu powinna się Tobie wydać znajoma. Na początk
 
 Następnie mamy dwo callbacki zdarzeń szablonu: jeden dla zdarzenia `submit` formularza, drugi dla usunięcia zdarzenia 'click' dla linka.
 
-////
+Callback usuwający zdarzenie click jest bardzo prosty: omija domyślne zdarzenie click i pyta o potwierdzenie. Jeżeli je dostanie, korzysta z post ID obecnego posta otrzymanego z kontekstu danych szablonu, usuwa go i ostatecznie przekierowuje użytkownika do strony domowej.
 
-////
+Callback uaktualniający dane 'update' jest nieco obszerniejszy, ale niewiele bardziej skomplikowany. Po ominięciu domyślnego zdarzenia i otrzymaniu bieżącego posta, otrzymujemy nowe dane formularza ze strony i zapisujemy je w obiekcie `postProperties`.
 
-////
+Następnie przekazujemy ten obiekt to metody Meteora `Collection.update()` i używamy callbacka który wyświetla błąd gdy uaktualnienie się nie powiedzie lub wysyła użytkownika z powrotem na stronę posta, gdy uaktualnienie przebiegnie pomyślnie.
 
-### Adding Links
+### Dodawanie linków
 
 ////
 
