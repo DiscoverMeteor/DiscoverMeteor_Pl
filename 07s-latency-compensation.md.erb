@@ -16,7 +16,7 @@ Metoda w Meteorze umożliwia uruchomienie serii komand na serwerze w uporządkow
 
 Gdyby jednak Meteor uruchamiał Metody w sposób najbardziej podstawowy, mielibyśmy problem. Rozważ następującą sekwencję zdarzeń (uwaga: znaczniki czasu są losowymi wartościami, wybranymi wyłącznie dla celów demonstracyjnych):
 
-- *+0ms:* Użytkownik klika na przycisk submit i przeglądarka wywołuje Metodę po stronie serwera.
+- *+0ms:* Użytkownik klika na przycisk wyślij i przeglądarka wywołuje Metodę po stronie serwera.
 - *+200ms:* Serwer wprowadza zmiany w bazie danych Mongo
 - *+500ms:* Klient odbiera powyższe zmiany i uaktualnia interfejs użytkownika aby je odzwierciedlić.
 
@@ -30,20 +30,20 @@ Aby obejść ten problem, Meteor wprowadza koncept **Kompensacji lagów**. Gdy z
 
 Gdy wywołujesz metodę serwerową, klient wysyła wywołanie do serwera i jednocześnie *symuluje* wykonanie akcji metody na kolekcjach znajdujących się u klienta. Nasza sekwencja zdarzeń wygląda teraz następująco:
 
-- *+0ms:* ////
-- *+0ms:* ////
-- *+200ms:* ////
-- *+500ms:* ////
+- *+0ms:* Użytkownik klika na przycisk wyślij i przeglądarka wywołuje metodę po stronie serwera
+- *+0ms:* Klient symuluje akcję wywołania metody na kolekcji klienta i zmienia UI odzwierciedlając zmiany
+- *+200ms:* Serwer wprowadza zmiany w bazie danych Mongo
+- *+500ms:* Klient otrzymuje zmiany od serwera i cofa symulowane zmiany, zmieniając je zmianami ze strony serwera (które ogólnie są takie same). UI zmienia się odzwierciedlając nowe zmiany.
 
-////
+W wyniku tego użytkownik natychmiastowo widzi zmiany. Gdy odpowiedź serwera jest zwracana po kilku chwilach, może, ale nie musi być widoczna zmiana podczas transferu autentycznych dokumentów. Można się z tego nauczyć tego, że powinniśmy upewnić się, że symulujemy prawdziwe dokumenty tak bardzo jak to możliwe.
 
-### Observing Latency Compensation
+### Obserwacja kompensacji lagów
 
-////
+Możemy dodać małą zmianę do wywołania metody `post` aby zobaczyć to w trakcie działania. Aby tego dokonać, napiszemy w pewnym sensie zaawansowaną implementację kodu używając pakietu npm `futures`, aby opóźnić wstawianie obiektów w ciele metody po stronie serwera.
 
-////
+Sprawdzimy zmienną `isSimulation` aby zapytać Meteora czy metoda jest aktualnie wykonywana jako stub. [Stub](http://docs.meteor.com/#methods_header) jest symulacją Metody, którą Meteor wykonuje równolegle po stronie klienta, podczas gdy "prawdziwa" metoda jest uruchomiona na serwerze.
 
-////
+Zapytamy zatem Metora czy kod jest wykonywany po stronie klienta. W przypadku odpowiedzi twierdzącej, dodamy słowo `(client)` do tytułu posta. W przypadku odpowiedzi przeczącej dodamy słowo `(server)`:
 
 ~~~js
 Meteor.methods({
@@ -77,11 +77,11 @@ Meteor.methods({
 <%= caption "collections/posts.js" %>
 <%= highlight "6, 7, 13~22" %>
 
-////
+Uwaga: gdybyś się zastanawiał, `this` w `this.isSimulation` jest [obiektem wywołanej metody](http://docs.meteor.com/#meteor_methods) który dostarcza dostęp do wielu przydatnych zmiennych.
 
-////
+Dokładny sposób działania [Futures](https://npmjs.org/package/future) jest poza zakresem tej książki, wspomnimy tylko, że nakazaliśmy, aby Meteor poczekał 5 sekund przed wstawieniem danych do kolekcji po stronie serwera.
 
-////
+Dodamy także przekierowanie wysłania posta bezpośrednio do listy postów:
 
 ~~~js
 Template.postSubmit.events({
@@ -105,29 +105,29 @@ Template.postSubmit.events({
 <%= caption "client/views/posts/post_submit.js" %>
 <%= highlight "15" %>
 
-<%= scommit "7-5-1", "Demonstrate the order that posts appear using a sleep." %>
+<%= scommit "7-5-1", "Pokazanie porządku pojawiania się postów za pomocą sleep." %>
 
-////
+Jeżeli utworzymy teraz posta, wyraźnie zobaczymy kompensację lagów w czasie działania. Na początku tytuł posta ma przyrostek `(client)` (pierwszy post z listy, podlinkowany do GitHub):
 
-<%= screenshot "s5-1", "Our post as first stored in the client collection" %>
+<%= screenshot "s5-1", "Post zapisany po stronie klienta" %>
 
-////
+Następnie pięć sekund później, jest on zamieniany prawdziwą zawartością dokumentu przysłaną przez serwer:
 
-<%= screenshot "s5-2", "Our post once the client receives the update from the server collection" %>
+<%= screenshot "s5-2", "Post po aktualizacji ze strony serwera" %>
 
-### Client Collection Methods
+### Metody do pracy z kolekcją po stronie klienta
 
-////
+Widząc to możesz pomyśleć, że metody wykonywane po stronie serwera są skomplikowane, ale tak naprawdę mogą być całkiem proste. Widzieliśmy już trzy proste motedy: metody zmiany kolekcji, `insert`, `update` i `remove`.
 
-////
+Gdy definujesz kolekcję po stronie serwera o nazwie `posts`, definiujesz pośrednio trzy metody: `posts/insert`, `posts/update` i `posts/delete`. Innymi słowy, gdy wołasz `Posts.insert()` na kolekcji po stronie klienta, tworzysz metodę która jest kompensowana serwerem i która wykonuje dwie rzeczy:
 
-1. ////
-2. ////
+1. Sprawdza, czy można wykonać zmianę przez zawołanie callbacków `allow` i `deny` (nie jest to wykonywane w przypadku symulacji)
+2. Przeprowadza prawdziwą zmianę w bazie danych.
   
-### Methods Calling Methods
+### Metody do pracy z kolekcją po stronie serwera
 
-////
+Jeżeli nadążasz, mogłeś zdać sobie sprawę, że nasza metoda `post` podczas wstawiania postów wywołuje inną metodę (`posts/insert`). Jak to działa?
  
-////
+Gdy uruchamiana jest symulacja (wersja metody po stronie klienta), wykonujemy symulację `insert` (zatem wprowadzamy dane do koelekcji po stronie klienta), ale *nie wołamy* prawdziwej metody `insert` po stronie serwera, ponieważ oczekujemy, że wykona to *serwerowa* wersja metody `post`.
 
-////
+Co za tym idzie, gdy serwerowa metoda `post` woła `insert`, nie ma potrzeby o martwienie się o symulację i wprowadzenie danych przebiega płynnie.
