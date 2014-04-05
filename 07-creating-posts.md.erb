@@ -134,15 +134,15 @@ Template.postSubmit.events({
 ~~~
 <%= caption "client/views/posts/post_submit.js" %>
 
-<%= commit "7-1", "Added a submit post page and linked to it in the header." %>
+<%= commit "7-1", "Dodana strona do dodawania postów podlinkowana w nagłówku strony." %>
 
-////
+Powyższa funkcja używa [jQuery](http://jquery.com) do parsowania wartości różnych pól formularza i tworzenia nowego obiektu posta z wyników parsowania. Musimy się upewnić, że używamy `preventDefault` na parametrze `event` naszego handlera aby upewnić się, że przeglądarka nie będzie kontynuowała i próbowała wysłać formularza.
 
-////
+Ostatecznie, możemy przekierować uzytkownika to strony nowego posta. Funkcja kolekcji `insert` zwraca wygenerowany `id` dla obiektu, który został wstawiony do bazy danych, który użyje funkcja Routera `go()` aby utworzyć docelowy URL.
 
-////
+Końcowym rezultatem jest to, że po wciśnieciu przycisku `wyślij` przez użytkownika, tworzony jest post i użytkownik jest natychmiastowo zabierany do strony z dyskusją na temat tego nowego posta.
 
-### Adding Some Security
+### Dodanie kilku środków bezpieczeństwa
 
 ////
 
