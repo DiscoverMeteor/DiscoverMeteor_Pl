@@ -1,50 +1,50 @@
 ---
-title: Zezwól i ogranicz dostęp
+title: Callbacki allow i deny
 slug: allow-and-deny
 date: 0008/01/02
 number: 8.5
 sidebar: true
-contents: Poznaj callbacki Allow i Deny.|W jakiej kolejności wywoływane są callbacki.
+contents: o callbackach Allow i Deny.|w jakiej kolejności wywoływane są callbacki.
 paragraphs: 16
 ---
 
-////
+System bezpieczeństwa Meteora pozwala na kontrolę modyfikacji bazy danych bez konieczności definiowania metod za każdym razem, gdy chcemy przeprowadzić zmianę.
 
-////
+Ponieważ potrzebowaliśmy wykonywać dodatkowe czynności, takie jak dekorowanie posta dodatkowymi polami i reakcję na opublikowanie posta pod konkretnym URL, użycie szczególnej metody `post` podczas tworzenia posta miało duży sens.
 
-////
+Z drugiej strony, nie potrzebowaliśmy tak naprawdę tworzyć nowych metod do uaktualniania i usuwania postów. Potrzebowaliśmy tylko sprawdzić czy użytkownik miał prawa do wykonywania tych akcji, a było to łatwe przy wykorzystaniu callbacków `allow` i deny`.
 
-////
+Używanie tych callbacków pozwala na bardziej deklaratywne modyfikowanie bazy danych i mówienie o tym jakie zmiany można przeprowadzić. Fakt integracji z systemem kont użytkowników jest dodatkowym bonusem.
 
 ### Wiele callbacków
 
-////
+Możemy zdefiniować tyle callbacków `allow`, ile tylko potrzeba. Potrzebujemy, aby _przynajmniej jeden z nich_ zwracał wartość `true` dla bieżącej zmiany. Zatem gdy `Posts.insert` jest wołany w przeglądarce (nieważne, czy z kodu aplikacji po stronie klienta, czy z konsoli przeglądarki), serwer z kolei zawoła cokolwiek jest zezwolone-`insert` sprawdza wzystkie po kolei, aż znajdzie jeden, który zwróci `true`. Jeżeli nie znajdzie żadnego, nie pozwoli na wprowadzenie danych i zwróci klientowi błąd `403`.
 
-////
+Podobnie możemy zdefiniować jeden lub więcej callbacków `deny`. Jeżeli _jakikolwiek_ z tych callbacków zwróci wartość `true`, zmiana będzie odwołana i zostanie zwrócony błąd `403`. Logika tego jest taka, że dla udanego `insert` zostanie zawołany jeden lub więcej callbacków `insert` oraz _kazdy_ callback `deny`.
 
 <%= diagram "allow_deny", "Uwaga: n/e oznacza Not Executed (niewykonane)" %>
 
-////
+Innymi słowy, Meteor przesuwa listę callbacków zaczynając najpierw od `deny`, następnie przechodzi do `allow` i woła każdy po kolei, aż do momentu gdy jeden z nich zwróci `true`.
 
-////
+Praktycznym przykładem tego wzorca jest posiadanie dwóch callbacków `allow()`, jeden sprawdza, czy post należy do konkretnego użytkownika, a drugi sprawdza, czy użytkownik ma prawa administratora. Jeżeli bieżącuy użytkownik jest administratorem, zapewnia to możliwość edytowania dowolnego posta, ponieważ przynajmniej jeden z tych callbacków zwróci `true`.
 
 ### Kompensacja lagów
 
-////
+Pamiętaj, że metody wprowadzające zmiany w bazie (takie jak  `.update()`) mają kompensację lagów, tak jak każda inna metoda serwerowa. Zatem jeżeli przykładowo próbujesz usunąć posta, który nie należy do Ciebie przez konsolę przeglądarki, zobaczysz chwilowe zniknięcie posta w momencie gdy lokalna kolekcja traci dokument, ale post pojawi się ponownie w mgnieniu oka, ponieważ serwer informuje, że w rzeczywistości dokument nie został usunięty.
 
-////
+Oczywiście to zachowanie nie jest problemem gdy jest uruchomione z konsoli przeglądarki (wszakże jeżeli użytkownik próbuje modyfikować dane z poziomu konsoli, nie jest to tak naprawdę Twoim problem co dzieje się w _ich_ przeglądarce). Jednak, musisz się upewnić, czy nie dzieje się to z poziomu interfejsu użytkownika. Na przykład, musisz się boleśnie upewnić, że nie pokazujesz przycisków pozwalających na usunięcie posta użytkownikom, którzy nie są upoważnieni do jego usuwania.
 
-////
+Szczęśliwie ponieważ dzielisz kod przechowujący uprawnienia pomiędzy klientem i serwerem (na przykład możesz napisać funkcję biblioteczną `canDeletePost(user, post)` i wstawić ją we współdzielonym folderze `/lib`), nie nastręcza to konieczności pisania dużej ilości kodu.
 
 ### Zasady dostępu po stronie serwera
 
-////
+Pamiętaj, że system ustalania praw stosuje się wyłącznie do zmian w bazie danych inicjowanych po stronie klienta. Meteor zakłada, że po stronie serwera _wszystkie_ operacje są dozwolone.
 
-////
+Oznacza to, że jeżeli miałbyś napisać metodę serwerową `deletePost`, która mogłaby być wołana przez klienta, każdy mógłby usunąć dowolny post. Prawdopodobnie nie chcesz tego, chyba że sprawdziłeś już prawa użytkownika dla tej metody.
 
 ### Używanie funkcji deny (odmawianie dostępu) jako callbacka
 
-////
+Ostatecznie możesz użyć `deny` jako callbacka "onX" (jeżeli coś zajdzie). Na przykład, możesz osiągnąć dodanie znacznika czasu modyfikacji posta `lastModified` za pomocą następującego kodu:
 
 ~~~js
 Posts.deny({
@@ -56,6 +56,6 @@ Posts.deny({
 });
 ~~~
 
-////
+Ponieważ callbacki `deny` są uruchamiane dla *każdej* udanej modyfikacji za pomocą `update`, wiemy, że ten callback będzie uruchomiony i jest w stanie zmienić dokument w uporządkowany sposób.
 
-////
+Trzeba przyznać, że ten sposób jest trochę hackowaniem systemu, więc możesz rozważyć dokonywanie zmian za pomocą metod po stronie serwera. Mimo wszystko, wiedza ta jest przydatna i można mieć nadzieję, że w przyszłości będzie dostępny callback `beforeUpdate`.
