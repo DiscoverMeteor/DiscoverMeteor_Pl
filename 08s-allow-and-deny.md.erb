@@ -30,17 +30,17 @@ Praktycznym przykładem tego wzorca jest posiadanie dwóch callbacków `allow()`
 
 ### Kompensacja lagów
 
-////
+Pamiętaj, że metody wprowadzające zmiany w bazie (takie jak  `.update()`) mają kompensację lagów, tak jak każda inna metoda serwerowa. Zatem jeżeli przykładowo próbujesz usunąć posta, który nie należy do Ciebie przez konsolę przeglądarki, zobaczysz chwilowe zniknięcie posta w momencie gdy lokalna kolekcja traci dokument, ale post pojawi się ponownie w mgnieniu oka, ponieważ serwer informuje, że w rzeczywistości dokument nie został usunięty.
 
-////
+Oczywiście to zachowanie nie jest problemem gdy jest uruchomione z konsoli przeglądarki (wszakże jeżeli użytkownik próbuje modyfikować dane z poziomu konsoli, nie jest to tak naprawdę Twoim problem co dzieje się w _ich_ przeglądarce). Jednak, musisz się upewnić, czy nie dzieje się to z poziomu interfejsu użytkownika. Na przykład, musisz się boleśnie upewnić, że nie pokazujesz przycisków pozwalających na usunięcie posta użytkownikom, którzy nie są upoważnieni do jego usuwania.
 
-////
+Szczęśliwie ponieważ dzielisz kod przechowujący uprawnienia pomiędzy klientem i serwerem (na przykład możesz napisać funkcję biblioteczną `canDeletePost(user, post)` i wstawić ją we współdzielonym folderze `/lib`), nie nastręcza to konieczności pisania dużej ilości kodu.
 
 ### Zasady dostępu po stronie serwera
 
-////
+Pamiętaj, że system ustalania praw stosuje się wyłącznie do zmian w bazie danych inicjowanych po stronie klienta. Meteor zakłada, że po stronie serwera _wszystkie_ operacje są dozwolone.
 
-////
+Oznacza to, że jeżeli miałbyś napisać metodę serwerową `deletePost`, która mogłaby być wołana przez klienta, każdy mógłby usunąć dowolny post. Prawdopodobnie nie chcesz tego, chyba że sprawdziłeś już prawa użytkownika dla tej metody.
 
 ### Używanie funkcji deny (odmawianie dostępu) jako callbacka
 
