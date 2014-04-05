@@ -27,7 +27,7 @@ Errors = new Meteor.Collection(null);
 ~~~
 <%= caption "client/helpers/errors.js" %>
 
-////
+Teraz gdy kolekcja została utworzona, możemy dodać funkcję `throwError`, którą będziemy wołali aby dodać do niej błędy. Nie musimy się martwić o `allow` czy `deny` czy cokolwiek podobnego, ponieważ jest to kolekcja lokalna, która nie będzie zapisywana w bazie danych Mongo.
 
 ~~~js
 throwError = function(message) {
@@ -36,11 +36,11 @@ throwError = function(message) {
 ~~~
 <%= caption "client/helpers/errors.js" %>
 
-////
+Zaletą używania lokalnej kolekcji do przechowywania błędów jest to, że jak wszystkie kolekcje, jest reaktywna -- oznacza to, że możemy wyświetlać błędy w ten sam sposób, co jakiekolwiek inne dane z kolekcji.
 
 ### Wyświetlanie błędów
 
-////
+Zamierzamy wyświetlać błędy na samej górze strony:
 
 ~~~html
 <template name="layout">
@@ -56,7 +56,7 @@ throwError = function(message) {
 <%= caption "client/views/application/layout.html" %>
 <%= highlight "7" %>
 
-////
+Utwórzmy teraz szablony `errors` i `error` w `errors.html`:
 
 ~~~html
 <template name="errors">
@@ -80,13 +80,13 @@ throwError = function(message) {
 
 ### Bliźniacze szablony
 
-////
+Zauważysz, że wrzucamy dwa szablony do jednego pliku. Do tej pory staraliśmy się stosować zasadę "jeden plik, jeden szablon", ale jeżeli chodzi o Meteora, wrzucenie wszystkich szablonów do jednego pliku działa równie dobrze (chociaż stworzyłoby to bardzo zagmatwany `main.html` !)
 
-////
+W tym przypadku, ponieważ oba szablony błędów są relatywnie krótkie, zrobimy wyjątek i wrzucimy je do tego samego pliku aby uporządkować repozytorium.
 
 <% end %>
 
-////
+Potrzebujemy tylko zintegrować nagłówek szablony i można zaczynać!
 
 ~~~js
 Template.errors.helpers({
@@ -101,9 +101,9 @@ Template.errors.helpers({
 
 ### Tworzenie błędów
 
-////
+wiemy jak wyświetlać błędy, ale potrzebujemy utworzyć kilka zanim będzie można cokolwiek zobaczyć. Błędy są najczęściej uaktywniane przez użytkowników wproadzających nowe dane, zatem będziemy sprawdzali błędy w callbacku tworzenia postów i wyświetlać wiadomość dla jakichkolwiek błędów, które powstają.
 
-////
+Dodatkowo, jeżeli otrzymamy błąd `302` (który oznacza, że post o tym samym URL już istnieje), przekierujemy użytkownika to bieżącego posta. Otrzymamy `_id` bieżącego posta z `error.details` (pamiętaj, że przekazaliśmy `_id` posta jako trzeci parametr do `details` naszej klasy `Errors` w rozdziale 7).
 
 ~~~js
 Template.postSubmit.events({
