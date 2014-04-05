@@ -1,28 +1,28 @@
 ---
-title: Latency Compensation
+title: Kompensacja lagów
 slug: latency-compensation
 date: 0007/01/02
 number: 7.5
 sidebar: true
-contents: Understand latency compensation.|Slow your app down and see what's going on.|Learn how Meteor Methods call each other.
+contents: jak zrozumieć kompensację lagów.|jak zwolnić swoją aplikację i zobaczyć co dzieje się naprawdę podczas jej pracy.|jak metody Metora wywołują się nawzajem
 paragraphs: 28
 ---
 
-////
+W ostatnim rozdziale wprowadziliśmy nowy koncept w świecie Metora: **Metody**,
 
 <%= diagram "latency1", "Without latency compensation", "pull-right" %>
 
-////
+Metoda w Meteorze umożliwia uruchomienie serii komand na serwerze w uporządkowany sposób. W naszym przykładzie, użytliśmy Metody ponieważ chcieliśmy upewnić się, że nowe posty zostaną otagowane imieniem autora i jego id oraz bieżącym czasem serwera.
 
-////
+Gdyby jednak Meteor uruchamiał Metody w sposób najbardziej podstawowy, mielibyśmy problem. Rozważ następującą sekwencję zdarzeń (uwaga: znaczniki czasu są losowymi wartościami, wybranymi wyłącznie dla celów demonstracyjnych):
 
-- *+0ms:* ////
-- *+200ms:* ////
-- *+500ms:* ////
+- *+0ms:* Użytkownik klika na przycisk submit i przeglądarka wywołuje Metodę po stronie serwera.
+- *+200ms:* Serwer wprowadza zmiany w bazie danych Mongo
+- *+500ms:* Klient odbiera powyższe zmiany i uaktualnia interfejs użytkownika aby je odzwierciedlić.
 
-If this were the way Meteor operated, then there'd be a short lag between performing such actions and seeing the results (that lag being more or less noticeable depending on how close you were to the server). We can't have that in a modern web application!
+Jeżeli tak działałby Meteor, występowałby bardzo krótki lag (przerwa) między wykonywaniem powyższych akcji i zobaczeniem wyników na ekranie (opóźnienie byłoby mniej lub bardziej widoczne w zależności od odległości do serwera). Nie możemy tak funkcjonować w nowoczesnej aplikacji webowej!
 
-### Latency Compensation
+### Kompensacja Lagów
 
 <%= diagram "latency2", "With latency compensation", "pull-right" %>
 
