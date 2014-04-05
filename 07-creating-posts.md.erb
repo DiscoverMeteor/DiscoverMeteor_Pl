@@ -1,19 +1,19 @@
 ---
-title: Creating Posts
+title: Tworzenie postów
 slug: creating-posts
 date: 0007/01/01
 number: 7
-contents: Learn how to submit a post client-side.|Implement a simple security check.|Restrict access to the post submit form.|Learn to use a server-side Method for added security.
+contents: jak dodawać posty po stronie klienta.|jak zaimplementować proste sprawdzenie bepieczeństwa.|jak ograniczyć dostęp do formularza dodawania posta.|jak użyć metody po stronie serwera dla zwiększenia bezpieczeństwa.
 paragraphs: 60
 ---
 
-////
+Widzieliśmy jak łatwo utworzyć nowy post z konsoli przeglądarki bezpośrednio używając funkcji bazy danych `Posts.insert`, ale nie możemy oczekiwać, że nasi użytkownicy będą otwierali konsolę przy każdym tworzeniu nowego posta.
 
-////
+W końcu będziemy musieli zbudować pewien interfejs użytkownika, aby pozwolić użytkownikom dodawać nowe posty z poziomu aplikacji.
 
-### Building The New Post Page
+### Budowanie strony Nowy Post
 
-////
+Zaczniemy od zdefiniowania ścieżki dla naszej nowej strony:
 
 ~~~js
 Router.configure({
@@ -38,9 +38,9 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "13~15" %>
 
-////
+Użyjemy funkcji routera `data`, aby ustawić kontekst danych szablonu `postPage`. Pamiętaj, że cokolwiek wstawiliśmy do kontekstu danych, będzie dostępne jako `this` w obrębie helperów szablonu.
 
-### Adding A Link To The Header
+### Dodawanie linka do nagłówka.
 
 ////
 
