@@ -261,7 +261,7 @@ I następnie utworzenia formularza szablonu komentarza:
 
 <%= screenshot "10-2", "Formularz do dodawania komentarza" %>
 
-////
+Aby opublikować komentarz, wołamy metodę `comment` w managerze `commentSubmit`, który działa podobnie do managera `postSubmit`:
 
 ~~~js
 Template.commentSubmit.events({
@@ -286,7 +286,7 @@ Template.commentSubmit.events({
 ~~~
 <%= caption "client/views/comments/comment_submit.js" %>
 
-////
+Zupełnie tak samo, jak zaimplementowaliśmy metodę `post` po stronie serwera, zaimplementujemy metodę `comment`, która utworzy komentarz, sprawdzi, że wszystko przebiegło prawidłowo i wstawi nowy komentarz do kolekcji `comments`.
 
 ~~~js
 Comments = new Meteor.Collection('comments');
@@ -320,21 +320,21 @@ Meteor.methods({
 
 <%= commit "10-3", "Utworzony formularz do dodawania koentarzy." %>
 
-////
+Nie dzieje się tutaj nic szczególnego, jest tu proste sprawdzenie, że użytkownik jest zalogowany, komentarz ma treść i że jest połączony z postem.
 
 ### Kontrola subskrypcji komentarzy
 
-////
+Obecna sytuacja jest taka, że publikujemy wszystkie komentarze wszystkich postów do wszystkich podłączonych klientów. Wydaję się to trochę nieekonomiczne. Używamy w końcu tylko małego podzbioru danych w określonym momencie. Polepszmy zatem publikacje i subskrypcje aby dokładnie kontrolować, które komentarze są publikowane.
 
-////
+Jeżeli pomyślimy o tym więcej, jedynym momentem, w którym potrzebujemy subskrybować publikację `comments`, jest chwila w której użytkownik wchodzi na stronę konkretnego posta i potrzebujemy wczytać jedynie podzbiór komentarzy do niego. 
 
-////
+Pierwszym krokiem będzie zmiana sposobu subskrypcji komentarzy. Aż do teraz, subskrypcje były tworzone na poziomie *routera*, co oznaczało, że wczytywaliśmy wszystkie dane raz podczas inicjalizacji routera.
 
-////
+Chcemy teraz, żeby nasza subskrypcja zależała od parametru ścieżki i że parametr może się oczywiście zmienić w dowolnym momencie. Z tego względu musimy przenieść kod subskrypcji z poziomu *routera* do poziomu *scieżki*.
 
-////
+Ma to jeszcze inne konsekwencje: zamiast wczytywać dane gdy inicjalizujemy aplikację, od teraz będziemy je wczytywali za każdym razem po wejściu na konkretną ścieżkę (inaczej URL). Oznacza to, że będziesz teraz doświadczał doczytywania danych przy przeglądaniu aplikacji. Jest to niemożliwe do uniknięcia, chyba że zamierzasz początkowo wczytać wszystkie dostępne dane.
 
-////
+Oto jak wygląda nowa funkcja `waitOn` na poziomie ścieżki:
 
 ~~~js
 Router.map(function() {
@@ -356,7 +356,7 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "7~9" %>
 
-////
+Zauważysz, że przekazujemy `this.params._id` jako argument do subskrypcji. Użyjmy teraz tej nowej informacji do upewnienia się, że ograniczyliśmy zbiór danych do komentarzy należących do bieżącego posta:
 
 ~~~js
 Meteor.publish('posts', function() {
