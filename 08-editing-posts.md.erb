@@ -136,7 +136,7 @@ Następnie przekazujemy ten obiekt to metody Meteora `Collection.update()` i uż
 
 ### Dodawanie linków
 
-////
+Powinniśmy również edytować linki do naszych postów, aby użytkownicy mieli dostęp do strony edytowania posta:
 
 ~~~html
 <template name="postItem">
@@ -155,7 +155,7 @@ Następnie przekazujemy ten obiekt to metody Meteora `Collection.update()` i uż
 <%= caption "client/views/posts/post_item.html" %>
 <%= highlight "5~8" %>
 
-////
+Oczywiście nie chcemy pokazywać linku do edytowania posta osobom postronnym. Pomaga w tym helper `ownPost`:
 
 ~~~js
 Template.postItem.helpers({
@@ -172,20 +172,20 @@ Template.postItem.helpers({
 <%= caption "client/views/posts/post_item.js" %>
 <%= highlight "2~4" %>
 
-<%= screenshot "8-1", "Post edit form." %>
+<%= screenshot "8-1", "Formularz edytowania posta." %>
 
-<%= commit "8-1", "Added edit posts form." %>
+<%= commit "8-1", "Dodany formularz edytowania posta." %>
 
-////
+Nasz formularz edytowania posta wygląda dobrze, ale właściwie nie możemy niczego teraz edytować. Co się dzieje?
 
-### Setting Up Permissions
+### Ustawianie praw dostępu
 
-////
+Ponieważ poprzednio usunęliśmy pakiet `insecure`, wszystkie zmiany po stronie klienta są obecnie odrzucane.
 
-////
+Aby to naprawić, ustawimy zasady praw dostępu. Najpierw utwórz nowy plik `permissions.js` w folderze `lib`. Załaduje to logikę ustawiania praw dostępu jako pierwszą (i będzie dostępna w obu środowiskach, po stronie klienta i serwera).
 
 ~~~js
-// check that the userId specified owns the documents
+// sprawdz czy userId jest wlascicielem dokumentu
 ownsDocument = function(userId, doc) {
   return doc && doc.userId === userId;
 }
