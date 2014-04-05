@@ -135,21 +135,21 @@ Template.postSubmit.events({
 
 <%= commit "9-2", "Używanie raportowania błędów." %>
 
-////
+Sprawdź to: spróbuj stworzyć posta i przejść do URL `http://meteor.com`. Ponieważ ten URL jest już dołączony do posta w danych początkowych (fixtures), powinieneś zobaczyć:
 
-<%= screenshot "9-1", "Wyzwalanie błędów" %>
+<%= screenshot "9-1", "Wyzwalanie błędu" %>
 
 ### Usuwanie błędów
 
-////
+Możliwe, że kliknąłeś przycisk 'zamknij' po zobaczeniu błędu. Jeżeli to zrobiłeś, błąd powinien zniknąć i pojawić się zaraz po tym, jak wczytasz kolejną stronę do przeglądarki. O co chodzi?
 
-////
+Przycisk 'zamknij' wyzwala kod JavaScript w Boostrap Twittera: nie ma nic wspólnego z Meteorem! Co się dzieje: Bootstrap usuwa element `<div>` z DOM zawierający błąd, ale nie z kolekcji Meteora. Oznacza to, że błąd pojawi się ponownie po ponownym przerenderowaniu strony.
 
-////
+Z tego względu jeżeli nie chcesz powstrzymać nieustającego pojawiania się błędu za każdym razem i wprawić użytkownika w obłęd, zaimplementujmy rozwiązanie umożliwiające usuwanie błędów także z kolekcji.
 
-////
+Na początek zmienimy funkcję `throwError` aby wziąć pod uwagę właściwość `seen` (ang. widziany). Będzie to przydatne później do śledzenia faktu, czy błąd został już widziany przez użytkownika.
 
-////
+Gdy jest to gotowe, możemy zaimplementować funkcję `clearErrors`, która czyści te `widziane` błędy:
 
 ~~~js
 // Local (client-only) collection
@@ -166,7 +166,7 @@ clearErrors = function() {
 <%= caption "client/helpers/errors.js" %>
 <%= highlight "5,8~10" %>
 
-////
+Następnie, wyczyścimy błędy w routerze aby nawigacja do następnej strony spowoduje usunięcie tych błędów na zawsze:
 
 ~~~js
 // ...
