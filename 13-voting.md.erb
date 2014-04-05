@@ -3,7 +3,7 @@ title: Głosowanie
 slug: voting
 date: 0013/01/01
 number: 13
-contents: tym jak zbudować system głosowania na posty użytkowników.|jak oceniać nasze posty na stronie "najlepszych" postów.|jak zaimplementować helper (funcję pomocniczą) szablonu handlebars.|podstawach bezpieczeństwa danych w Meteorze.|kilku interesujących kwestiach dotyczących wydajności MongoDB.
+contents: jak zbudować system głosowania na posty użytkowników.|jak oceniać nasze posty na stronie "najlepszych" postów.|jak zaimplementować helper (funcję pomocniczą) szablonu handlebars.|o podstawach bezpieczeństwa danych w Meteorze.|o kilku interesujących kwestiach dotyczących wydajności MongoDB.
 paragraphs: 49
 ---
 
@@ -281,7 +281,7 @@ Handlebars.registerHelper('pluralize', function(n, thing) {
 ~~~
 <%= caption "client/helpers/handlebars.js" %>
 
-////
+Funkcje pomocnicze szablonów, które stworzyliśmy poprzednio, były związane z managerem i szablonem do którego miały zastosowanie. Przez użycie `Handlebars.registerHelper` utworzyliśmy *globalny* helper, który może być używany z dowolnego szablonu:
 
 ~~~html
 <template name="postItem">
