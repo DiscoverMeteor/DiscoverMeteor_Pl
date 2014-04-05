@@ -1,20 +1,20 @@
 ---
-title: Zezwól i ogranicz dostęp
+title: Callbacki allow i deny
 slug: allow-and-deny
 date: 0008/01/02
 number: 8.5
 sidebar: true
-contents: Poznaj callbacki Allow i Deny.|W jakiej kolejności wywoływane są callbacki.
+contents: o callbackach Allow i Deny.|w jakiej kolejności wywoływane są callbacki.
 paragraphs: 16
 ---
 
-////
+System bezpieczeństwa Meteora pozwala na kontrolę modyfikacji bazy danych bez konieczności definiowania metod za każdym razem, gdy chcemy przeprowadzić zmianę.
 
-////
+Ponieważ potrzebowaliśmy wykonywać dodatkowe czynności, takie jak dekorowanie posta dodatkowymi polami i reakcję na opublikowanie posta pod konkretnym URL, użycie szczególnej metody `post` podczas tworzenia posta miało duży sens.
 
-////
+Z drugiej strony, nie potrzebowaliśmy tak naprawdę tworzyć nowych metod do uaktualniania i usuwania postów. Potrzebowaliśmy tylko sprawdzić czy użytkownik miał prawa do wykonywania tych akcji, a było to łatwe przy wykorzystaniu callbacków `allow` i deny`.
 
-////
+Używanie tych callbacków pozwala na bardziej deklaratywne modyfikowanie bazy danych i mówienie o tym jakie zmiany można przeprowadzić. Fakt integracji z systemem kont użytkowników jest dodatkowym bonusem.
 
 ### Wiele callbacków
 
