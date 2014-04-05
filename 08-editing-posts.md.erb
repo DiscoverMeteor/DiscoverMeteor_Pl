@@ -1,15 +1,15 @@
 ---
-title: Editing Posts
+title: Edytowanie postów
 slug: editing-posts
 date: 0008/01/01
 number: 8
-contents: Add a form for editing your posts.|Set up edit permissions.|Restrict which properties can be edited.
+contents: jak dodać formularz umożliwiający edytowanie postów.|jak ustawić prawa do edycji postóœ.|jak ograniczyć, które części posta mogą być edytowane.
 paragraphs: 29
 ---
 
-////
+Teraz skoro możemy tworzyć posty, następnym krokiem będzie umożliwienie edycji i usuwanie postóœ. Kod UI który to umożliwi jest releatywnie prosty i jest to dobry moment na podjęcie tematu zarządzania praw użytkowników.
 
-////
+Zacznijmy od podłączenia routera. Dodamy ścieżkę, która umożliwi dostęp do strony modyfikacji posta i ustawi jej kontekst danych:
 
 ~~~js
 Router.configure({
@@ -50,9 +50,9 @@ Router.before(requireLogin, {only: 'postSubmit'});
 <%= caption "lib/router.js" %>
 <%= highlight "12~15" %>
 
-### The Post Edit Template
+### Szablon edytowania posta
 
-////
+Możemy teraz skoncetrować się na szablonie. Nasz szablon `postEdit` będzie miał całkiem standardową formę:
 
 ~~~html
 <template name="postEdit">
@@ -87,7 +87,7 @@ Router.before(requireLogin, {only: 'postSubmit'});
 ~~~
 <%= caption "client/views/posts/post_edit.html" %>
 
-////
+A poniżej znajdziesz manager `post_edit.js` który z nim współgra:
 
 ~~~js
 Template.postEdit.events({
@@ -124,19 +124,19 @@ Template.postEdit.events({
 ~~~
 <%= caption "client/views/posts/post_edit.js" %>
 
-////
+Jak do tej pory większość kodu powinna się Tobie wydać znajoma. Na początku mamy helper szablonu, który pobiera bieżący post z bazy danych i przekazuje go do szablonu.
 
-////
+Następnie mamy dwo callbacki zdarzeń szablonu: jeden dla zdarzenia `submit` formularza, drugi dla usunięcia zdarzenia 'click' dla linka.
 
-////
+Callback usuwający zdarzenie click jest bardzo prosty: omija domyślne zdarzenie click i pyta o potwierdzenie. Jeżeli je dostanie, korzysta z post ID obecnego posta otrzymanego z kontekstu danych szablonu, usuwa go i ostatecznie przekierowuje użytkownika do strony domowej.
 
-////
+Callback uaktualniający dane 'update' jest nieco obszerniejszy, ale niewiele bardziej skomplikowany. Po ominięciu domyślnego zdarzenia i otrzymaniu bieżącego posta, otrzymujemy nowe dane formularza ze strony i zapisujemy je w obiekcie `postProperties`.
 
-////
+Następnie przekazujemy ten obiekt to metody Meteora `Collection.update()` i używamy callbacka który wyświetla błąd gdy uaktualnienie się nie powiedzie lub wysyła użytkownika z powrotem na stronę posta, gdy uaktualnienie przebiegnie pomyślnie.
 
-### Adding Links
+### Dodawanie linków
 
-////
+Powinniśmy również edytować linki do naszych postów, aby użytkownicy mieli dostęp do strony edytowania posta:
 
 ~~~html
 <template name="postItem">
@@ -155,7 +155,7 @@ Template.postEdit.events({
 <%= caption "client/views/posts/post_item.html" %>
 <%= highlight "5~8" %>
 
-////
+Oczywiście nie chcemy pokazywać linku do edytowania posta osobom postronnym. Pomaga w tym helper `ownPost`:
 
 ~~~js
 Template.postItem.helpers({
@@ -172,29 +172,29 @@ Template.postItem.helpers({
 <%= caption "client/views/posts/post_item.js" %>
 <%= highlight "2~4" %>
 
-<%= screenshot "8-1", "Post edit form." %>
+<%= screenshot "8-1", "Formularz edytowania posta." %>
 
-<%= commit "8-1", "Added edit posts form." %>
+<%= commit "8-1", "Dodany formularz edytowania posta." %>
 
-////
+Nasz formularz edytowania posta wygląda dobrze, ale właściwie nie możemy niczego teraz edytować. Co się dzieje?
 
-### Setting Up Permissions
+### Ustawianie praw dostępu
 
-////
+Ponieważ poprzednio usunęliśmy pakiet `insecure`, wszystkie zmiany po stronie klienta są obecnie odrzucane.
 
-////
+Aby to naprawić, ustawimy zasady praw dostępu. Najpierw utwórz nowy plik `permissions.js` w folderze `lib`. Załaduje to logikę ustawiania praw dostępu jako pierwszą (i będzie dostępna w obu środowiskach, po stronie klienta i serwera).
 
 ~~~js
-// check that the userId specified owns the documents
+// sprawdz czy userId jest wlascicielem dokumentu
 ownsDocument = function(userId, doc) {
   return doc && doc.userId === userId;
 }
 ~~~
 <%= caption "lib/permissions.js" %>
 
-////
+W rozdziale [Tworzenie postów](/chapter/creating-posts) pozbyliśmy się metod `allow()`, ponieważ wstawialiśmy nowe posty wyłącznie za pomocą metody serwerowej (która i tak omija `allow()`).
 
-////
+Teraz jednak edytujemy i usuwamy posty po stronie klienta, wróćmy zatem do pliku `posts.js` i dodajmy blok `allow()`:
 
 ~~~js
 Posts = new Meteor.Collection('posts');
@@ -210,13 +210,13 @@ Meteor.methods({
 <%= caption "collections/posts.js" %>
 <%= highlight "3~6" %>
 
-<%= commit "8-2", "Added basic permission to check the post's owner." %>
+<%= commit "8-2", "Dodanie podstawowych praw dostępu do sprawdzenia właściciela posta." %>
 
-### Limiting Edits
+### Ograniczanie edycji
 
-////
+Fakt, że możesz edytować własne posty nie oznacza, że powinieneś edytować *każde* pole. Na przykład, nie chcemy aby użytkownicy mogli tworzyć posta i następnie przypisać go innej osobie.
 
-////
+Używamy callbacka Meteora `deny()` aby upewnić się, że użytkownicy mogę edytować wyłącznie niektóre pola:
 
 ~~~js
 Posts = new Meteor.Collection('posts');
@@ -236,31 +236,31 @@ Posts.deny({
 <%= caption "collections/posts.js" %>
 <%= highlight "8~13" %>
 
-<%= commit "8-3", "Only allow changing certain fields of posts." %>
+<%= commit "8-3", "Pozwól na zmianę tylko niektórych pól posta." %>
 
-////
+Używamy tablicy `fieldNames`, która zawiera listę zmienianych pól i używamy metody `without()` [Underscore](http://underscorejs.org/), aby zwrócić tablicę, która zawiera częściową tablicę zawierającą pola, te które *nie* są polami `url` czy `title`.
 
-////
+Jeżeli wszystko przebiegnie prawidłowo, ta tablica powinna być pusta i jej długość powinna być równa 0. Jeżeli ktoś stara się dokonać czegoś nieoczekiwanego, długość tablicy będzie równa 1 lub więcej i callback zwrócie `true` (odrzucając w ten sposób uaktualnienie).
 
 <% note do %>
 
-### Method Calls vs Client-side Data Manipulation
+### Zawołania metod vs manipulacja danych po stronie klienta
 
-////
+Używamy metody `post` aby utworzyć nowe posty, natomiast do edycji i usuwania ich wołamy `update` i `remove` bezpośrednio po stronie klienta i ograniczamy dostęp przez `allow` i `deny`.
 
-////
+Kiedy odpowiednie jest używanie każdego z nich?
 
-////
+Gdy sytuacja jest relatywnie jasna i można konkretnie wyrazić zasady za pomocą `allow` i `deny`, zwykle prościej jest wykonywać je po stronie klienta.
 
-////
+Bezpośrednia manipulacja bazy danych ze strony klienta tworzy wyobrażenie natychmiastowej zmiany i służy lepszemu postrzeganiu aplikacji przez użytkownika, tak długo, jak pamiętasz o prawidłowym obchodzeniu się z przypadkami błędów (tj. wtedy gdy serwer zwraca informację, że zmiana się nie powiodła).
 
-////
+Jednakże, gdy masz potrzebę wykonania czynności, które powinny być poza kontrolą użytkownika (tak jak ustawianie znacznika czasu posta czy przypisywanie go do konkretnego użytkownika), lepiej jest użyć Metodę po stronie serwera.
 
-////
+Metody serwerowe są także odpowiednie w kliku innych przypadkach:
 
-- ////
-- ////
-- ////
+- Gdy musisz znać lub zwracać wartości za pomocą callbacka raczej niż czekać na synchronizację i propagację danych przez serwer.
+- Dla funkcji obciążających bazę danych, dla których jest zbyt kosztowne przesyłanie całej kolekcji do klienta.
+- Do sumowania lub zbierania danych (np. zliczanie, obliczanie średniej lub sumy).
 
 <% end %>
 
