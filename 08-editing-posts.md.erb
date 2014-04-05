@@ -236,15 +236,15 @@ Posts.deny({
 <%= caption "collections/posts.js" %>
 <%= highlight "8~13" %>
 
-<%= commit "8-3", "Only allow changing certain fields of posts." %>
+<%= commit "8-3", "Pozwól na zmianę tylko niektórych pól posta." %>
 
-////
+Używamy tablicy `fieldNames`, która zawiera listę zmienianych pól i używamy metody `without()` [Underscore](http://underscorejs.org/), aby zwrócić tablicę, która zawiera częściową tablicę zawierającą pola, te które *nie* są polami `url` czy `title`.
 
-////
+Jeżeli wszystko przebiegnie prawidłowo, ta tablica powinna być pusta i jej długość powinna być równa 0. Jeżeli ktoś stara się dokonać czegoś nieoczekiwanego, długość tablicy będzie równa 1 lub więcej i callback zwrócie `true` (odrzucając w ten sposób uaktualnienie).
 
 <% note do %>
 
-### Method Calls vs Client-side Data Manipulation
+### Zawołania metod vs manipulacja danych po stronie klienta
 
 ////
 
