@@ -246,21 +246,21 @@ Jeżeli wszystko przebiegnie prawidłowo, ta tablica powinna być pusta i jej d�
 
 ### Zawołania metod vs manipulacja danych po stronie klienta
 
-////
+Używamy metody `post` aby utworzyć nowe posty, natomiast do edycji i usuwania ich wołamy `update` i `remove` bezpośrednio po stronie klienta i ograniczamy dostęp przez `allow` i `deny`.
 
-////
+Kiedy odpowiednie jest używanie każdego z nich?
 
-////
+Gdy sytuacja jest relatywnie jasna i można konkretnie wyrazić zasady za pomocą `allow` i `deny`, zwykle prościej jest wykonywać je po stronie klienta.
 
-////
+Bezpośrednia manipulacja bazy danych ze strony klienta tworzy wyobrażenie natychmiastowej zmiany i służy lepszemu postrzeganiu aplikacji przez użytkownika, tak długo, jak pamiętasz o prawidłowym obchodzeniu się z przypadkami błędów (tj. wtedy gdy serwer zwraca informację, że zmiana się nie powiodła).
 
-////
+Jednakże, gdy masz potrzebę wykonania czynności, które powinny być poza kontrolą użytkownika (tak jak ustawianie znacznika czasu posta czy przypisywanie go do konkretnego użytkownika), lepiej jest użyć Metodę po stronie serwera.
 
-////
+Metody serwerowe są także odpowiednie w kliku innych przypadkach:
 
-- ////
-- ////
-- ////
+- Gdy musisz znać lub zwracać wartości za pomocą callbacka raczej niż czekać na synchronizację i propagację danych przez serwer.
+- Dla funkcji obciążających bazę danych, dla których jest zbyt kosztowne przesyłanie całej kolekcji do klienta.
+- Do sumowania lub zbierania danych (np. zliczanie, obliczanie średniej lub sumy).
 
 <% end %>
 
