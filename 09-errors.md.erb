@@ -177,15 +177,15 @@ Router.before(function() { clearErrors() });
 <%= caption "lib/router.js" %>
 <%= highlight "4" %>
 
-////
+Aby funkcja `clearErrors()` poprawnie wykonała swoją pracę, błędy muszą być zaznaczane jako `widziane`. Aby przebiegało to prawidłowo, musimy zatroszczyć się o obsługę jednego przypadku wyjątkowego: gdy wyrzucamy błąd i przekierowujemy użytkownika do innego miejsca (tak jak przy próbie utworzenia posta ze zduplikowanym linkiem), przekierowanie jest natychmiastowe. Oznacza to, że użytkownik nigdy nie dostanie szansy na zobaczenie błędu zanim zostanie on usunięty.
 
-////
+Jest to miejsce, w którym przyda się zmienna `seen` (widziany). Musimy się upewnić, że jest ustawiana na `true` wyłącznie wtedy, gdy użytkownik zobaczył błąd.
 
-////
+Aby tego dokonać, użyjemy funkcji `Meteor.defer()`. Funkcja ta przekazuje Meteorowi, aby uruchomić callback "zaraz po tym" co dzieje się w tej chwili. Jeżeli pomoże to zrozumieć, możesz pomyśleć, że `defer()` to jak przekazanie przeglądarce aby poczekać 1 milisekundę przed kontynuowaniem pracy.
 
-////
+Osiągneliśmy to, że Meteor ustawia `seen` na `true` 1 milisekundę po renderowaniu szablonu `template`. Ale czy pamiętasz jak wspomnieliśmy, że przekierowanie dzieje się natychmiastowo? Oznacza to, że mechanizm przekierowania zostanie uruchomiony przed callbackiem `defer`, który nigdy nie będzie miał możliwości na wykonanie.
 
-////
+Jest to dokładnie to, co chcieliśmy osiągnąć: jeżeli nie został wykonany, nasz błąd nie zostanie zaznaczony jako `widziany`, co oznacza, że nie będzie usunięty, co również oznacza, że pojawi się na stronie na którą użytkownik został przekierowany, dokładnie tak, jak chcieliśmy!
 
 ~~~js
 Template.errors.helpers({
