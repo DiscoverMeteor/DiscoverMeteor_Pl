@@ -24,16 +24,16 @@ Sesja jest globalnym reaktywnym magazynem danych. Jest globalny w sensie obiektu
 
 ### Changing the Session
 
-////
+Sesja jest dostępna wszędzie jako `Session`. Aby ustawić wartość sesji, możesz zawołać:
 
 ~~~js
 ❯ Session.set('pageTitle', 'A different title');
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Możesz ponownie wczytać dane za pomocą `Session.get('mySessionProperty');`. Jest to reaktywne źródło danych, co oznacza, że jeżeli zaimplementujesz helper, zobaczysz że dane wyjściowe helpera będą się zmieniały reaktywnie gdy zmienna Session ulegnie zmianie.
 
-////
+Aby to wypróbować, dodaj następujący kod do szablonu layout:
 
 ~~~html
 <header class="navbar">
@@ -51,16 +51,16 @@ Template.layout.helpers({
 ~~~
 <%= caption "client/views/application/layout.js"%>
 
-////
+Automatyczne przeładowanie kodu przez Meteora (znane jako “hot code reload” lub w skrócie HCR), utrzymuje zmienne Session, zatem powinniśmy teraz zobaczyć napis "A different title" wyświetlony w pasku nawigacji. Jeżeli tak się stało, wpisz ponownie poprzednią komendę `Session.set()`.
 
-////
+Co więcej, jeżeli ponownie zmienimy wartość zmiennej (znowu w konsoli przeglądarki), zobaczymy znowuy inny tytuł:
 
 ~~~js
 ❯ Session.set('pageTitle', 'A brand new title');
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Sesja 
 
 <% note do %>
 
