@@ -1,26 +1,26 @@
 ---
-title: The Session
+title: Sesja
 slug: the-session
 date: 0005/01/02
 number: 5.5
 sidebar: true
-contents: Learn about the Meteor Session|Learn about the autorun function|Learn about Hot Code Reload
+contents: o sesji Meteora|o funkcji autorun|o natychmiastowym przeładowaniu kodu
 paragraphs: 33
 ---
 
-////
+Meteor jest reaktywnym frameworkiem. Oznacza to, że po zmianie danych twoja aplikacja reaguje na zmiany i nie musisz jawnie robić nic dodatkowo.
 
-////
+Widzieliśmy to już w akcji w momencie gdy nasz szablon zmieniał się po zmianie danych i ścieżki URL.
 
-////
+Spojrzymy na to dokładniej w późniejszych rozdziałach, ale teraz chciałbym wprowadzić kilka podstawowych cech reaktywności, które są bardzo przydatne w ogólnych aplikacjach.
 
-### The Meteor Session
+### Sesja Meteora
 
-////
+Obecnie w Microscope, bieżący stan aplikacji użytkownika jest całkowicie zawarty w URL, który jest odwiedzany (oraz w bazie danych).
 
-////
+Jednak w wielu przypadkach, będziesz potrzebował przechowywać ulotny stan splikacji, który jest istotny tylko dla bieżącej wersji aplikacji użytkownika (na przykład czy dany element jest właśnie pokazywany czy ukryty). Wygodnym sposobem na osiągniecie tego jest użycie Sesji.
 
-////
+Sesja jest globalnym reaktywnym magazynem danych. Jest globalny w sensie obiektu singletona: istnieje jedna sesja, i jest do niej dostęp z dowolnego miejsca. Globalne zmienne są zazwyczaj uważane za coś złego, ale w tym przypadku sesja jest używana jako centralna magistrala komunikacyjna między różnymi częściami aplikacji.
 
 ### Changing the Session
 
