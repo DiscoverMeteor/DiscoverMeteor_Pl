@@ -117,17 +117,17 @@ Zdecydowanie jest dwóch użytkowników w bazie. Dlaczego więc widzimy jednego 
 
 ### Tajemnicza publikacja!
 
-////
+Jeżeli wrócisz w myślach do rozdziału 4, możesz pamiętać, że przez wyłączenie `autopublish` zablokowaliśmy automatyczne wysyłanie wszystkich danych przez kolekcje z serwera do każdego podłączonego klienta i jego lokalnej wersji kolekcji. Potrzebowaliśmy stworzyć parę publikację i subskrypcję aby przesyłać dane przez kanał klient-serwer.
 
-////
+Nie ustawialiśmy jednak żadnej publikacji dla użytkownika. Dlaczego zatem widzimy jakiekolwiek dane użytkownika?
 
-////
+Odpowiedź jest taka, że pakiet `accounts` automatycznie pzeprowadza `auto-publish` aktualnie zalogowanego użytkownika, bez względu na inne ustawienia. Jeżeli by tego nie robił, użytkownik nie mógłby się nigdy zalogować na stronę!
 
-////
+Pakiet `accounts` publikuje wyłącznie *bieżącego* użytkownika. Wyjaśnia to, dlaczego użytkownik nie może widzieć szczegółów kont innych użytkowników.
 
-////
+Publikacja zatem publikuje wyłącznie jeden obiekt użytkownika dla każdego zalogowanego użytkownika (i nie publikuje żadnego, gdy nie jesteś zalogowany).
 
-////
+Co więcej, dokumenty w naszej kolekcji użytkownika nie zawierają tych samych pól po stronie klienta i serwera. W Mongo, użytkownik posiada wiele danych. Aby to zobaczyć, wróc do terminala Mongo i wpisz:
 
 ~~~bash
 > db.users.findOne()
@@ -154,7 +154,7 @@ Zdecydowanie jest dwóch użytkowników w bazie. Dlaczego więc widzimy jednego 
   "username" : "tmeasday"
 }
 ~~~
-<%= caption "Mongo console" %>
+<%= caption "Konsola Mongo" %>
 
 ////
 
