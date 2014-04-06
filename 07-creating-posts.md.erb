@@ -1,19 +1,19 @@
 ---
-title: Creating Posts
+title: Tworzenie postów
 slug: creating-posts
 date: 0007/01/01
 number: 7
-contents: Learn how to submit a post client-side.|Implement a simple security check.|Restrict access to the post submit form.|Learn to use a server-side Method for added security.
+contents: jak dodawać posty po stronie klienta.|jak zaimplementować proste sprawdzenie bepieczeństwa.|jak ograniczyć dostęp do formularza dodawania posta.|jak użyć metody po stronie serwera dla zwiększenia bezpieczeństwa.
 paragraphs: 60
 ---
 
-////
+Widzieliśmy jak łatwo utworzyć nowy post z konsoli przeglądarki bezpośrednio używając funkcji bazy danych `Posts.insert`, ale nie możemy oczekiwać, że nasi użytkownicy będą otwierali konsolę przy każdym tworzeniu nowego posta.
 
-////
+W końcu będziemy musieli zbudować pewien interfejs użytkownika, aby pozwolić użytkownikom dodawać nowe posty z poziomu aplikacji.
 
-### Building The New Post Page
+### Budowanie strony Nowy Post
 
-////
+Zaczniemy od zdefiniowania ścieżki dla naszej nowej strony:
 
 ~~~js
 Router.configure({
@@ -38,11 +38,11 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "13~15" %>
 
-////
+Użyjemy funkcji routera `data`, aby ustawić kontekst danych szablonu `postPage`. Pamiętaj, że cokolwiek wstawiliśmy do kontekstu danych, będzie dostępne jako `this` w obrębie helperów szablonu.
 
-### Adding A Link To The Header
+### Dodawanie linka do nagłówka.
 
-////
+Po zdefiniowaniu ścieżki, możemy dodać link do strony umożliwiającej dodanie posta w nagłówku:
 
 ~~~html
 <template name="header">
@@ -69,7 +69,7 @@ Router.map(function() {
 <%= caption "client/views/includes/header.html" %>
 <%= highlight "11~16" %>
 
-////
+Ustawienie ścieżki oznacza, że jeżeli użytkownik przejdzie do URL `/submit`, Meteor wyświetli szablon `postSubmit`. Napiszmy zatem ten szablon:
 
 ~~~html
 <template name="postSubmit">
@@ -106,13 +106,13 @@ Router.map(function() {
 ~~~
 <%= caption "client/views/posts/post_submit.html" %>
 
-////
+Uwaga: jest tu wiele znaczników pochodzących z Bootstrap Twittera. Podczas gdy tylko elementy formularza są istotne, dodatkowe znaczniki pomogą w upiększeniu naszej aplikacji. Powinna wyglądać teraz podobnie do:
 
-<%= screenshot "7-1", "The post submit form" %>
+<%= screenshot "7-1", "Formularz dodawania posta" %>
 
-////
+Jest to prosty formularz. Nie musimy się martwić o wykonanie konkretnej akcji, ponieważ będziemy przechwytywali zdarzenie `wyślij` na forumlarzu i uaktualniali dane za pomocą JavaScript. (Nie ma sensu dostarczać na wszelki wypadek rozwiązania nie-JavaScript, gdy weźmiesz pod uwagę, że aplikacja Meteora jest całkowicie niefunkcjonalna po wyłączeniu obsługi JavaScript).
 
-### Creating Posts
+### Tworzenie postów
 
 ////
 
@@ -134,32 +134,32 @@ Template.postSubmit.events({
 ~~~
 <%= caption "client/views/posts/post_submit.js" %>
 
-<%= commit "7-1", "Added a submit post page and linked to it in the header." %>
+<%= commit "7-1", "Dodana strona do dodawania postów podlinkowana w nagłówku strony." %>
 
-////
+Powyższa funkcja używa [jQuery](http://jquery.com) do parsowania wartości różnych pól formularza i tworzenia nowego obiektu posta z wyników parsowania. Musimy się upewnić, że używamy `preventDefault` na parametrze `event` naszego handlera aby upewnić się, że przeglądarka nie będzie kontynuowała i próbowała wysłać formularza.
 
-////
+Ostatecznie, możemy przekierować uzytkownika to strony nowego posta. Funkcja kolekcji `insert` zwraca wygenerowany `id` dla obiektu, który został wstawiony do bazy danych, który użyje funkcja Routera `go()` aby utworzyć docelowy URL.
 
-////
+Końcowym rezultatem jest to, że po wciśnieciu przycisku `wyślij` przez użytkownika, tworzony jest post i użytkownik jest natychmiastowo zabierany do strony z dyskusją na temat tego nowego posta.
 
-### Adding Some Security
+### Dodanie kilku środków bezpieczeństwa
 
-////
+Tworzenie postów ma się dobrze, ale nie chcemy na to pozwolić dowolnemu użytkownikowi: chcemy, aby się zalogowali przed dodaniem posta. Oczywiście możemy zacząć od ukrycia formularza wprowadzania nowego posta dla niezalogowanych użytkowników. Mimo to, użytkownik mógłby ukrycie utworzyć post w konsoli przeglądarki bez zalogowania się, a nie możemy sobie na to pozwolić.
 
-////
+Na szczęście bezpieczeństwo danych jest wbudowane w podstawy kolekcji Meteora: jest to po prostu domyślnie wyłączone, gdy tworzysz nowy projekt. Pozwala to na łatwy start i budowanie własnej aplikacji zostawiając nudne sprawy na sam koniec.
 
-////
+Nasza aplikacja już nie potrzebuje tej pomocy, zatem usuńmy pakiet `insecure`:
 
 ~~~bash
 $ meteor remove insecure
 ~~~
 <%= caption "Terminal" %>
 
-////
+Po wykonaniu tej komendy zauważyszm że formularz posta przestanie działać. Dzieje się to, ponieważ bez pakietu `insecure`wstawianie danych po stronie klienta _przestaje być dozwolone_. Musimy dodać Metorowi wyraźne zasady pozwalające na wstawianie postów przez klienta lub wstawiać posty po stronie serwera.
 
-### Allowing Post Inserts
+### Zezwolenie na wstawianie postów
 
-////
+Aby rozpocząć, pokażemy jak zezwolić na wstawianie nowych postów po stronie klienta, aby formularz zaczął znowu działać poprawnie. Jak się okaże później, wybierzemy jeszcze inny sposób, ale na teraz poniższy kod wystarczy, aby naprawić działanie aplikacji:
 
 ~~~js
 Posts = new Meteor.Collection('posts');
@@ -174,31 +174,31 @@ Posts.allow({
 <%= caption "collections/posts.js" %>
 <%= highlight "3~8" %>
 
-<%= commit "7-2", "Removed insecure, and allowed certain writes to posts." %>
+<%= commit "7-2", "Usunieto insecure i zezwolono na zapisy do kolekcji posts." %>
 
-////
+Wołamy `Posts.allow`, które przekazuje Meteorowi "jest to zbiór okoliczności dla których klient ma zezwolenie różnych akcji na kolekcji `Posts`". W tym przypadku, mówimy "klient może wstawiać posty pod warunkiem posiadania `userId`".
 
-////
+`userId` użytkownika przeprowadzającego zmianę jest przekazywany do `allow` i `deny` (lub zwraca `null`, jeżeli żaden użytkownik nie jest zalogowany), co jest prawie zawsze pożyteczne. I skoro konta użytkowników są powiązane z głównym modułem Meteora możemy zawsze polegać na prawidłowości `userId`.
 
-////
+Zdołaliśmy upewnić się, że musisz być zalogowany, aby móc tworzyć posty. Spróbuj się wylogować i utworzyć posta. Powinieneś zobaczyć w konsoli przeglądarki jak poniżej:
 
 <%= screenshot "7-2", "Insert failed: Access denied " %>
 
-////
+Jednakże, wciąż musimy dać sobie radę z kilkoma problemami:
 
- - ////
- - ////
- - ////
+ - Wylogowani użytkownicy nadal mają dostę do formularza tworzenia posta
+ - Post nie jest związany z użytkownikiem w żaden sposób (i nie ma żadnego kodu po stronie serwera, który by to obsługiwał).
+ - Można utworzyć wiele postów, które będą wskazywały na ten sam URL.
 
-////
+Naprawmy te problemy.
 
-### Securing Access To The New Post Form
+### Zabezpieczanie dostępu do formularza nowego posta
 
-////
+Zacznijmy od zabezpieczenia przed zobaczeniem formularza dla niezalogowanych użytkowników. Zrobimy to na poziomie routera przez zdefiniowanie funkcji *podłączonej do ścieżki* (ang. hook).
 
-////
+Funkcja taka przechwyca proces przekierowania i potencjalnie może zmienić akcję, którą podejmuje router. Możesz myśleć o tym jako o strażniku, który sprawdza twoje dane przez wpuszczeniem Ciebie do środka (lub odmowie dostępu).
 
-////
+Co potrzebujemy, to sprawdzenie czy użytkownik jest zalogowany, a jeżeli nie jest, wyrenderowanie szablonu `accessDenied` zamiast oczekiwanego szablonu `postSubmit` (następnie zatrzymujemy wykonywanie kolejnych funkcji przez router). Zmieńmy zatem router.js tak, jak poniżej:
 
 ~~~js
 Router.configure({
@@ -230,30 +230,30 @@ Router.before(requireLogin, {only: 'postSubmit'});
 <%= caption "lib/router.js" %>
 <%= highlight "18~25" %>
 
-////
+Tworzymy również szablon dla strony z odmową dostępu:
 
 ~~~html
 <template name="accessDenied">
-  <div class="alert alert-error">You can't get here! Please log in.</div>
+  <div class="alert alert-error">Nie masz tu dostępu! Proszę się zalogować.</div>
 </template>
 ~~~
 <%= caption "client/views/includes/access_denied.html" %>
 
-<%= commit "7-3", "Denied access to new posts page when not logged in." %>
+<%= commit "7-3", "Odmowa dostępu do strony nowych postów dla niezalogowanych użtytkowników." %>
 
-////
+Jeżeli skierujesz się teraz do http://localhost:3000/submit/ nie będąc zalogowanym, powinieneś zobaczyć:
 
-<%= screenshot "7-3", "The access denied template" %>
+<%= screenshot "7-3", "Szablon odmowy dostępu
 
-////
+Pozytywnym aspektem funkcji podpiętych pod router jest to, że są _reaktywne_. Oznacza to, że możemy działać deklaratywnie i nie musimy martwić się o callbacki czy cokolwiek podobnego, gdy użytkownik jest zalogowany. Gdy status zalogowania się użytkownika ulega zmianie, szablony strony routera natychmiastowo zmienia się z `accessDenied` na `postSubmit` bez konieczności pisania dodatkowego kodu.
 
-////
+Zaloguj się, następnie spróbuj odświeżyć stronę. Możesz czasami zobaczyć krótkie mignięcie szablonu odmowy dostępu przed pojawieniem się strony pozwalającej na dodanie posta. Przyczyna tego jest taka, że Meteor rozpoczyna renderowania tak szybko, jak to jest tylko możliwe, zanim skontaktuje się z serwerem i sprawdzi, czy bieżący użytkownik (zapisany w lokalnej bazie danych) nawet istnieje.
 
-////
+Aby uniknąć tego problemu (który jest częstą klasą problemów, z którymi będziesz musiał się zmierzyć poznając subtelności związanych z opóźnieniem przy komunikacji klient-serwer), wyświetlimy po prostu na ekranie szablon ładowania na krótką chwilę podczas sprawdzania, czy użytkownik ma dostęp.
 
-////
+W końcu w tym momencie nie wiemy czy użytkownik ma prawidłowe dane do zalogowania i nie możemy pokazać ani `accessDenied` ani `postSubmit` aż tego nie sprawdzimy.
 
-////
+Modyfikujemy zatem naszą funkcję podpiętą do routera aby używała szablonu do ładowania podczas gdy `Meteor.logginIn()` zwraca true:
 
 ~~~js
 Router.map(function() {
@@ -287,40 +287,40 @@ Router.before(requireLogin, {only: 'postSubmit'});
 
 <%= commit "7-4", "Show a loading screen while waiting to login." %>
 
-### Hiding the Link
+### Ukrywanie linka
 
-////
+Najłatwiejszym sposobem aby zapobiec przypadkowy dostęp użytkownikom do tej strony jest ukryć link. Osiągniemy to całkiem łatwo przez:
 
 ~~~html
 <ul class="nav">
-  {{#if currentUser}}<li><a href="{{pathFor 'postSubmit'}}">Submit Post</a></li>{{/if}}
+  {{#if currentUser}}<li><a href="{{pathFor 'postSubmit'}}">Dodaj post</a></li>{{/if}}
 </ul>
 ~~~
 <%= caption "client/views/includes/header.html" %>
 
-<%= commit "7-5", "Only show submit post link if logged in." %>
+<%= commit "7-5", "Pokazuj link Dodaj post jeżeli uzytkownik jest zalogowany." %>
 
-////
+Helper `currentUser` jest dostarczony przez pakiet `accounts` i jest odpowiednikiem `Meteor.user()` dostarczanego przez Handlebars. Ponieważ jest reaktywny, link pojawi się lub nie w zależności od tego, czy się wylogujesz, czy zalogujesz do aplikacji.
 
-### Meteor Method: Better Abstraction and Security
+### Serwerowe metody Meteora: Większy stopień bezpieczeństwa i abstrakcji
 
-////
+Zdołaliśmy zabezpieczyć dostęp do strony nowych postów dla niezalogowanych użytkowników, i odmówić takim użytkownim możliwość dodawania postów nawet jeżeli oszukują i używają konsoli przeglądarki. Jest jednak jeszcze kilka rzeczy, o które musimy się zatroszczyć:
 
-- ////
-- ////
-- ////
+- Dodanie znacznika czasu do posta.
+- Upewnienie się, że ten sam URL nie można dodać więcej, niż jeden raz.
+- Dodanie szczegółów o autorze posta (ID, nazwa użytkownika, itd.).
 
-////
+Możesz sobie pomyśleć, że wszystko to możemy osiągnąć w funkcji obsługującej zdarzenia `submit`. Gdybyśmy to zrobili, napotkalibyśmy nową grupę problemów:
 
-- ////
-- ////
-- ////
+- Jeżeli chodzi o znacznik czasu, musielibyśmy polegać na prawidłowo ustawionym czasie po stronie klienta, co nie zawsze nastąpi
+- Klient nie będzie wiedział o _wszystkich_ URL, które zostały opublikowane na stronie. Będą jedynie wiedzieli o postach, które bieżąco widzą (później dokładnie opiszemy jak to działa), więc nie ma pewnego sposobu na wymuszenie unikalnych adresów URL po stronie klienta.
+- Ostatecznie, chociaż teoretycznie _możemy_ dodawać szczegóły użytkownika po stronie klienta, nie wymuszalibyśmy ich dokładności i zgodności z prawdą i prowadziłoby to do nadużyć związanych z używaniem konsoli przeglądarki.
 
-////
+Z powodów wymienionych powyżej lepiej jest utrzymywać proste funkcje obsługujące zdarzenia i jeżeli robimy coś więcej niż tylko podstawowa wstawianie lub modyfikacje kolekcji, używać **Metod** Meteora (metod przez duże 'M').
 
-////
+Metoda Meteora jest funkcją serwerową wykonywaną po stronie serwera, ale wywoływaną po stronie klienta. Nie jest to dla nas całkowicie obce -- w szczególności funkcje kolekcji `insert`, `update` i `remove` są wszystkie Metodami. Sprawdźmy jak zaimplementować własną.
 
-////
+Wróćmy do `post_submit.js`. Zamiast wstawiania bezpośrednio do kolekcji `Posts`, zawołamy Metodę o nazwie `post`:
 
 ~~~js
 Template.postSubmit.events({
@@ -344,9 +344,9 @@ Template.postSubmit.events({
 ~~~
 <%= caption "client/views/posts/post_submit.js" %>
 
-////
+Funkcja `Meteor.call` woła Metodę o nazwie określonej w pierwszym parametrze funkcji. Możesz dodać parametry do wywołania funkcji (w tym przypadku obiekt `post` skonstruowany na podstawie formularza) i ostatecznie dodać callback, który zostanie uruchomiony po zakończeniu Metody. Tutaj po prostu ostrzegamy użytkownika czy wystąpił jakiś problem lub przekierowujemy go nowoutworzonej strony dyskusji konkretnego posta.
 
-////
+Następnie zdefiniujemy Metodą w pliku `collections/posts.js`. Usuniemy blok `allow()` z `posts.js`, ponieważ Metoda Meteora i tak go ominie. Pamiętaj, że Metody są wykonywane po stronie serwera, więc Meteor uważa, że można im ufać.
 
 ~~~js
 Posts = new Meteor.Collection('posts');
@@ -386,25 +386,25 @@ Meteor.methods({
 ~~~
 <%= caption "collections/posts.js" %>
 
-<%= commit "7-6", "Use a method to submit the post." %>
+<%= commit "7-6", "Uzycie Metody przy dodawaniu posta." %>
 
-////
+Metoda ta jest trochę skomplikowana, ale mamy nadzieje że możesz nadążyć.
 
-////
+Na początkek definiujemy zmienną `user` i sprawdzamy, czy post z tym samym linkiem już nie istnieje. Następnie sprawdzamy, czy użytkownik jest zalogowany, rzucając błąd (który końcowo będzie wyświetlony w przeglądarce), jeżeli nie jest. Przeprowadzamy także prostą walidację obiektu posta, aby upewnić się, że post zawiera tytuł.
 
-////
+Następnie, jeżeli istnieje już post z tym samym URL, rzucamy błąd `302` (który oznacza przekierowanie), przekazaując użytkownikowi, że powinien sprawdzić poprzednio tworzony post.
 
-////
+Klasa `Error` Meteora ma trzy parametry. Pierwszy, (`error`) będzie numerycznym kodem `302`, drugi (`reason`) zawiera wyjaśnienie zrozumiałe dla człowieka i trzeci (`details`) może być jakąkolwiek użyteczną informacją.
 
-////
+W naszym przypadku, użyjemy trzeci argument aby przekazać ID posta, który właśnie znaleźliśmy. Uwaga: użyjemy tego później aby przekierować użytkownika do jeszcze nieistniejącego posta.
 
-////
+Jeżeli wszystkie kroki są sprawdzone i przechodzą poprawnie, bierzemy pola, które chcemy wstawić (upewniając się, że użytkownik wołający tą Metodę w konsoli przeglądarki nie może dodać fałszywych danych do bazy) i dodajemy pewne informacje o uzytkowniku dodającym posta -- jak również bieżący czas -- do posta.
 
-////
+Ostatecznie, wstawiamy post do bazy danych i zwracamy nowy `id` użytkownikowi.
 
-### Sorting Posts
+### Sortowanie postów
 
-////
+Teraz skoro mamy dostęp do czasu wstawienia wszystkich postów, ma sens upewnienie się, że są posortowane ze względu na ten atrybut. Aby to uczynić, możemy użyć operatora Mongo `sort`, który oczekuje obiektu składającego się z kluczy po których posortować i znaku oznaczającego czy sortowanie ma być wykonane rosnąco czy malejąco.
 
 ~~~js
 Template.postsList.helpers({
@@ -416,8 +416,8 @@ Template.postsList.helpers({
 <%= caption "client/views/posts/posts_list.js" %>
 <%= highlight "3" %>
 
-<%= commit "7-7", "Sort posts by submitted timestamp." %>
+<%= commit "7-7", "Sortowanie postów po znaczniku czasu." %>
 
-////
+Zabrało to trochę pracy, ale wreszcie mamy interfejs użytkownika, który pozwala bezpiecznie wstawiać nowe dane do naszej aplikacji!
 
-////
+Jakakolwiek aplikacja, która pozwala użytkownikom na tworzenie nowych treści musi dać im także sposób na ich późniejszą edycję lub usuwania. Poświęcony jest temu rozdział Edytowanie Postów.
