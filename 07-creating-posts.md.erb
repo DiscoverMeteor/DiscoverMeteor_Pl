@@ -159,7 +159,7 @@ Po wykonaniu tej komendy zauważyszm że formularz posta przestanie działać. D
 
 ### Zezwolenie na wstawianie postów
 
-////
+Aby rozpocząć, pokażemy jak zezwolić na wstawianie nowych postów po stronie klienta, aby formularz zaczął znowu działać poprawnie. Jak się okaże później, wybierzemy jeszcze inny sposób, ale na teraz poniższy kod wystarczy, aby naprawić działanie aplikacji:
 
 ~~~js
 Posts = new Meteor.Collection('posts');
@@ -174,25 +174,25 @@ Posts.allow({
 <%= caption "collections/posts.js" %>
 <%= highlight "3~8" %>
 
-<%= commit "7-2", "Removed insecure, and allowed certain writes to posts." %>
+<%= commit "7-2", "Usunieto insecure i zezwolono na zapisy do kolekcji posts." %>
 
-////
+Wołamy `Posts.allow`, które przekazuje Meteorowi "jest to zbiór okoliczności dla których klient ma zezwolenie różnych akcji na kolekcji `Posts`". W tym przypadku, mówimy "klient może wstawiać posty pod warunkiem posiadania `userId`".
 
-////
+`userId` użytkownika przeprowadzającego zmianę jest przekazywany do `allow` i `deny` (lub zwraca `null`, jeżeli żaden użytkownik nie jest zalogowany), co jest prawie zawsze pożyteczne. I skoro konta użytkowników są powiązane z głównym modułem Meteora możemy zawsze polegać na prawidłowości `userId`.
 
-////
+Zdołaliśmy upewnić się, że musisz być zalogowany, aby móc tworzyć posty. Spróbuj się wylogować i utworzyć posta. Powinieneś zobaczyć w konsoli przeglądarki jak poniżej:
 
 <%= screenshot "7-2", "Insert failed: Access denied " %>
 
-////
+Jednakże, wciąż musimy dać sobie radę z kilkoma problemami:
 
- - ////
- - ////
- - ////
+ - Wylogowani użytkownicy nadal mają dostę do formularza tworzenia posta
+ - Post nie jest związany z użytkownikiem w żaden sposób (i nie ma żadnego kodu po stronie serwera, który by to obsługiwał).
+ - Można utworzyć wiele postów, które będą wskazywały na ten sam URL.
 
-////
+Naprawmy te problemy.
 
-### Securing Access To The New Post Form
+### Zabezpieczanie dostępu do formularza nowego posta
 
 ////
 
