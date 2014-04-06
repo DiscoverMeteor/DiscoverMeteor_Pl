@@ -344,9 +344,9 @@ Template.postSubmit.events({
 ~~~
 <%= caption "client/views/posts/post_submit.js" %>
 
-////
+Funkcja `Meteor.call` woła Metodę o nazwie określonej w pierwszym parametrze funkcji. Możesz dodać parametry do wywołania funkcji (w tym przypadku obiekt `post` skonstruowany na podstawie formularza) i ostatecznie dodać callback, który zostanie uruchomiony po zakończeniu Metody. Tutaj po prostu ostrzegamy użytkownika czy wystąpił jakiś problem lub przekierowujemy go nowoutworzonej strony dyskusji konkretnego posta.
 
-////
+Następnie zdefiniujemy Metodą w pliku `collections/posts.js`. Usuniemy blok `allow()` z `posts.js`, ponieważ Metoda Meteora i tak go ominie. Pamiętaj, że Metody są wykonywane po stronie serwera, więc Meteor uważa, że można im ufać.
 
 ~~~js
 Posts = new Meteor.Collection('posts');
@@ -386,25 +386,25 @@ Meteor.methods({
 ~~~
 <%= caption "collections/posts.js" %>
 
-<%= commit "7-6", "Use a method to submit the post." %>
+<%= commit "7-6", "Uzycie Metody przy dodawaniu posta." %>
 
-////
+Metoda ta jest trochę skomplikowana, ale mamy nadzieje że możesz nadążyć.
 
-////
+Na początkek definiujemy zmienną `user` i sprawdzamy, czy post z tym samym linkiem już nie istnieje. Następnie sprawdzamy, czy użytkownik jest zalogowany, rzucając błąd (który końcowo będzie wyświetlony w przeglądarce), jeżeli nie jest. Przeprowadzamy także prostą walidację obiektu posta, aby upewnić się, że post zawiera tytuł.
 
-////
+Następnie, jeżeli istnieje już post z tym samym URL, rzucamy błąd `302` (który oznacza przekierowanie), przekazaując użytkownikowi, że powinien sprawdzić poprzednio tworzony post.
 
-////
+Klasa `Error` Meteora ma trzy parametry. Pierwszy, (`error`) będzie numerycznym kodem `302`, drugi (`reason`) zawiera wyjaśnienie zrozumiałe dla człowieka i trzeci (`details`) może być jakąkolwiek użyteczną informacją.
 
-////
+W naszym przypadku, użyjemy trzeci argument aby przekazać ID posta, który właśnie znaleźliśmy. Uwaga: użyjemy tego później aby przekierować użytkownika do jeszcze nieistniejącego posta.
 
-////
+Jeżeli wszystkie kroki są sprawdzone i przechodzą poprawnie, bierzemy pola, które chcemy wstawić (upewniając się, że użytkownik wołający tą Metodę w konsoli przeglądarki nie może dodać fałszywych danych do bazy) i dodajemy pewne informacje o uzytkowniku dodającym posta -- jak również bieżący czas -- do posta.
 
-////
+Ostatecznie, wstawiamy post do bazy danych i zwracamy nowy `id` użytkownikowi.
 
-### Sorting Posts
+### Sortowanie postów
 
-////
+Teraz skoro mamy dostęp do czasu wstawienia wszystkich postów, ma sens upewnienie się, że są posortowane ze względu na ten atrybut. Aby to uczynić, możemy użyć operatora Mongo `sort`, który oczekuje obiektu składającego się z kluczy po których posortować i znaku oznaczającego czy sortowanie ma być wykonane rosnąco czy malejąco.
 
 ~~~js
 Template.postsList.helpers({
@@ -416,8 +416,8 @@ Template.postsList.helpers({
 <%= caption "client/views/posts/posts_list.js" %>
 <%= highlight "3" %>
 
-<%= commit "7-7", "Sort posts by submitted timestamp." %>
+<%= commit "7-7", "Sortowanie postów po znaczniku czasu." %>
 
-////
+Zabrało to trochę pracy, ale wreszcie mamy interfejs użytkownika, który pozwala bezpiecznie wstawiać nowe dane do naszej aplikacji!
 
-////
+Jakakolwiek aplikacja, która pozwala użytkownikom na tworzenie nowych treści musi dać im także sposób na ich późniejszą edycję lub usuwania. Poświęcony jest temu rozdział Edytowanie Postów.
