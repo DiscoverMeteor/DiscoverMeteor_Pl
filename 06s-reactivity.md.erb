@@ -1,20 +1,20 @@
 ---
-title: Reactivity
+title: Reaktywność
 slug: reactivity
 date: 0006/01/02
 number: 6.5
 sidebar: true
-contents: Learn about Meteor's reactive code dependency system.|Understand the motivations and how it makes code declarative.|Learn to use advanced code that uses reactive data.
+contents: o systemie zależności reaktywnego kodu Meteora.|jak rozumieć motywacje i jak czyni to kod deklaratywnym.|jak używać zaawansowanego kodu, który używa reaktywnych danych.
 paragraphs: 20
 ---
 
-////
+Jeżeli kolekcje są jądrem Metora, to *reaktywność* jest warstwą, która robi to jądro użytecznym.
 
-////
+Kolekcje radykalnie zmieniają sposób w jaki Twoja aplikacja radzi sobie ze zmianą danych. Zamiast ręcznie sprawdzać zmiany danych (np. przez wołanie AJAX) i następnie wstawianie zmian do HTMLa, zmiany danych zamiast tego mogą przyjść w dowolnym momencie i być nieprzerwanie aplikowane do interfejsu użytkownika przez Meteora.
 
-////
+Poświęć chwilę na przemyślenie tego: za kurtyną, Meteor może zmieniać *jakąkolwiek* część twojego interfejsu użytkownika gdy zależna od niego kolekcja ulega zmianie.
 
-////
+*Imperatywnym* sposobem na osiągniecie tego byłoby użycie `.observe()`, funkcji kursora, która wywołuje callbacki gdy dokumenty pasujące do kursora ulegają zmianie. Moglibyśmy wtedy aplikować zmiany w DOM (renderowanym HTML naszej strony) za pomocą tych callbacków. Kod wynikowy wyglądałby mniej więcej tak:
 
 ~~~js
 Posts.find().observe({
