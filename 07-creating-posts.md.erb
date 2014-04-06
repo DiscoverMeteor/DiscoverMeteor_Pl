@@ -243,7 +243,7 @@ Tworzymy również szablon dla strony z odmową dostępu:
 
 Jeżeli skierujesz się teraz do http://localhost:3000/submit/ nie będąc zalogowanym, powinieneś zobaczyć:
 
-<%= screenshot "7-3", "Szablon odmowy dostępu
+<%= screenshot "7-3", "Szablon odmowy dostępu" %>
 
 Pozytywnym aspektem funkcji podpiętych pod router jest to, że są _reaktywne_. Oznacza to, że możemy działać deklaratywnie i nie musimy martwić się o callbacki czy cokolwiek podobnego, gdy użytkownik jest zalogowany. Gdy status zalogowania się użytkownika ulega zmianie, szablony strony routera natychmiastowo zmienia się z `accessDenied` na `postSubmit` bez konieczności pisania dodatkowego kodu.
 
