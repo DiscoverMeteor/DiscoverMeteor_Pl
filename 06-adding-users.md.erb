@@ -93,29 +93,29 @@ Przez dodanie pakietu `accounts` Meteor utworzył specjalną kolekcję, do któr
 ~~~
 <%= caption "Konsola przeglądarki" %>
 
-////
+Konsola powinna zwrócić obiekt reprezentujący twojego użytkownika; jeżeli przyjrzysz mu się bliżej, zauważysz że jest tam obecna twoja nazwa użytkownika jak i `_id`, które jest twoim unikatowym identyfikatorem. Zauważ, że możesz również otrzymać akutalnie zalogowanego użytkownika wołająć `Meteor.user()`.
 
-////
+Teraz wyloguj się i ponownie utwórz konto z inną nazwą użytkownika. `Meteor.user()` powinno zwrócić teraz drugiego użytkownika. Ale poczekaj, zawołajmy:
 
 ~~~js
 ❯ Meteor.users.find().count();
 1
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarkiu" %>
 
-////
+Konsola zwraca wartość 1. Czy nie powinna mieć wartości 2? Czy pierwszy użytkownik został usunięty? Jeżeli spróbujesz zalogować się jako pierwszy użytkownik, zobaczysz, że tak się nie stało.
 
-////
+Upewnijmy się i sprawdzimy w kanonicznym magazynie danych, czyli bazie danych Mongo. Zalogujemy się do Mongo (`meteor mogno` w terminalu) i sprawdzimy:
 
 ~~~bash
 > db.users.count()
 2
 ~~~
-<%= caption "Mongo console" %>
+<%= caption "Konsola Mongo" %>
 
-////
+Zdecydowanie jest dwóch użytkowników w bazie. Dlaczego więc widzimy jednego w przeglądarce?
 
-### A Mystery Publication!
+### Tajemnicza publikacja!
 
 ////
 
