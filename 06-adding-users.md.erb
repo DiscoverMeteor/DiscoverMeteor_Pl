@@ -1,25 +1,25 @@
 ---
-title: Adding Users
+title: Dodawanie użytkowników
 slug: adding-users
 date: 0006/01/01
 number: 6
-contents: Learn about user accounts in Meteor.|Add all the authentication we'll need for Microscope.|Use the built-in accounts-ui package to get an instant user interface.
+contents: o kontach użytkowników w Meteorze.|jak dodać wszystkie potrzebne poświadczenia tożsamości do Microscope.|jak użyć wbudowany pakiet accounts-ui aby natychmiastowo otrzymać interfejs użytkownika potrzebny do zalogowania.
 paragraphs: 27
 ---
 
-////
+Do tej pory zdołaliśmy w miarę sensownie utworzyć i wyświetlić trochę statycznych danych początkowych i połączyć wszystko razem w prosty prototyp aplikacji.
 
-////
+Widzieliśmy nawet jak nasz UI reaguje na żywo na zmiany danych i wstawione czy zmienione dane pojawiają się natychmiastowo. Nadal jednak nasza strona jest sparaliżowana przez fakt, że nie możemy wstawiać danych. Faktycznie, nawet nie mamy żanych użytkowników! 
 
-////
+Sprawdźmy jak można to naprawić
 
-### Accounts: users made simple
+### Konta: proste podejście do użytkowników
 
-////
+W większości frameworków webowych dodawanie kont użytkowników jest znajomą przeszkodą. Na pewno trzeba to robić prawie w każdym projekcie, ale nigdy nie jest to tak łatwe jak powinno być. Co więcej, kiedy tylko musisz pracować z OAuth lub jakimkolwiek innym schematem logowania, sprawy szybko się komplikują.
 
-////
+Na szczęście Metor troszczy się o to wszystko. Dzieki temu, że pakiety Meteora mogą dodać kod zarówno po stronie serwera (JavaScript) i klienta (JavaScript, HTML i CSS), możemy dostać system logowania prawie za darmo.
 
-////
+Mógłbyś po prostu użyć wbudowanego w Meteorze UI dla kont użytkowników (za pomocą `mrt add accounts-ui`), ale ponieważ zbudowaliśmy całą aplikację za pomocą Bootstrap, użyjemy zamiast tego pakiet `accounts-ui-bootstrap-dropdown` (nie martw się, jedyna różnica to styl UI). Wpisz w linii komend:
 
 ~~~bash
 $ mrt add accounts-ui-bootstrap-dropdown
