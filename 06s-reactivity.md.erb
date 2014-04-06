@@ -75,11 +75,11 @@ Template.postsList.helpers({
 
 Za kurtyną Meteor podłącza callbacki `observe()` za nas i przerysowuje odpowiednie sekcje HTML po zmianie reaktywnego źródła danych.
 
-### Dependency Tracking in Meteor: Computations
+### Śledzenie zależności w Meteorze: Komputacje
 
-////
+Podczas gdy Meteor jest działającym w trybie rzeczywistym, reaktywnym frameworkiem, tylko *częściowo* kod samego Meteora jest reaktywny. Jeżeli byłby w całości reaktywny, cała aplikacja uruchamiała by się ponownie po każdej zmianie. Zamiast tego, reaktywność jest ograniczona do konkretnych obszarów kodu i nazywamy te obszary **komputacjami**.
 
-////
+Innymi słowy, komputacja jest blokiem kodu wykonywanym po każdej zmianie reaktywnego źródła danych
 
 ////
 
