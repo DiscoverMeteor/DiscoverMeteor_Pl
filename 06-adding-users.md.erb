@@ -156,15 +156,15 @@ Co więcej, dokumenty w naszej kolekcji użytkownika nie zawierają tych samych 
 ~~~
 <%= caption "Konsola Mongo" %>
 
-////
+Z drugiej strony, w przeglądarce obiekt użytkownika o wiele bardziej zredukowany, co możesz sprawdzić przez wpisanie równorzędnej komendy:
 
 ~~~js
 ❯ Meteor.users.findOne();
 Object {_id: "kYdBd9hr3fWPGPcii", username: "tmeasday"}
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Powyższy przykład pokazuje jak lokalna kolekcji może być *bezpiecznym podzbiorem* prawdziwej bazy danych. Zalogowany użytkownik widzi wyłącznie tyle prawdziwego zbioru danych, ile potrzebuje (w tym przypadku do zalogowania). Jest to użyteczny wzorzec do zapamiętania, jak zobaczyć później.
 
-////
+Nie oznacza to, że nie możesz sprawić, aby większa część danych użytkownika była publiczna, jeżeli tylko chcesz. Możesz odnieść się do [Dokumentacji Meteora](http://docs.meteor.com/#meteor_users) aby sprawdzić jak opcjonalnie publikować więcej pól w klekcji `Meteor.users()`.
 
