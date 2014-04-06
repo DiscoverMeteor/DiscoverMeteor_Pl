@@ -27,9 +27,9 @@ $ mrt add accounts-password
 ~~~
 <%= caption "Terminal" %>
 
-////
+Te dwie komendy dają nam dostęp do specjalnych szablonów dla kont użytkowników; możemy dołączyć je do naszej strony za pomocą helpera `{{> loginButtons}}`. Przydatna wskazówka: możesz kontrolować, po której stronie ekranu pokaże się przyciski do logowania używając atrybutu `align` (na przykład `{{> loginButtons  align="right"}}`).
 
-////
+Dodamy przyciski do naszego nagłówka. Ponieważ nasz nagłówek zaczyna się rozrastać, dajmy mu trochę więcej miejsca we własnym szablonie (wstawimy go do `client/views/includes/`). Użyjemy także trochę markup'u i klas Bootstrap aby upewnić się, że wszystko ładnie wygląda:
 
 ~~~html
 <template name="layout">
@@ -65,13 +65,13 @@ $ mrt add accounts-password
 ~~~
 <%= caption "client/views/includes/header.html" %>
 
-////
+Teraz, gdy otwieramy naszą aplikację w oknie przeglądarki, widzimy przyciski do logowania w górnym prawym rogu naszej strony.
 
 <%= screenshot "6-1", "Meteor's built-in accounts UI" %>
 
-////
+Możemy ich użyć do dodania konta, zalogowania się, zapytania o zmianę hasła i wszystkiego potrzebnego tej prostej stronie dla kont użytkowników opartych na hasłach.
 
-////
+Aby przekazać naszemu systemoi kont, że chcemy aby użytkownik logował się za pomocą nazwy użytkownika, dodajemy po prostu blok konfiguracji `Accounts.ui` w nowym pliku `config.js` w folderze `client/helpers/`:
 
 ~~~js
 Accounts.ui.config({
