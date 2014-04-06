@@ -114,28 +114,28 @@ Deps.autorun(function() {
 
 Jak właśnie widzieliśmy, autorun może być bardzo użyteczny w śledzeniu reaktywnych źródeł danych i jawnej reakcji na nie.
 
-### Hot Code Reload
+### Natychmiastowe przeładowanie kodu
 
-////
+Podczas rozwoju Microscope korzystaliśmy z jednej z wielu funkcji Meteora pozwalającej oszczędzić czas: hot code reload (HCR). Za każdym razem o zapisaniu dowolnego pliku kodu źródłowego aplikacji, Meteor rozpoznaje zmiany i niewidocznie restartuje serwer informując każdego klienta o konieczności przeładowania strony.
 
-////
+Jest to podobne to automatycznego przeładowania strony z jedną istotną różnicą.
 
-////
+Aby dowiedzieć się, co to za różnica, rozpocznij resetując zmienną Session, którą wcześniej używaliśmy:
 
 ~~~js
 ❯ Session.set('pageTitle', 'A brand new title');
 ❯ Session.get('pageTitle');
 'A brand new title'
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Jeżeli mielibyśmy ręcznie przeładować stronę, nasze zmienne Session naturalnie byłyby stracone (ponieważ utworzyłoby to nową sesję). Z drugiej strony, jeżeli wyzwolimy `hot code reload` (na przykład przez zapisanie jednego z plików źródłowych) strona się przeładuje, ale zmienna Session będzie nadal ustawiona. Wypróbuj to teraz!
 
 ~~~js
 ❯ Session.get('pageTitle');
 'A brand new title'
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
 ////
 
