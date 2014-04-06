@@ -33,25 +33,25 @@ Posts.find().observe({
 });
 ~~~
 
-Prawdopodobnie zorientowałeś się już, jak szybko zwiększy się poziom skomplikowania takiego kodu. Wyobraź sobie radzenie sobie ze zmianami *każdego atrybutu* posta i koniecznością zmiany skomplikowanego HTML w elementach `<li>` posta. Nie wspominając o koni
+Prawdopodobnie zorientowałeś się już, jak szybko zwiększy się poziom skomplikowania takiego kodu. Wyobraź sobie radzenie sobie ze zmianami *każdego atrybutu* posta i koniecznością zmiany skomplikowanego HTML w elementach `<li>` posta. Nie wspominając o szczególnych przypadkach, które mogą się pojawić gdy zaczniemy polegać na wielu źródłach informacji, które mogą zmieniać się w czasie rzeczywistym.
 
 <% note do %>
 
-### When *Should* We Use `observe()`?
+### Kiedy *powinniśmy* używać `observe()`?
 
-////
+Używanie powyższego schematu jest czasami konieczne, szczególnie przy pracy z widgetami ze źródeł trzecich. Na przykład wyobraź sobie, że chcemy dodać lub usuwać znaczniki na mapie w czasie rzeczywistym bazując na danych znajdujących się w Kolekcji (powiedzmy, aby pokazać lokalizacje bieżąco zalogowanych użytkowników).
 
-////
+W takich przypadkach będziesz musiał używać callbacków `observe()` aby zmusić mapę do "rozmowy" z kolekcją Meteora i wiedzieć jak reagować na zmianę danych. Na przykład, polegalibyśmy na callbackach `added` i `removed` aby wołać funkcje API mapy `dropPin()` czy `removePin()`.
 
 <% end %>
 
-### A Declarative Approach
+### Podejście deklaratywne
 
-////
+Meteor daje nam lepsze rozwiązanie: reaktywność, która jest samym jądrem podejścia **deklaratywnego**. Bycie deklaratywnym pozwala na zdefiniowanie związku między obiektami raz i poźniej poleganie na tym, że będą automatycznie synchronizowane zamiast ustawiać akcje reagujące na każdą możliwą zmianę.
 
-////
+Jest to bardzo mocny koncept, ponieważ system reagujący w czasie rzeczywistym ma wiele wejść, które mogą zmieniać się w nieoczekiwanych momentach. Przez deklaratywne określenie jak renderujemy bazowane na HTML lub jakiekolwiek inne źródła danych o które się troszczymy, Meteor może przejąć pracę monitorowania źródeł danych i w sposób niewidoczny uaktualniać interfejs użytkownika.
 
-////
+Podsumowując to wszystko, zamiast myśleć o kolejnych callbackach `observe`, Meteor pozwala nam napisać:
 
 ~~~html
 <template name="postsList">
@@ -63,7 +63,7 @@ Prawdopodobnie zorientowałeś się już, jak szybko zwiększy się poziom skomp
 </template>
 ~~~
 
-////
+I następnie otrzymać listę postów za pomocą:
 
 ~~~js
 Template.postsList.helpers({
@@ -73,7 +73,7 @@ Template.postsList.helpers({
 });
 ~~~
 
-////
+Za kurtyną Meteor podłącza callbacki `observe()` za nas i przerysowuje odpowiednie sekcje HTML po zmianie reaktywnego źródła danych.
 
 ### Dependency Tracking in Meteor: Computations
 
