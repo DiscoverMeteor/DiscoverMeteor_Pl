@@ -137,21 +137,21 @@ Jeżeli mielibyśmy ręcznie przeładować stronę, nasze zmienne Session natura
 ~~~
 <%= caption "Konsola przeglądarki" %>
 
-////
+Jeżeli zatem używamy zmiennych sesji do śledzenia tego, co użytkownik właśnie robi, HCR powinien być prawie transparentny dla użytkownika, ponieważ zachowa wartość wszystkich zmiennych sesji. Pozwala to na instalację nowej wersji produkcujnej nasze aplikacji Meteora mając pewność, że nasi użytkownicy będą w minimalnym stopniu zdezorganizowani.
 
-////
+Rozważ to przez chwilę. Jeżeli możemy trzymać cały stan w URL i sesji, możemy transparetnie zmieniać _uruchomiony kod źródłowy_ każdej aplikacji klienta nie przeszkadzając im zbytnio.
 
-////
+Sprawdźmy co dzieje się, gdy ręcznie odświeżymy stronę:
 
 ~~~js
 ❯ Session.get('pageTitle');
 null
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Gdy przeładowaliśmy stronę, straciliśmy sesję. W HCR Meteor zapisuje sesję do lokalnego magazynu danych i wczytuje ją ponownie po przeładowaniu strony. Jednakże to pierwsze zachowanie się aplikacji po ręcznym przeładowaniu strony ma sens: jeżeli użytkownik przeładowuje strone, to tak jakby ponownie odwiedził ten sam URL i powinien być zresetowany do stanu początkowego, takiego jaki zobaczyłby jakikolwiek użytkownik odwiedzający tą stronę.
 
-////
+Ważne wnioski, które należy z tego wyciągnąć to:
 
-1. ////
-2. ////
+1. Zawsze zapisuj stan użytkownika w sesji lub URL, tak aby użytkownikom jak najmniej przeszkadzało `hot code reload`.
+2. Zapisuj jakikolwiek stan, który ma być dzielony między użytkownikami *w URL*.
