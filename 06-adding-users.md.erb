@@ -71,7 +71,7 @@ Teraz, gdy otwieramy naszą aplikację w oknie przeglądarki, widzimy przyciski 
 
 Możemy ich użyć do dodania konta, zalogowania się, zapytania o zmianę hasła i wszystkiego potrzebnego tej prostej stronie dla kont użytkowników opartych na hasłach.
 
-Aby przekazać naszemu systemoi kont, że chcemy aby użytkownik logował się za pomocą nazwy użytkownika, dodajemy po prostu blok konfiguracji `Accounts.ui` w nowym pliku `config.js` w folderze `client/helpers/`:
+Aby przekazać naszemu systemowi kont, że chcemy aby użytkownik logował się za pomocą nazwy użytkownika, dodajemy po prostu blok konfiguracji `Accounts.ui` w nowym pliku `config.js` w folderze `client/helpers/`:
 
 ~~~js
 Accounts.ui.config({
@@ -84,14 +84,14 @@ Accounts.ui.config({
 
 ### Creating Our First User
 
-////
+Spróbuj dodać konto użytkownika: przycisk "Sign in" zmieni się i pokaże twoją nazwę użytkownika. Potwierdza to, że konto użytkownika zostało dla Ciebie utworzone. Ale skąd pochodzą dane konta użytkownika?
 
-////
+Przez dodanie pakietu `accounts` Meteor utworzył specjalną kolekcję, do której można mieć dostęp przez `Meteor.users`. Aby ją zobaczyć, otwórz konsolę przeglądarki i wpisz:
 
 ~~~js
 ❯ Meteor.users.findOne();
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
 ////
 
