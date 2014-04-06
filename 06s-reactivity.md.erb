@@ -73,23 +73,23 @@ Template.postsList.helpers({
 });
 ~~~
 
-Za kurtyną Meteor podłącza callbacki `observe()` za nas i przerysowuje odpowiednie sekcje HTML po zmianie reaktywnego źródła danych.
+Za kulisami Meteor podłącza callbacki `observe()` za nas przerenderowując odpowiednie sekcje HTML po zmianie reaktywnego źródła danych.
 
 ### Śledzenie zależności w Meteorze: Komputacje
 
-Podczas gdy Meteor jest działającym w trybie rzeczywistym, reaktywnym frameworkiem, tylko *częściowo* kod samego Meteora jest reaktywny. Jeżeli byłby w całości reaktywny, cała aplikacja uruchamiała by się ponownie po każdej zmianie. Zamiast tego, reaktywność jest ograniczona do konkretnych obszarów kodu i nazywamy te obszary **komputacjami**.
+Podczas gdy Meteor jest reaktywnym frameworkiem, działającym w trybie rzeczywistym, tylko *częściowo* kod samego Meteora jest reaktywny. Jeżeli byłby w całości reaktywny, cała aplikacja uruchamiała by się ponownie po każdej zmianie danych. Zamiast tego, reaktywność jest ograniczona do konkretnych obszarów kodu i nazywamy te obszary **komputacjami**.
 
-Innymi słowy, komputacja jest blokiem kodu wykonywanym po każdej zmianie reaktywnego źródła danych
+Innymi słowy, komputacja jest blokiem kodu wykonywanym po każdej zmianie reaktywnego źródła danych. Jeżeli masz reaktywne źródło danych (na przykład zmienną Session) i chciałbyś reaktywnie na nią reagować, potrzebujesz ustawić odpowiednią komputację, która się tym zajmie.
 
-////
+Zauważ, że zwykle nie musisz tego robić jawnie, ponieważ Meteor daje domyślnie osobną specjalną komputację każdemu szablonowi, który renderuje (oznacza to, że kod w helperach szablonów i callbackach jest domyślnie reaktywny).
 
-////
+Każde reaktywne źródło danych śledzi wszystkie komputacje, które go używają, tak aby mogło same dać im znać, gdy jego wartość ulegnie zmianie. Aby to osiągnąć, woła funkcję `invalidate()` komputacji.
 
-////
+Komputacje są z reguły ustawiane po to, aby przeliczyć zawartość danych podczas weryfikacji i dzieje się tak również w komputacjach szablonu (dodatkowo komputacje szablonu próbują kilku sztuczek, aby bardziej widajnie przerysować stronę). Mimo, że możesz mieć większą kontrolę nad komputacją podczas wykonywania `invalidate`, to większość czasu będziesz potrzebował domyślnych ustawień.
 
-### Setting Up a Computation
+### Ustawianie komputacji
 
-////
+Teraz skoro rozumiemy teorię komputacji, implementacja ich będzie nieproporcjonalnie łatwiejsza niż teoria. Używamy po prostu funkcji `Deps.autorun` aby umieścić blok kodu w komputacji i uczynić go reaktywnym:
 
 ~~~js
 Deps.autorun(function() {
@@ -97,11 +97,11 @@ Deps.autorun(function() {
 });
 ~~~
 
-////
+Za kulisami, `autorun` tworzy komputację i podłącza ją w odpowiednie miejsce, aby była wykonywana za każdym razem, gdy zmienia się źródło danych na którym zależy. Ustawiliśmy właśnie bardzo prostą komputację, która wypisuje w konsoli liczbę postów. Ponieważ `Posts.find()` jest reaktywnym źródłem danych, zatroszczy się o przekazanie komputacji, aby została wykonana za każdym razem, gdy liczba postów ulegnie zmianie.
 
 ~~~js
 > Posts.insert({title: 'New Post'});
 There are 4 posts.
 ~~~
 
-////
+Końcowym rezultatem tego jest to, że możemy pisać kod, który używa reaktywnych źródeł danych w bardzo naturalny sposób, wiedząc, że za kulisami system zależności we właściwym momencie zatroszczy się o uruchomienie kodu.
