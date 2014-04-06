@@ -194,11 +194,11 @@ Naprawmy te problemy.
 
 ### Zabezpieczanie dostępu do formularza nowego posta
 
-////
+Zacznijmy od zabezpieczenia przed zobaczeniem formularza dla niezalogowanych użytkowników. Zrobimy to na poziomie routera przez zdefiniowanie funkcji *podłączonej do ścieżki* (ang. hook).
 
-////
+Funkcja taka przechwyca proces przekierowania i potencjalnie może zmienić akcję, którą podejmuje router. Możesz myśleć o tym jako o strażniku, który sprawdza twoje dane przez wpuszczeniem Ciebie do środka (lub odmowie dostępu).
 
-////
+Co potrzebujemy, to sprawdzenie czy użytkownik jest zalogowany, a jeżeli nie jest, wyrenderowanie szablonu `accessDenied` zamiast oczekiwanego szablonu `postSubmit` (następnie zatrzymujemy wykonywanie kolejnych funkcji przez router). Zmieńmy zatem router.js tak, jak poniżej:
 
 ~~~js
 Router.configure({
@@ -230,30 +230,30 @@ Router.before(requireLogin, {only: 'postSubmit'});
 <%= caption "lib/router.js" %>
 <%= highlight "18~25" %>
 
-////
+Tworzymy również szablon dla strony z odmową dostępu:
 
 ~~~html
 <template name="accessDenied">
-  <div class="alert alert-error">You can't get here! Please log in.</div>
+  <div class="alert alert-error">Nie masz tu dostępu! Proszę się zalogować.</div>
 </template>
 ~~~
 <%= caption "client/views/includes/access_denied.html" %>
 
-<%= commit "7-3", "Denied access to new posts page when not logged in." %>
+<%= commit "7-3", "Odmowa dostępu do strony nowych postów dla niezalogowanych użtytkowników." %>
 
-////
+Jeżeli skierujesz się teraz do http://localhost:3000/submit/ nie będąc zalogowanym, powinieneś zobaczyć:
 
-<%= screenshot "7-3", "The access denied template" %>
+<%= screenshot "7-3", "Szablon odmowy dostępu
 
-////
+Pozytywnym aspektem funkcji podpiętych pod router jest to, że są _reaktywne_. Oznacza to, że możemy działać deklaratywnie i nie musimy martwić się o callbacki czy cokolwiek podobnego, gdy użytkownik jest zalogowany. Gdy status zalogowania się użytkownika ulega zmianie, szablony strony routera natychmiastowo zmienia się z `accessDenied` na `postSubmit` bez konieczności pisania dodatkowego kodu.
 
-////
+Zaloguj się, następnie spróbuj odświeżyć stronę. Możesz czasami zobaczyć krótkie mignięcie szablonu odmowy dostępu przed pojawieniem się strony pozwalającej na dodanie posta. Przyczyna tego jest taka, że Meteor rozpoczyna renderowania tak szybko, jak to jest tylko możliwe, zanim skontaktuje się z serwerem i sprawdzi, czy bieżący użytkownik (zapisany w lokalnej bazie danych) nawet istnieje.
 
-////
+Aby uniknąć tego problemu (który jest częstą klasą problemów, z którymi będziesz musiał się zmierzyć poznając subtelności związanych z opóźnieniem przy komunikacji klient-serwer), wyświetlimy po prostu na ekranie szablon ładowania na krótką chwilę podczas sprawdzania, czy użytkownik ma dostęp.
 
-////
+W końcu w tym momencie nie wiemy czy użytkownik ma prawidłowe dane do zalogowania i nie możemy pokazać ani `accessDenied` ani `postSubmit` aż tego nie sprawdzimy.
 
-////
+Modyfikujemy zatem naszą funkcję podpiętą do routera aby używała szablonu do ładowania podczas gdy `Meteor.logginIn()` zwraca true:
 
 ~~~js
 Router.map(function() {
@@ -287,24 +287,24 @@ Router.before(requireLogin, {only: 'postSubmit'});
 
 <%= commit "7-4", "Show a loading screen while waiting to login." %>
 
-### Hiding the Link
+### Ukrywanie linka
 
-////
+Najłatwiejszym sposobem aby zapobiec przypadkowy dostęp użytkownikom do tej strony jest ukryć link. Osiągniemy to całkiem łatwo przez:
 
 ~~~html
 <ul class="nav">
-  {{#if currentUser}}<li><a href="{{pathFor 'postSubmit'}}">Submit Post</a></li>{{/if}}
+  {{#if currentUser}}<li><a href="{{pathFor 'postSubmit'}}">Dodaj post</a></li>{{/if}}
 </ul>
 ~~~
 <%= caption "client/views/includes/header.html" %>
 
-<%= commit "7-5", "Only show submit post link if logged in." %>
+<%= commit "7-5", "Pokazuj link Dodaj post jeżeli uzytkownik jest zalogowany." %>
 
-////
+Helper `currentUser` jest dostarczony przez pakiet `accounts` i jest odpowiednikiem `Meteor.user()` dostarczanego przez Handlebars. Ponieważ jest reaktywny, link pojawi się lub nie w zależności od tego, czy się wylogujesz, czy zalogujesz do aplikacji.
 
-### Meteor Method: Better Abstraction and Security
+### Serwerowe metody Meteora: Większy stopień bezpieczeństwa i abstrakcji
 
-////
+Zdołaliśmy zabezpieczyć dostęp do strony nowych postów dla niezalogowanych użytkowników, i odmówić takim użytkownim możliwość dodawania postów nawet jeżeli oszukują i używają konsoli przeglądarki. Jest jednak jeszcze kilka rzeczy, o które musimy się zatroszczyć:
 
 - ////
 - ////
