@@ -72,9 +72,9 @@ Jeżeli będziesz modyfikował zmienną Session za pmocą `Session.set()`, ale 
 
 ### Wprowadzenie do Autorun
 
-////
+Zaznajomiliśmy się z przykładem reaktywnego źródła danych i obserwowaliśmy je w akcji w środku helpera szablonu. Ale mimo to, że niektóre konteksty Meteora (takie jak helpery szablonów) są z natury reaktywne, większość kodu Meteora jest nadal zwykłym niereaktywnym kodem JavaScript.
 
-////
+Przypuśćmy, że w kodzie aplikacji mamy poniższy fragment kodu:
 
 ~~~js
 helloWorld = function() {
@@ -82,11 +82,11 @@ helloWorld = function() {
 }
 ~~~
 
-////
+Mimo to, że mamy tu dostęp do zmiennej Session, *kontekst* w którym została zawołana nie jest reaktywny. Oznacza to, że nie będziemy otrzymywali nowych alertów za każdym razem po zmianie zmiennej.
 
-////
+Tutaj właśnie przychodzi z pomocą [Autorun](http://docs.meteor.com/#deps_autorun). Jak nazwa wskazuje, kod znajdujący się w środku bloku `autorun` będzie automatycznie uruchomiony i będzie uruchomiony za każdym razem, gdy reaktywne źródło danych z którego korzysta ulegnie zmianie.
 
-////
+Spróbuj napisać w konsoli przeglądarki:
 
 ~~~js
 ❯ Deps.autorun( function() { console.log('Value is: ' + Session.get('pageTitle')); } );
@@ -94,17 +94,17 @@ Value is: A brand new title
 ~~~
 <%= caption "Browser console" %>
 
-////
+Jak mogłeś oczekiwać, blok kodu dostarczany do `autorun` zostaje uruchomiony raz, wypisując dane na konsolę. Spróbujmy teraz zmienić tytuł:
 
 ~~~js
 ❯ Session.set('pageTitle', 'Yet another value');
 Value is: Yet another value
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Magia! Po zmianie wartości sesji `autorun` wiedziało o tym, żeby ponownie uruchomić kod i wypisać nową wartość na konsolę.
 
-////
+Wracając zatem do naszego poprzedniego przykładu, jeżeli chcemy wyzwolić nowy alert po każdej zmianie zmiennej Session, wszystko co trzeba zrobić, to wstawić fragment kodu do bloku `autorun`:
 
 ~~~js
 Deps.autorun(function() {
@@ -112,7 +112,7 @@ Deps.autorun(function() {
 });
 ~~~
 
-////
+Jak właśnie widzieliśmy, autorun może być bardzo użyteczny w śledzeniu reaktywnych źródeł danych i jawnej reakcji na nie.
 
 ### Hot Code Reload
 
