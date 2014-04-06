@@ -306,21 +306,21 @@ Helper `currentUser` jest dostarczony przez pakiet `accounts` i jest odpowiednik
 
 Zdołaliśmy zabezpieczyć dostęp do strony nowych postów dla niezalogowanych użytkowników, i odmówić takim użytkownim możliwość dodawania postów nawet jeżeli oszukują i używają konsoli przeglądarki. Jest jednak jeszcze kilka rzeczy, o które musimy się zatroszczyć:
 
-- ////
-- ////
-- ////
+- Dodanie znacznika czasu do posta.
+- Upewnienie się, że ten sam URL nie można dodać więcej, niż jeden raz.
+- Dodanie szczegółów o autorze posta (ID, nazwa użytkownika, itd.).
 
-////
+Możesz sobie pomyśleć, że wszystko to możemy osiągnąć w funkcji obsługującej zdarzenia `submit`. Gdybyśmy to zrobili, napotkalibyśmy nową grupę problemów:
 
-- ////
-- ////
-- ////
+- Jeżeli chodzi o znacznik czasu, musielibyśmy polegać na prawidłowo ustawionym czasie po stronie klienta, co nie zawsze nastąpi
+- Klient nie będzie wiedział o _wszystkich_ URL, które zostały opublikowane na stronie. Będą jedynie wiedzieli o postach, które bieżąco widzą (później dokładnie opiszemy jak to działa), więc nie ma pewnego sposobu na wymuszenie unikalnych adresów URL po stronie klienta.
+- Ostatecznie, chociaż teoretycznie _możemy_ dodawać szczegóły użytkownika po stronie klienta, nie wymuszalibyśmy ich dokładności i zgodności z prawdą i prowadziłoby to do nadużyć związanych z używaniem konsoli przeglądarki.
 
-////
+Z powodów wymienionych powyżej lepiej jest utrzymywać proste funkcje obsługujące zdarzenia i jeżeli robimy coś więcej niż tylko podstawowa wstawianie lub modyfikacje kolekcji, używać **Metod** Meteora (metod przez duże 'M').
 
-////
+Metoda Meteora jest funkcją serwerową wykonywaną po stronie serwera, ale wywoływaną po stronie klienta. Nie jest to dla nas całkowicie obce -- w szczególności funkcje kolekcji `insert`, `update` i `remove` są wszystkie Metodami. Sprawdźmy jak zaimplementować własną.
 
-////
+Wróćmy do `post_submit.js`. Zamiast wstawiania bezpośrednio do kolekcji `Posts`, zawołamy Metodę o nazwie `post`:
 
 ~~~js
 Template.postSubmit.events({
