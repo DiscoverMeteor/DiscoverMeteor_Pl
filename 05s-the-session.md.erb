@@ -1,39 +1,39 @@
 ---
-title: The Session
+title: Sesja
 slug: the-session
 date: 0005/01/02
 number: 5.5
 sidebar: true
-contents: Learn about the Meteor Session|Learn about the autorun function|Learn about Hot Code Reload
+contents: o sesji Meteora|o funkcji autorun|o natychmiastowym przeładowaniu kodu
 paragraphs: 33
 ---
 
-////
+Meteor jest reaktywnym frameworkiem. Oznacza to, że po zmianie danych twoja aplikacja reaguje na zmiany i nie musisz jawnie robić nic dodatkowo.
 
-////
+Widzieliśmy to już w akcji w momencie gdy nasz szablon zmieniał się po zmianie danych i ścieżki URL.
 
-////
+Spojrzymy na to dokładniej w późniejszych rozdziałach, ale teraz chciałbym wprowadzić kilka podstawowych cech reaktywności, które są bardzo przydatne w ogólnych aplikacjach.
 
-### The Meteor Session
+### Sesja Meteora
 
-////
+Obecnie w Microscope, bieżący stan aplikacji użytkownika jest całkowicie zawarty w URL, który jest odwiedzany (oraz w bazie danych).
 
-////
+Jednak w wielu przypadkach, będziesz potrzebował przechowywać ulotny stan splikacji, który jest istotny tylko dla bieżącej wersji aplikacji użytkownika (na przykład czy dany element jest właśnie pokazywany czy ukryty). Wygodnym sposobem na osiągniecie tego jest użycie Sesji.
 
-////
+Sesja jest globalnym reaktywnym magazynem danych. Jest globalny w sensie obiektu singletona: istnieje jedna sesja, i jest do niej dostęp z dowolnego miejsca. Globalne zmienne są zazwyczaj uważane za coś złego, ale w tym przypadku sesja jest używana jako centralna magistrala komunikacyjna między różnymi częściami aplikacji.
 
 ### Changing the Session
 
-////
+Sesja jest dostępna wszędzie jako `Session`. Aby ustawić wartość sesji, możesz zawołać:
 
 ~~~js
 ❯ Session.set('pageTitle', 'A different title');
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Możesz ponownie wczytać dane za pomocą `Session.get('mySessionProperty');`. Jest to reaktywne źródło danych, co oznacza, że jeżeli zaimplementujesz helper, zobaczysz że dane wyjściowe helpera będą się zmieniały reaktywnie gdy zmienna Session ulegnie zmianie.
 
-////
+Aby to wypróbować, dodaj następujący kod do szablonu layout:
 
 ~~~html
 <header class="navbar">
@@ -51,30 +51,30 @@ Template.layout.helpers({
 ~~~
 <%= caption "client/views/application/layout.js"%>
 
-////
+Automatyczne przeładowanie kodu przez Meteora (znane jako “hot code reload” lub w skrócie HCR), utrzymuje zmienne Session, zatem powinniśmy teraz zobaczyć napis "A different title" wyświetlony w pasku nawigacji. Jeżeli tak się stało, wpisz ponownie poprzednią komendę `Session.set()`.
 
-////
+Co więcej, jeżeli ponownie zmienimy wartość zmiennej (znowu w konsoli przeglądarki), zobaczymy znowuy inny tytuł:
 
 ~~~js
 ❯ Session.set('pageTitle', 'A brand new title');
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Sesja jest globalnie dostępna, zatem zmiany te mogą być przeprowadzane w dowolnym miejscu aplikacji. Daje to wiele możliwości ale może także wprowadzić w pułapkę, jeżeli jest zbyt często używane.
 
 <% note do %>
 
-### Identical Changes
+### Identyczne zmiany
 
-////
+Jeżeli będziesz modyfikował zmienną Session za pmocą `Session.set()`, ale ustawisz daną zmienną na tą samą wartość, Meteor będzie na tyle sprytny, żeby przerwać łańcuch reaktywności i uniknie niepotrzebnych zawołań metod.
 
 <% end %>
 
-### Introducing Autorun
+### Wprowadzenie do Autorun
 
-////
+Zaznajomiliśmy się z przykładem reaktywnego źródła danych i obserwowaliśmy je w akcji w środku helpera szablonu. Ale mimo to, że niektóre konteksty Meteora (takie jak helpery szablonów) są z natury reaktywne, większość kodu Meteora jest nadal zwykłym niereaktywnym kodem JavaScript.
 
-////
+Przypuśćmy, że w kodzie aplikacji mamy poniższy fragment kodu:
 
 ~~~js
 helloWorld = function() {
@@ -82,11 +82,11 @@ helloWorld = function() {
 }
 ~~~
 
-////
+Mimo to, że mamy tu dostęp do zmiennej Session, *kontekst* w którym została zawołana nie jest reaktywny. Oznacza to, że nie będziemy otrzymywali nowych alertów za każdym razem po zmianie zmiennej.
 
-////
+Tutaj właśnie przychodzi z pomocą [Autorun](http://docs.meteor.com/#deps_autorun). Jak nazwa wskazuje, kod znajdujący się w środku bloku `autorun` będzie automatycznie uruchomiony i będzie uruchomiony za każdym razem, gdy reaktywne źródło danych z którego korzysta ulegnie zmianie.
 
-////
+Spróbuj napisać w konsoli przeglądarki:
 
 ~~~js
 ❯ Deps.autorun( function() { console.log('Value is: ' + Session.get('pageTitle')); } );
@@ -94,17 +94,17 @@ Value is: A brand new title
 ~~~
 <%= caption "Browser console" %>
 
-////
+Jak mogłeś oczekiwać, blok kodu dostarczany do `autorun` zostaje uruchomiony raz, wypisując dane na konsolę. Spróbujmy teraz zmienić tytuł:
 
 ~~~js
 ❯ Session.set('pageTitle', 'Yet another value');
 Value is: Yet another value
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Magia! Po zmianie wartości sesji `autorun` wiedziało o tym, żeby ponownie uruchomić kod i wypisać nową wartość na konsolę.
 
-////
+Wracając zatem do naszego poprzedniego przykładu, jeżeli chcemy wyzwolić nowy alert po każdej zmianie zmiennej Session, wszystko co trzeba zrobić, to wstawić fragment kodu do bloku `autorun`:
 
 ~~~js
 Deps.autorun(function() {
@@ -112,46 +112,46 @@ Deps.autorun(function() {
 });
 ~~~
 
-////
+Jak właśnie widzieliśmy, autorun może być bardzo użyteczny w śledzeniu reaktywnych źródeł danych i jawnej reakcji na nie.
 
-### Hot Code Reload
+### Natychmiastowe przeładowanie kodu
 
-////
+Podczas rozwoju Microscope korzystaliśmy z jednej z wielu funkcji Meteora pozwalającej oszczędzić czas: hot code reload (HCR). Za każdym razem o zapisaniu dowolnego pliku kodu źródłowego aplikacji, Meteor rozpoznaje zmiany i niewidocznie restartuje serwer informując każdego klienta o konieczności przeładowania strony.
 
-////
+Jest to podobne to automatycznego przeładowania strony z jedną istotną różnicą.
 
-////
+Aby dowiedzieć się, co to za różnica, rozpocznij resetując zmienną Session, którą wcześniej używaliśmy:
 
 ~~~js
 ❯ Session.set('pageTitle', 'A brand new title');
 ❯ Session.get('pageTitle');
 'A brand new title'
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Jeżeli mielibyśmy ręcznie przeładować stronę, nasze zmienne Session naturalnie byłyby stracone (ponieważ utworzyłoby to nową sesję). Z drugiej strony, jeżeli wyzwolimy `hot code reload` (na przykład przez zapisanie jednego z plików źródłowych) strona się przeładuje, ale zmienna Session będzie nadal ustawiona. Wypróbuj to teraz!
 
 ~~~js
 ❯ Session.get('pageTitle');
 'A brand new title'
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Jeżeli zatem używamy zmiennych sesji do śledzenia tego, co użytkownik właśnie robi, HCR powinien być prawie transparentny dla użytkownika, ponieważ zachowa wartość wszystkich zmiennych sesji. Pozwala to na instalację nowej wersji produkcujnej nasze aplikacji Meteora mając pewność, że nasi użytkownicy będą w minimalnym stopniu zdezorganizowani.
 
-////
+Rozważ to przez chwilę. Jeżeli możemy trzymać cały stan w URL i sesji, możemy transparetnie zmieniać _uruchomiony kod źródłowy_ każdej aplikacji klienta nie przeszkadzając im zbytnio.
 
-////
+Sprawdźmy co dzieje się, gdy ręcznie odświeżymy stronę:
 
 ~~~js
 ❯ Session.get('pageTitle');
 null
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Gdy przeładowaliśmy stronę, straciliśmy sesję. W HCR Meteor zapisuje sesję do lokalnego magazynu danych i wczytuje ją ponownie po przeładowaniu strony. Jednakże to pierwsze zachowanie się aplikacji po ręcznym przeładowaniu strony ma sens: jeżeli użytkownik przeładowuje strone, to tak jakby ponownie odwiedził ten sam URL i powinien być zresetowany do stanu początkowego, takiego jaki zobaczyłby jakikolwiek użytkownik odwiedzający tą stronę.
 
-////
+Ważne wnioski, które należy z tego wyciągnąć to:
 
-1. ////
-2. ////
+1. Zawsze zapisuj stan użytkownika w sesji lub URL, tak aby użytkownikom jak najmniej przeszkadzało `hot code reload`.
+2. Zapisuj jakikolwiek stan, który ma być dzielony między użytkownikami *w URL*.
