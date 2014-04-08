@@ -3,49 +3,49 @@ title: Routing
 slug: routing
 date: 0005/01/01
 number: 5
-contents: Learn about routing in Meteor.|Create post discussion pages, with unique URLs.|Learn how to link to those URLs properly.
+contents: o routingu w Meteorze.|jak tworzyć stronę z dyskusją o postach, z unikalnymi URLami.|jak odpowiednio linkować się do powyższych URL.
 paragraphs: 72
 ---
 
-////
+Teraz skoro mamy listę postów (która w końcu będzie wysłana) potrzebujemy stronę dla każdego posta, na której użytkownicy będą mogli prowadzić dyskuję.
 
-////
+Chcielibyśmy, żeby te strony były dostępne za pomocą *permamentnego linka*, URLa w formie `http://myapp.com/posts/xyz` (gdzie `xyz` jest identifaktorem MongoDB `_id`), który jest unikalny dla każdego posta.
 
-////
+Oznacza to, że potrzebujemy pewnego rodzaju *routera*, który sprawdza, jaki URL został wpisany w przeglądarce i przekierowuje do właściwej podstrony i wyświetla pożądaną treść.
 
-### Adding the Iron Router Package
+### Dodanie pakietu Iron Router
 
-////
+[Iron Router](https://github.com/EventedMind/iron-router) jest routerem przeznaczonym i zaprojektowanym specjalnie dla aplikacji Meteora. 
 
-////
+Nie tylko pomaga ze zorganizowaniem routingu (odpowiednich ścieżek), ale również dba o filtry (przypisaniem akcji do niektórych ścieżek) jak również zarządza subskrypcjami (kontroluje, która ścieżka ma dostęp do konretnych danych). (Uwaga: Iron Router został częściowo zaprojektowany przez autora książki *Discover Meteor*, którą czytasz , Toma Colemana.)
 
-////
+Na początek zainstalujmy pakiet z Atmosphere:
 
 ~~~bash
 $ mrt add iron-router
 ~~~
 <%= caption "Terminal" %>
 
-////
+Powyższa komenda pobiera i instaluje pakiet iron-router w Twojej aplikacji, który jest od razu gotowy do użycia. Zauważ, że będziesz musiał czasem zrestartować aplikacji (za pomocą `ctrl+c` aby zabić proces i `mrt` aby go ponownie wystartować) aby pakiet mógł być użyty.
 
-////
+Zauważ, że Iron Router jest pakietem niedostępnym w standardowych pakietach Meteora, pochodzi z trzeciego źródła i konieczna jest instalacja Meteorite (`meteor add iron-router` nie zadziała).
 
 <% note do %>
 
-### Router Vocabulary
+### Słowniczek Routera
 
-////
+Poruszymy wiele różnych tematów routera w tym rozdziale. Jeżeli masz doświadczenie z frameworkiem takim jak Rails, będziesz już zaznajomiony z większością tych konceptów. Jeżeli nie jesteś, oto kilka pojęć, które przyspieszą pracę ( zachowujemy oryginalne nazewnictwo, ponieważ jest stosowane w kodzie źródłowym, niektórych się z reguły nie tłumaczy. Podajemy tłumaczenie w nawiasie - przyp. tłum.):
 
-- ////
-- ////
-- ////
-- ////
-- ////
-- ////
-- ////
-- ////
+- **Routes** (trasy): Trasa jest fundamentalnym pojęciem routera. Jest to zbiór instrukcji, który wskaże aplikacji gdzie się kierować i co robić po napotkaniu danego URL.
+- **Paths** (ścieżki): Ścieżka jest dowolnym URLem dostępnym w Twojej aplikacji. Może być statyczna (`/terms_of_service`) lub dynamiczna (`/posts/xyz`) i może nawet zawierać parametry zapytań (`/search?keyword=meteor`). 
+- **Segments** (segmenty): części ścieżki rozdzielone slashem (`/`).
+- **Hooks** (haki): Hak jest akcją, którą chciałbyć wykonać przed, po, lub podczas wykonywania procesu routowania. Typowym przykładem może być sprawdzenie, czy użytkownik ma wystarczające prawa, aby obejrzeć daną stronę. 
+- **Filters** (filtry): Filtry to globalne haki, które definiuje się dla jednej lub więcej tras. 
+- **Route Templates** (szablony trasy): Każda trasa musi wskazywać na szablon. Jeżeli nie określisz konkretnego szablonu, router będzie domyślnie szukał szablonu o tej samej nazwie, co trasa.
+- **Layouts**: (układy) Możesz pomyśleć o układach jak o ramce na zdjęcia. Zawierają cały kod HTML, który opakowuje bieżący szablon i pozostanie nienaruszony po zmianach szablonu.
+- **Controllers** (kontrolery): Czasami zdasz sobie sprawę, że wiele Twoich szablonów używa tych samych parametrów. Zamiast duplikować kod, możesz sprawic aby wszystkie takie trasy dziedziczyły z jednego *kontrolera trasy*, który będzie zawierał logikę routingu. 
 
-////
+Aby dowiedzieć się więcej o Iron Router, sprawdź [pełną dokumentację na GitHub](https://github.com/EventedMind/iron-router). 
 
 <% end %>
 
