@@ -26,18 +26,18 @@ $ mrt add iron-router
 ~~~
 <%= caption "Terminal" %>
 
-////
+Powyższa komenda pobiera i instaluje pakiet iron-router w Twojej aplikacji, który jest od razu gotowy do użycia. Zauważ, że będziesz musiał czasem zrestartować aplikacji (za pomocą `ctrl+c` aby zabić proces i `mrt` aby go ponownie wystartować) aby pakiet mógł być użyty.
 
-////
+Zauważ, że Iron Router jest pakietem niedostępnym w standardowych pakietach Meteora, pochodzi z trzeciego źródła i konieczna jest instalacja Meteorite (`meteor add iron-router` nie zadziała).
 
 <% note do %>
 
-### Router Vocabulary
+### Słowniczek Routera
 
-////
+Poruszymy wiele różnych tematów routera w tym rozdziale. Jeżeli masz doświadczenie z frameworkiem takim jak Rails, będziesz już zaznajomiony z większością tych konceptów. Jeżeli nie jesteś, oto kilka pojęć, które przyspieszą pracę ( zachowujemy oryginalne nazewnictwo, ponieważ jest stosowane w kodzie źródłowym i podajemy tłumaczenie w nawiasie - przyp. tłum.):
 
-- ////
-- ////
+- **Routes** (trasy): Trasa jest fundamentalnym pojęciem routera. Jest to zbiór instrukcji, który wskaże aplikacji gdzie się kierować i co robić po napotkaniu danego URL.
+- **Paths** (ścieżki): Ścieżka jest dowolnym URLem dostępnym w Twojej aplikacji. Może być statyczna (`/terms_of_service`) lub dynamiczna (`/posts/xyz`) i może nawet zawierać parametry zapytań (`/search?keyword=meteor`). 
 - ////
 - ////
 - ////
