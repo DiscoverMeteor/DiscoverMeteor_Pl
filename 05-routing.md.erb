@@ -3,23 +3,23 @@ title: Routing
 slug: routing
 date: 0005/01/01
 number: 5
-contents: Learn about routing in Meteor.|Create post discussion pages, with unique URLs.|Learn how to link to those URLs properly.
+contents: o routingu w Meteorze.|jak tworzyć stronę z dyskusją o postach, z unikalnymi URLami.|jak odpowiednio linkować się do powyższych URL.
 paragraphs: 72
 ---
 
-////
+Teraz skoro mamy listę postów (która w końcu będzie wysłana) potrzebujemy stronę dla każdego posta, na której użytkownicy będą mogli prowadzić dyskuję.
 
-////
+Chcielibyśmy, żeby te strony były dostępne za pomocą *permamentnego linka*, URLa w formie `http://myapp.com/posts/xyz` (gdzie `xyz` jest identifaktorem MongoDB `_id`), który jest unikalny dla każdego posta.
 
-////
+Oznacza to, że potrzebujemy pewnego rodzaju *routera*, który sprawdza, jaki URL został wpisany w przeglądarce i przekierowuje do właściwej podstrony i wyświetla pożądaną treść.
 
-### Adding the Iron Router Package
+### Dodanie pakietu Iron Router
 
-////
+[Iron Router](https://github.com/EventedMind/iron-router) jest routerem przeznaczonym i zaprojektowanym specjalnie dla aplikacji Meteora. 
 
-////
+Nie tylko pomaga ze zorganizowaniem routingu (odpowiednich ścieżek), ale również dba o filtry (przypisaniem akcji do niektórych ścieżek) jak również zarządza subskrypcjami (kontroluje, która ścieżka ma dostęp do konretnych danych). (Uwaga: Iron Router został częściowo zaprojektowany przez autora książki *Discover Meteor*, którą czytasz , Toma Colemana.)
 
-////
+Na początek zainstalujmy pakiet z Atmosphere:
 
 ~~~bash
 $ mrt add iron-router
