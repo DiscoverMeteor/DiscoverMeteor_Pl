@@ -34,18 +34,18 @@ Zauważ, że Iron Router jest pakietem niedostępnym w standardowych pakietach M
 
 ### Słowniczek Routera
 
-Poruszymy wiele różnych tematów routera w tym rozdziale. Jeżeli masz doświadczenie z frameworkiem takim jak Rails, będziesz już zaznajomiony z większością tych konceptów. Jeżeli nie jesteś, oto kilka pojęć, które przyspieszą pracę ( zachowujemy oryginalne nazewnictwo, ponieważ jest stosowane w kodzie źródłowym i podajemy tłumaczenie w nawiasie - przyp. tłum.):
+Poruszymy wiele różnych tematów routera w tym rozdziale. Jeżeli masz doświadczenie z frameworkiem takim jak Rails, będziesz już zaznajomiony z większością tych konceptów. Jeżeli nie jesteś, oto kilka pojęć, które przyspieszą pracę ( zachowujemy oryginalne nazewnictwo, ponieważ jest stosowane w kodzie źródłowym, niektórych się z reguły nie tłumaczy. Podajemy tłumaczenie w nawiasie - przyp. tłum.):
 
 - **Routes** (trasy): Trasa jest fundamentalnym pojęciem routera. Jest to zbiór instrukcji, który wskaże aplikacji gdzie się kierować i co robić po napotkaniu danego URL.
 - **Paths** (ścieżki): Ścieżka jest dowolnym URLem dostępnym w Twojej aplikacji. Może być statyczna (`/terms_of_service`) lub dynamiczna (`/posts/xyz`) i może nawet zawierać parametry zapytań (`/search?keyword=meteor`). 
-- ////
-- ////
-- ////
-- ////
-- ////
-- ////
+- **Segments** (segmenty): części ścieżki rozdzielone slashem (`/`).
+- **Hooks** (haki): Hak jest akcją, którą chciałbyć wykonać przed, po, lub podczas wykonywania procesu routowania. Typowym przykładem może być sprawdzenie, czy użytkownik ma wystarczające prawa, aby obejrzeć daną stronę. 
+- **Filters** (filtry): Filtry to globalne haki, które definiuje się dla jednej lub więcej tras. 
+- **Route Templates** (szablony trasy): Każda trasa musi wskazywać na szablon. Jeżeli nie określisz konkretnego szablonu, router będzie domyślnie szukał szablonu o tej samej nazwie, co trasa.
+- **Layouts**: (układy) Możesz pomyśleć o układach jak o ramce na zdjęcia. Zawierają cały kod HTML, który opakowuje bieżący szablon i pozostanie nienaruszony po zmianach szablonu.
+- **Controllers** (kontrolery): Czasami zdasz sobie sprawę, że wiele Twoich szablonów używa tych samych parametrów. Zamiast duplikować kod, możesz sprawic aby wszystkie takie trasy dziedziczyły z jednego *kontrolera trasy*, który będzie zawierał logikę routingu. 
 
-////
+Aby dowiedzieć się więcej o Iron Router, sprawdź [pełną dokumentację na GitHub](https://github.com/EventedMind/iron-router). 
 
 <% end %>
 
