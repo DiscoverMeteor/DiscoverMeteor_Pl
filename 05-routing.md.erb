@@ -49,13 +49,13 @@ Aby dowiedzieć się więcej o Iron Router, sprawdź [pełną dokumentację na G
 
 <% end %>
 
-### Routing: Mapping URLs To Templates
+### Routing: Mapowanie URL na odpowiednie szablony
 
-////
+Jak do tej pory budowaliśmy layout za pomocą zahardcode'owanych dołączeń szablonu (takich jak `{{>postsList}}`). Zatem mimo to, że zawartość strony może ulec zmianom, struktora strony pozostanie  taka sama: nagłówek z listą postów poniżej.
 
-////
+Iron Router pozwala na przerwanie tego schematu przez przecięcia kontroli nad zawartością renderowaną w tagu HTML `<body>`. Nie definiujemy zatem zawartości nagłówka sami, jak by to było w przypadku normalnej trony HTML. Zamiast tego wskazujemy routerowi specjalny szablon layoutu zawierający helper szablonuzawierający `{{> yield}}`. 
 
-////
+Powyższy helper `{{> yield}}` zdefiniuje specjalną dynamiczną strefę, która zostanie automatycznie przerenderowana za każdym razem, gdy szablon będzie odpowiadał bieżacej ścieżce (jako konwencję przyjmiemy, że ten specjalny szablon będzie się nazywał od tej pory "szablonem trasy" ang. “route templates”):
 
 <%= diagram "router-diagram", "Layouts and templates.", "pull-center" %>
 
