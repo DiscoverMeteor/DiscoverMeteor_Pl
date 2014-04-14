@@ -115,15 +115,15 @@ Uwaga: zauważ, że skoro folder `/lib` nie jest umieszczony w `/client` ani `/s
 
 <% end %>
 
-### Named Routes
+### Nazwane trasy (ang named routes)
 
-////
+Rozwiejmy pewne wątpliwości. Nazwaliśmy naszą trasę `postsList`, a również mamy *szablon* o nazwie `postsList`. Jak można to w prosty sposób wyjaśnić?
 
-////
+Domyślnie Iron Router szuka szablonu o tej samej nazwie, co trasa. Tak naprawdę również szuka *ścieżki* o tej samej nazwie, co nazwa trasy. Oznacza to, że jeżeli nie zdefiniowaliśmy odrębnej ścieżki (a zrobiliśmy to przez dodanie opcji `path` w definicji trasy), nasz szablon nie byłby dostępny domyślnie przez URL `postsList`.
 
-////
+Możesz się zastanawiać, dlaczego w ogóle potrzebujemy nadawać nazwy trasom. Otóż pozwala to na użycie kilku funkcji Iron Routera, które ułatwiają na tworzenie linków w aplikacji. Najbardziej przydatną jest helper Handlebars `{{pathFor}}`, który zwraca ścieżkę URL dla każdej trasy.
 
-////
+Chcemy, aby nasz link do strony domowej wskazywał na listę postów, zatem zamiast precyzować statyczny URL `/`, możemy również użyć helpera Handlebars. Końcowy wynik będzie identyczny, ale da to nam więcej elastyczności, ponieważ helper zwróci zawsze prawidłowy URL nawet jeżeli zmienimy ścieżką trasy w routerze.
 
 ~~~html
 <header class="navbar">
@@ -137,9 +137,9 @@ Uwaga: zauważ, że skoro folder `/lib` nie jest umieszczony w `/client` ani `/s
 <%= caption "client/views/application/layout.html"%>
 <%= highlight "3" %>
 
-<%= commit "5-1", "Very basic routing." %>
+<%= commit "5-1", "Podstawowy routing." %>
 
-### Waiting on Data
+### Oczekiwanie na dane
 
 ////
 
