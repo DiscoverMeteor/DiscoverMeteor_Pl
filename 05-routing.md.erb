@@ -55,13 +55,13 @@ Jak do tej pory budowaliśmy layout za pomocą zahardcode'owanych dołączeń sz
 
 Iron Router pozwala na przerwanie tego schematu przez przecięcia kontroli nad zawartością renderowaną w tagu HTML `<body>`. Nie definiujemy zatem zawartości nagłówka sami, jak by to było w przypadku normalnej trony HTML. Zamiast tego wskazujemy routerowi specjalny szablon layoutu zawierający helper szablonuzawierający `{{> yield}}`. 
 
-Powyższy helper `{{> yield}}` zdefiniuje specjalną dynamiczną strefę, która zostanie automatycznie przerenderowana za każdym razem, gdy szablon będzie odpowiadał bieżacej ścieżce (jako konwencję przyjmiemy, że ten specjalny szablon będzie się nazywał od tej pory "szablonem trasy" ang. “route templates”):
+Powyższy helper `{{> yield}}` zdefiniuje specjalną dynamiczny obszar, który zostanie automatycznie przerenderowany za każdym razem, gdy szablon będzie odpowiadał bieżacej ścieżce (przyjmijmy, że ten specjalny szablon będzie się nazywał od tej pory "szablonem trasy" ang. “route templates”):
 
 <%= diagram "router-diagram", "Layouts and templates.", "pull-center" %>
 
-////
+Rozpoczniemy od utworzenia naszego szablonu i dodania helpera `{{> yield}}`. Najpierw usuniemy tag HTML `<body>` z `main.html` i przeniesiemy jego zawartość do odrębnego szablonu `layout.html`.
 
-////
+Nasz odchudzony `main.html` wygląda teraz następująco:
 
 ~~~html
 <head>
@@ -70,7 +70,7 @@ Powyższy helper `{{> yield}}` zdefiniuje specjalną dynamiczną strefę, która
 ~~~
 <%= caption "client/main.html" %>
 
-////
+A nowo utworzony `layout.html` będzie zawierał zewnętrzny layout aplikacji:
 
 ~~~html
 <template name="layout">
@@ -88,9 +88,9 @@ Powyższy helper `{{> yield}}` zdefiniuje specjalną dynamiczną strefę, która
 ~~~
 <%= caption "client/views/application/layout.html" %>
 
-////
+Zauważyłeś zapewne, że zamieniliśmy włączenie szablonu `postsList` zawołaniem helpera `yield`. Po zastosowaniu tej zmiany nie zobaczysz nic na ekranie. Dzieje się tak, ponieważ nie wskazaliśmy routerowi jak stosować się do URL `/` i pokazuje nam domyślnie pusty szablon.
 
-////
+Aby rozpocząć, możemy przywrócić poprzednią funkcjonalność przez przemapowanie głównego URL `/` do szablonu `postList`. Utworzymy folder `/lib` w głównym folderze projektu i plik `router.js` w tym folderze.
 
 ~~~js
 Router.configure({
@@ -103,7 +103,7 @@ Router.map(function() {
 ~~~
 <%= caption "lib/router.js"%>
 
-////
+Osiągneliśmy dwie ważne sprawy. Po pierwsze, wskazaliśmy routerowi, aby używał layout, który właśnie utworzyliśmy jako domyślny layout dla wszystkich tras. Po drugie, zdefiniowaliśmy nową trasę o nazwie `postLists` i powiązaliśmy ją ze ścieżką `/`.
 
 <% note do %>
 
