@@ -49,19 +49,19 @@ Aby dowiedzieć się więcej o Iron Router, sprawdź [pełną dokumentację na G
 
 <% end %>
 
-### Routing: Mapping URLs To Templates
+### Routing: Mapowanie URL na odpowiednie szablony
 
-////
+Jak do tej pory budowaliśmy layout za pomocą zahardcode'owanych dołączeń szablonu (takich jak `{{>postsList}}`). Zatem mimo to, że zawartość strony może ulec zmianom, struktora strony pozostanie  taka sama: nagłówek z listą postów poniżej.
 
-////
+Iron Router pozwala na przerwanie tego schematu przez przecięcia kontroli nad zawartością renderowaną w tagu HTML `<body>`. Nie definiujemy zatem zawartości nagłówka sami, jak by to było w przypadku normalnej trony HTML. Zamiast tego wskazujemy routerowi specjalny szablon layoutu zawierający helper szablonuzawierający `{{> yield}}`. 
 
-////
+Powyższy helper `{{> yield}}` zdefiniuje specjalną dynamiczny obszar, który zostanie automatycznie przerenderowany za każdym razem, gdy szablon będzie odpowiadał bieżacej ścieżce (przyjmijmy, że ten specjalny szablon będzie się nazywał od tej pory "szablonem trasy" ang. “route templates”):
 
 <%= diagram "router-diagram", "Layouts and templates.", "pull-center" %>
 
-////
+Rozpoczniemy od utworzenia naszego szablonu i dodania helpera `{{> yield}}`. Najpierw usuniemy tag HTML `<body>` z `main.html` i przeniesiemy jego zawartość do odrębnego szablonu `layout.html`.
 
-////
+Nasz odchudzony `main.html` wygląda teraz następująco:
 
 ~~~html
 <head>
@@ -70,7 +70,7 @@ Aby dowiedzieć się więcej o Iron Router, sprawdź [pełną dokumentację na G
 ~~~
 <%= caption "client/main.html" %>
 
-////
+A nowo utworzony `layout.html` będzie zawierał zewnętrzny layout aplikacji:
 
 ~~~html
 <template name="layout">
@@ -88,9 +88,9 @@ Aby dowiedzieć się więcej o Iron Router, sprawdź [pełną dokumentację na G
 ~~~
 <%= caption "client/views/application/layout.html" %>
 
-////
+Zauważyłeś zapewne, że zamieniliśmy włączenie szablonu `postsList` zawołaniem helpera `yield`. Po zastosowaniu tej zmiany nie zobaczysz nic na ekranie. Dzieje się tak, ponieważ nie wskazaliśmy routerowi jak stosować się do URL `/` i pokazuje nam domyślnie pusty szablon.
 
-////
+Aby rozpocząć, możemy przywrócić poprzednią funkcjonalność przez przemapowanie głównego URL `/` do szablonu `postList`. Utworzymy folder `/lib` w głównym folderze projektu i plik `router.js` w tym folderze.
 
 ~~~js
 Router.configure({
@@ -103,27 +103,27 @@ Router.map(function() {
 ~~~
 <%= caption "lib/router.js"%>
 
-////
+Osiągneliśmy dwie ważne sprawy. Po pierwsze, wskazaliśmy routerowi, aby używał layout, który właśnie utworzyliśmy jako domyślny layout dla wszystkich tras. Po drugie, zdefiniowaliśmy nową trasę o nazwie `postLists` i powiązaliśmy ją ze ścieżką `/`.
 
 <% note do %>
 
 ### The `/lib` folder
 
-////
+Cokolwiek wstawisz do folderu `lib` będzie załadowane przed załadowaniem pozostałych części aplikacji (z wyjątkiem `smart packages`). Jest to świetne miejsce do wstawiania jakiegokolwiek kodu pomocniczego, który ma być cały czas dostępny.
 
-////
+Uwaga: zauważ, że skoro folder `/lib` nie jest umieszczony w `/client` ani `/server`, oznacza to, że jego zawartość będzie dostępna w obu środowiskach.
 
 <% end %>
 
-### Named Routes
+### Nazwane trasy (ang named routes)
 
-////
+Rozwiejmy pewne wątpliwości. Nazwaliśmy naszą trasę `postsList`, a również mamy *szablon* o nazwie `postsList`. Jak można to w prosty sposób wyjaśnić?
 
-////
+Domyślnie Iron Router szuka szablonu o tej samej nazwie, co trasa. Tak naprawdę również szuka *ścieżki* o tej samej nazwie, co nazwa trasy. Oznacza to, że jeżeli nie zdefiniowaliśmy odrębnej ścieżki (a zrobiliśmy to przez dodanie opcji `path` w definicji trasy), nasz szablon nie byłby dostępny domyślnie przez URL `postsList`.
 
-////
+Możesz się zastanawiać, dlaczego w ogóle potrzebujemy nadawać nazwy trasom. Otóż pozwala to na użycie kilku funkcji Iron Routera, które ułatwiają na tworzenie linków w aplikacji. Najbardziej przydatną jest helper Handlebars `{{pathFor}}`, który zwraca ścieżkę URL dla każdej trasy.
 
-////
+Chcemy, aby nasz link do strony domowej wskazywał na listę postów, zatem zamiast precyzować statyczny URL `/`, możemy również użyć helpera Handlebars. Końcowy wynik będzie identyczny, ale da to nam więcej elastyczności, ponieważ helper zwróci zawsze prawidłowy URL nawet jeżeli zmienimy ścieżką trasy w routerze.
 
 ~~~html
 <header class="navbar">
@@ -137,15 +137,16 @@ Router.map(function() {
 <%= caption "client/views/application/layout.html"%>
 <%= highlight "3" %>
 
-<%= commit "5-1", "Very basic routing." %>
+<%= commit "5-1", "Podstawowy routing." %>
 
-### Waiting on Data
+### Oczekiwanie na dane
 
-////
+Jeżeli uruchomisz bieżącą wersję aplikacji w środowisku produkcyjnym przez zawołanie meteor deploy (lub uruchomisz instancję dostępną w linku powyżej) zauważysz, że lista przez momeny jest pusta, zanim posty pojawią się na ekranie. Dzieje się tak, ponieważ podczas ładowania strony nie ma żadnych postów do wyświetlenia, aż do momentu gdy subskrypcja `posts` zakończy pobieranie danych z serwera.
 
-////
+O wiele lepszym rozwiązaniem byłoby przedstawienie w sposób wizualny użytkownikowi, że coś się w tym czasie dzieje i że powinien przez chwilę poczekać.
 
-////
+Na szczęście Iron Router umożliwia osiągnięcie tego w łatwy sposób -- używając `waitOn` na subskrypcję:
+
 
 ~~~js
 Router.configure({
@@ -161,17 +162,17 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "3,4" %>
 
-////
+Opiszmy po kolei. Najpierw zmieniliśmy blok `Router.configure()` aby dostarczyć routerowi nazwę szablonu wyświetlanego podczas ładowania danych (który zaimplementujemy wkrótce).
 
-////
+Następnie dodaliśmy funkcję `waitOn`, która zwraca subskrypcję `posts`. Ostatecznie podłączyliśmy się pod wbudowaną funkcję `loading`. Oznacza to, że router upewni się, że subskrypcja `posts` zostanie załadowana zanim użytkownik zostanie przekierowany na ścieżkę, którą wybrał.
 
-////
+Zauważ, że skoro definiujemy globalnie funkcję `waitOn()` na poziomie routera, taka kolej rzeczy będzie miała miejsce tylko przy pierwszym dostępie użytkownika do aplikacji. Kolejnym razem dane będą już załadowane w pamięci przeglądarki i router nie będzie zmuszony na ponowne oczekiwanie.
 
-////
+Ponieważ pozwalamy routerowi na zarządzanie subskrypcjami, możemy ją bezpiecznie usunąć z pliku `main.js` (który powinien być teraz pusty).
 
-////
+Zwykle dobrym pomysłem jest czekanie na subskrypcje nie tylko ze względu na poprawienie obsługi użytkownika, ale również warto upewnić się, że dane będą zawsze dostępne z poziomu szablonu. Eliminuje to konieczność obsługi sytuacji wyjątkowych, gdy szablon jest renderowany zanim dane są dostępne.
 
-////
+Ostatnim elementem układanki jest ładowanie szablonu. Użyjemy pakietu `spin` aby utworzyć ładnie wyglądający animowany spinner. Dodaj go za pomocą `mrt add spin` i utwórz szablon jak poniżej:
 
 ~~~html
 <template name="loading">
@@ -180,29 +181,29 @@ Router.map(function() {
 ~~~
 <%= caption "client/views/includes/loading.html" %>
 
-////
+Zauważ, że `{{>spinner}}`, jest funkcją typu "partial" zawartą w pakiecie `spin`. Mimo to, że funkcja ta pochodzi z "zewnątrz" aplikacji, możemy ją stosować jak każdy inny dowolny szablon.
 
-<%= commit "5-2", "Wait on the post subscription." %>
+<%= commit "5-2", "Czekanie na subskrypcję post." %>
 
 <% note do %>
 
-### A First Glance At Reactivity
+### Pierwszy rzut oka na reaktywność
 
-////
+Reaktywność jest jednym z głównych fundamentów Meteora. Pomimo tego, że jeszcze nie zajęliśmy się tym tematem, ładowanie naszego szablonu daje pierwsze wrażenie tego konceptu.
 
-////
+Przekierowanie do szablonu ładowania danych, jeżeli dane nie zostały jeszcze załadowane jest bardzo dobrym rozwiązaniem, ale skąd router wie kiedy przekierować użytkownika *z powrotem* na żądaną stronę po załadowaniu danych?
 
-////
+Na razie nie zastanawiajmy się nad tym. Ale nie martw się, dowiesz się o tym bardzo szybko!
 
 <% end %>
 
-### Routing To A Specific Post
+### Przekierowanie do konkretnego posta
 
-////
+Teraz po tym, jak dowiedzieliśmy się jak przekierowywać na szablon `postsList`, zaimplementujmy ścieżkę, która umożliwi wyświetlenie szczegółów pojedyńczego posta.
 
-////
+Jest tutaj jeden haczyk: nie możemy kontynuować i definiować osobne trasy dla każdego nowego posta, ponieważ może być ich setki. Potrzebujemy zatem ustawić jedną *dynamiczną* trasę i sprawić, aby ta trasa wyświetlała żądany post.
 
-////
+Aby rozpocząć, utworzymy nowy szablon, który po prostu renderuje ten sam szablon posta, który użyliśmy wcześniej w liście postów.
 
 ~~~html
 <template name="postPage">
@@ -211,9 +212,9 @@ Router.map(function() {
 ~~~
 <%= caption "client/views/posts/post_page.html" %>
 
-////
+Dodamy później więcej elementów do tego szablonu (np. komentarze), ale na teraz będzie on służył jako szkielet dla naszego `{{> postItem}}`.
 
-////
+Zamierzamy utworzyć nową nazwaną trasę, tym razem kojarząc ścieżkę URL o formie `/posts/<ID>` z szablonem `postPage`:
 
 ~~~js
 Router.map(function() {
@@ -228,17 +229,17 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "4~6" %>
 
-////
+Specjalna składnia `:_id` informuje router o dwóch sprawach: po pierwsze aby skojarzyć jakąkolwiek trasę o formacie `/posts/xyz/`, gdzie “xyz” może być dowolne. Po drugie, aby wsawił cokolwiek znajdzie w “xyz” do własności `_id` tablicy parametrów routera (`params`).
 
-////
+Zwróć uwagę, że używamy `_id` tylko ze względu na łatwość i wygodę implementacji. Router nie ma możliwości, aby dowiedzieć się że przekazujemy właściwy `_id`, czy dowolny losowy ciąg znaków.
 
-////
+Przekierowujemy teraz na właściwy szablon, ale ciągle czegoś brakuje: router zna `_id` posta, który chcemy wyświetlić, ale szablon nie ma o tym żadnego pojęcia. Jak więc rozwiązać ten problem? 
 
-////
+Na szczęście roter ma wbudowane sprytne rozwiązanie tego problemu: pozwala na określenie **kontekstu danych** dla szablonu. Możesz skojarzyć kontekst danych z marmoladą w abstrakcyjnym pączku, pączku stworzonym z szablonów i layoutów. Aby uprościć tok rozumowania, są to dane, z których korzysta szablon:
 
-<%= diagram "router-diagram-2", "The data context.", "pull-center" %>
+<%= diagram "router-diagram-2", "Kontekst danych.", "pull-center" %>
 
-////
+W naszym przypadku otrzymamy prawidłowy kontekst danych przez szukanie posta na postawie `_id` otrzymanego z URL:
 
 ~~~js
 Router.map(function() {
