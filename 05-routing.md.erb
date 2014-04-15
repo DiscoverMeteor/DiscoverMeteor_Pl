@@ -141,11 +141,12 @@ Chcemy, aby nasz link do strony domowej wskazywał na listę postów, zatem zami
 
 ### Oczekiwanie na dane
 
-////
+Jeżeli uruchomisz bieżącą wersję aplikacji w środowisku produkcyjnym przez zawołanie meteor deploy (lub uruchomisz instancję dostępną w linku powyżej) zauważysz, że lista przez momeny jest pusta, zanim posty pojawią się na ekranie. Dzieje się tak, ponieważ podczas ładowania strony nie ma żadnych postów do wyświetlenia, aż do momentu gdy subskrypcja `posts` zakończy pobieranie danych z serwera.
 
-////
+O wiele lepszym rozwiązaniem byłoby przedstawienie w sposób wizualny użytkownikowi, że coś się w tym czasie dzieje i że powinien przez chwilę poczekać.
 
-////
+Na szczęście Iron Router umożliwia osiągnięcie tego w łatwy sposób -- używając `waitOn` na subskrypcję:
+
 
 ~~~js
 Router.configure({
@@ -161,17 +162,17 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "3,4" %>
 
-////
+Opiszmy po kolei. Najpierw zmieniliśmy blok `Router.configure()` aby dostarczyć routerowi nazwę szablonu wyświetlanego podczas ładowania danych (który zaimplementujemy wkrótce).
 
-////
+Następnie dodaliśmy funkcję `waitOn`, która zwraca subskrypcję `posts`. Ostatecznie podłączyliśmy się pod wbudowaną funkcję `loading`. Oznacza to, że router upewni się, że subskrypcja `posts` zostanie załadowana zanim użytkownik zostanie przekierowany na ścieżkę, którą wybrał.
 
-////
+Zauważ, że skoro definiujemy globalnie funkcję `waitOn()` na poziomie routera, taka kolej rzeczy będzie miała miejsce tylko przy pierwszym dostępie użytkownika do aplikacji. Kolejnym razem dane będą już załadowane w pamięci przeglądarki i router nie będzie zmuszony na ponowne oczekiwanie.
 
-////
+Ponieważ pozwalamy routerowi na zarządzanie subskrypcjami, możemy ją bezpiecznie usunąć z pliku `main.js` (który powinien być teraz pusty).
 
-////
+Zwykle dobrym pomysłem jest czekanie na subskrypcje nie tylko ze względu na poprawienie obsługi użytkownika, ale również warto upewnić się, że dane będą zawsze dostępne z poziomu szablonu. Eliminuje to konieczność obsługi sytuacji wyjątkowych, gdy szablon jest renderowany zanim dane są dostępne.
 
-////
+Ostatnim elementem układanki jest ładowanie szablonu. Użyjemy pakietu `spin` aby utworzyć ładnie wyglądający animowany spinner. Dodaj go za pomocą `mrt add spin` i utwórz szablon jak poniżej:
 
 ~~~html
 <template name="loading">
@@ -180,7 +181,7 @@ Router.map(function() {
 ~~~
 <%= caption "client/views/includes/loading.html" %>
 
-////
+Zauważ, że `{{>spinner}}`, jest funkcją typu "partial" zawartą w pakiecie `spin`. Mimo to, że funkcja ta pochodzi z "zewnątrz" aplikacji, możemy ją stosować jak każdy inny dowolny szablon.
 
 <%= commit "5-2", "Wait on the post subscription." %>
 
