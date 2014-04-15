@@ -273,7 +273,7 @@ Dzieje się to zwykle pośrednio przy pomocy iteratora `{{#each}}`, który auto
 {{/each}}
 ~~~
 
-Możemy to również osiągnąć jawnie przez przesłanie kontekstu jako *parametru* do wywołania szablonu. W takim przypadku poprzedni fragment kodu może być przepisany następująco:
+Możemy również jawnie użyć `{{#with}}`, który oznacza: "użyj powyższy obiekt dla danego szablonu". Przykładowo możemy napisać:
 
 ~~~html
 {{#with myWidget}}
@@ -281,7 +281,7 @@ Możemy to również osiągnąć jawnie przez przesłanie kontekstu jako *parame
 {{/with}}
 ~~~
 
-////
+Okazuje się, że możemy to również osiągnąć jawnie przez przesłanie kontekstu jako *parametru* do wywołania szablonu. W takim przypadku poprzedni fragment kodu może być przepisany następująco:
 
 ~~~js
 {{> widgetPage myWidget}}
@@ -309,17 +309,17 @@ Nazwaliśmy ścieżkę posta `postPage`, zatem możemy użyć helpera `{{pathFor
 <%= highlight "6" %>
 <%= commit "5-3", "Przekierowanie na pojedyńczą stronę posta." %>
 
-////
+Ale chwila, skąd dokładnie router wie, skąd wziąć część `xyz` z `/posts/xyz`? W końcu nie przekazujemy tu żadnego `_id`.
 
-////
+Okazuje się, że Iron Router jest na tyle sprytny, że uzyskuje tą informację bez naszej pomocy. Gdy prosimy o użycie trasy `postPage` router wie, że ta trasa potrzebuje `_id` (ponieważ zdefiniowaliśmy to w naszej `ścieżce`).
 
-////
+Zatem router będzie szukał tego `_id` w najbardziej logicznym dla tego miejscu: w kontekście danych helpera `{{pathFor 'postPage'}}`, innymi słowy `this`. I tak się składa, że `this` odpowiada postowi, który (o dziwo!) posiada własność `_id`.
 
-////
+Ewentualnie, możesz również jawnie nakazać routerowi miejsce szukania własności `_id`, przez przekazanie drugiego parametru helperowi (np. `{{pathFor 'postPage' someOtherPost}}`). Praktycznym tego przykładem byłoby uzyskanie linku do poprzedniego lub następnego posta z listy.
 
-////
+Aby sprawdzić, czy działa to poprawnie, przejdź do listy postów i kliknij na jeden z linków `Discuss`. Powinieneś zobaczyć coś podobnego do:
 
-<%= screenshot "5-2", "A single post page." %>
+<%= screenshot "5-2", "Strona z pojedyńczym postem." %>
 
 <% note do %>
 
