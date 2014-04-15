@@ -235,7 +235,7 @@ Zwróć uwagę, że używamy `_id` tylko ze względu na łatwość i wygodę im
 
 Przekierowujemy teraz na właściwy szablon, ale ciągle czegoś brakuje: router zna `_id` posta, który chcemy wyświetlić, ale szablon nie ma o tym żadnego pojęcia. Jak więc rozwiązać ten problem? 
 
-Na szczęście roter ma wbudowane sprytne rozwiązanie tego problemu: pozwala na określenie **kontekstu danych** dla szablonu. Możesz skojarzyć kontekst danych z marmoladą w abstrakcyjnym pączku, pączku stworzonym z szablonów i layoutów. Aby uprościć tok rozumowania, są to dane, z których korzysta szablon:
+Na szczęście router ma wbudowane sprytne rozwiązanie tego problemu: pozwala na określenie **kontekstu danych** dla szablonu. Możesz skojarzyć kontekst danych z marmoladą w abstrakcyjnym pączku, pączku stworzonym z szablonów i layoutów. Aby uprościć tok rozumowania, są to dane, z których korzysta szablon:
 
 <%= diagram "router-diagram-2", "Kontekst danych.", "pull-center" %>
 
@@ -255,17 +255,17 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "4~7" %>
 
-////
+Zatem za każdym razem, gdy użytkownik uzyska dostęp do tej trasy, odpowiedni post zostanie znaleziony i przekazany do szablonu. Pamiętaj, że `findOne` zwraca pojedyńczy post, który jest wynikiem zapytania i że przekazanie `id` jako parametru funkcji jest skrótem dla `{_id: id}`.
 
-////
+W ciele funkcji `data` dla danej trasy, `this` odpowiada bieżącej trasie i możemy użyć `this.params` aby uzyskać dostęp do nazwanych części trasy (które oznaczyliśmy za pomocą przedrostka `:` w naszej `ścieżce`).
 
 <% note do %>
 
-### More About Data Contexts
+### Więcej o kontekstach danych
 
-////
+Możesz kontrolować wartość `this` w helperach szablonów przez ustawienie *kontekstu danych* szablonu.
 
-////
+Dzieje się to zwykle pośrednio przy pomocy iteratora `{{#each}}`, który automatycznie ustawia kontekst danych każdej iteracji do bieżącego elementu będącego wynikiem iteracji.
 
 ~~~html
 {{#each widgets}}
@@ -273,7 +273,7 @@ Router.map(function() {
 {{/each}}
 ~~~
 
-////
+Możemy to również osiągnąć jawnie przez przesłanie kontekstu jako *parametru* do wywołania szablonu. W takim przypadku poprzedni fragment kodu może być przepisany następująco:
 
 ~~~html
 {{#with myWidget}}
@@ -289,11 +289,11 @@ Router.map(function() {
 
 <% end %>
 
-### Using a Dynamic Named Route Helper
+### Używanie dynamicznego helpera nazwanej trasy
 
-////
+Na końcu musimy się upewnić, że wskazujemy na właściwe miejsce, gdy chcemy linkować pojedyńczy post. Moglibyśmy to osiągnąć również przez `<a href="/posts/{{_id}}">`, ale użycie helpera trasy jest po prostu bardziej solidne.
 
-////
+Nazwaliśmy ścieżkę posta `postPage`, zatem możemy użyć helpera `{{pathFor 'postPage'}}`:
 
 ~~~html
 <template name="postItem">
@@ -307,7 +307,7 @@ Router.map(function() {
 ~~~
 <%= caption "client/views/posts/post_item.html"%>
 <%= highlight "6" %>
-<%= commit "5-3", "Routing to a single post page." %>
+<%= commit "5-3", "Przekierowanie na pojedyńczą stronę posta." %>
 
 ////
 
