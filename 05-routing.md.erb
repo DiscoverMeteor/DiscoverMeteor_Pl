@@ -183,21 +183,21 @@ Ostatnim elementem układanki jest ładowanie szablonu. Użyjemy pakietu `spin` 
 
 Zauważ, że `{{>spinner}}`, jest funkcją typu "partial" zawartą w pakiecie `spin`. Mimo to, że funkcja ta pochodzi z "zewnątrz" aplikacji, możemy ją stosować jak każdy inny dowolny szablon.
 
-<%= commit "5-2", "Wait on the post subscription." %>
+<%= commit "5-2", "Czekanie na subskrypcję post." %>
 
 <% note do %>
 
-### A First Glance At Reactivity
+### Pierwszy rzut oka na reaktywność
 
-////
+Reaktywność jest jednym z głównych fundamentów Meteora. Pomimo tego, że jeszcze nie zajęliśmy się tym tematem, ładowanie naszego szablonu daje pierwsze wrażenie tego konceptu.
 
-////
+Przekierowanie do szablonu ładowania danych, jeżeli dane nie zostały jeszcze załadowane jest bardzo dobrym rozwiązaniem, ale skąd router wie kiedy przekierować użytkownika *z powrotem* na żądaną stronę po załadowaniu danych?
 
-////
+Na razie nie zastanawiajmy się nad tym. Ale nie martw się, dowiesz się o tym bardzo szybko!
 
 <% end %>
 
-### Routing To A Specific Post
+### Przekierowanie do konkretnego posta
 
 ////
 
