@@ -229,17 +229,17 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "4~6" %>
 
-////
+Specjalna składnia `:_id` informuje router o dwóch sprawach: po pierwsze aby skojarzyć jakąkolwiek trasę o formacie `/posts/xyz/`, gdzie “xyz” może być dowolne. Po drugie, aby wsawił cokolwiek znajdzie w “xyz” do własności `_id` tablicy parametrów routera (`params`).
 
-////
+Zwróć uwagę, że używamy `_id` tylko ze względu na łatwość i wygodę implementacji. Router nie ma możliwości, aby dowiedzieć się że przekazujemy właściwy `_id`, czy dowolny losowy ciąg znaków.
 
-////
+Przekierowujemy teraz na właściwy szablon, ale ciągle czegoś brakuje: router zna `_id` posta, który chcemy wyświetlić, ale szablon nie ma o tym żadnego pojęcia. Jak więc rozwiązać ten problem? 
 
-////
+Na szczęście roter ma wbudowane sprytne rozwiązanie tego problemu: pozwala na określenie **kontekstu danych** dla szablonu. Możesz skojarzyć kontekst danych z marmoladą w abstrakcyjnym pączku, pączku stworzonym z szablonów i layoutów. Aby uprościć tok rozumowania, są to dane, z których korzysta szablon:
 
-<%= diagram "router-diagram-2", "The data context.", "pull-center" %>
+<%= diagram "router-diagram-2", "Kontekst danych.", "pull-center" %>
 
-////
+W naszym przypadku otrzymamy prawidłowy kontekst danych przez szukanie posta na postawie `_id` otrzymanego z URL:
 
 ~~~js
 Router.map(function() {
