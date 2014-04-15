@@ -199,11 +199,11 @@ Na razie nie zastanawiajmy się nad tym. Ale nie martw się, dowiesz się o tym 
 
 ### Przekierowanie do konkretnego posta
 
-////
+Teraz po tym, jak dowiedzieliśmy się jak przekierowywać na szablon `postsList`, zaimplementujmy ścieżkę, która umożliwi wyświetlenie szczegółów pojedyńczego posta.
 
-////
+Jest tutaj jeden haczyk: nie możemy kontynuować i definiować osobne trasy dla każdego nowego posta, ponieważ może być ich setki. Potrzebujemy zatem ustawić jedną *dynamiczną* trasę i sprawić, aby ta trasa wyświetlała żądany post.
 
-////
+Aby rozpocząć, utworzymy nowy szablon, który po prostu renderuje ten sam szablon posta, który użyliśmy wcześniej w liście postów.
 
 ~~~html
 <template name="postPage">
@@ -212,9 +212,9 @@ Na razie nie zastanawiajmy się nad tym. Ale nie martw się, dowiesz się o tym 
 ~~~
 <%= caption "client/views/posts/post_page.html" %>
 
-////
+Dodamy później więcej elementów do tego szablonu (np. komentarze), ale na teraz będzie on służył jako szkielet dla naszego `{{> postItem}}`.
 
-////
+Zamierzamy utworzyć nową nazwaną trasę, tym razem kojarząc ścieżkę URL o formie `/posts/<ID>` z szablonem `postPage`:
 
 ~~~js
 Router.map(function() {
