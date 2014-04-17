@@ -1,42 +1,42 @@
 ---
-title: Publications and Subscriptions
+title: Publikacje i subskrypcje
 slug: publications-and-subscriptions
 date: 0004/01/02
 number: 4.5
 sidebar: true
-contents: Understand how publications and subscriptions work.|Learn what the default Autopublish package does.|See a few more examples of publication patterns.
+contents: Jak działają publikacje i subskrypcje.|Do czego służy domyślny pakiet Autopublish.|O kilku przykładach wzorców publikacji.
 paragraphs: 52
 ---
 
-////
+Publikacje i subskrypcje należą do fundamentalnych konceptów Meteora, ale ciężko je zrozumieć jeżeli dopiero zaczynasz przygodę z Meteorem.
 
-////
+Prowadzi to do wielu nieporozumień, tak jak plotka, że Meteor nie jest bezpieczny, lub że Meteor nie jest w stanie poradzić sobie z dużą liczbą danych.
 
-////
+W dużym stopniu powodem, dla którego ludzie są zdezorientowani, jest "magia", którą Meteor za nas wykonuje. Mimo to, że ta "magia" jest bardzo użyteczna, może ukryć wiele kwestii, które są ukryte za kulisami implementacji (jak to zwykle bywa, gdy wiele rzeczy jest robione za nas). Zobaczmy zatem pod maskę i spróbujmy zrozumieć, co naprawdę się dzieje.
 
-### The Olden Days
+### Po staremu
 
-////
+Najpierw wróćmy do roku 2011, gdy nie było jeszcze Meteora. Przypuśćmy, że budujesz prostą aplikację Rails. W momencie, gdy użytkownik wejdzie na Twoją stronę, klient (czyli przeglądarka) wysyła żądania do aplikacji, która jest uruchomiona na serwerze.
 
-////
+Pierwszym zadaniem aplikacji jest sprawdzenie, jakie dane udostępnić użytkownikowi. Może to być strona 12 rezultatów wyszukiwania, informacja o profilu Marysi, ostatnie 20 tweetów Bartka itd. Można o tym myśleć jako o sprzedawcy pracującemu w księgarni, który przegląda półki na twoje żądanie.
 
-////
+Gdy dane zostały znalezione, kolejnym zadaniem aplikacji jest przetłumaczenie ich w format HTML zrozumiały dla człowieka  (lub JSON w przypadku API).
 
-////
+Używając metafory księgarni, można to skojarzyć z opakowaniem właśnie zakupionej książki i wrzucenie jej do torby. Jest to część nazywana "View" w znanym modelu MVC (Model-View-Controller).
 
-////
+Ostatecznie, aplikacja wysyła wygenerowany kod HTML do przeglądarki. Praca aplikacji jest zakończona i kontrola zostaje przekazana z dala od jej wirtualnych rąk, oczekująć na kolejny dostęp.
 
-### The Meteor Way
+### Jak to robi Meteor
 
-////
+Zaznajomimy się z tym, co czyni Meteor tak specjalnym, w porównaniu do wcześniejszych rozwiązań. Jak już zdążyliśmy zauważyć, główną innowacją Meteora jest to, że aplikacje Rails są uruchamiane wyłącznie **po stronie serwera**, aplikacje Meteora zawierają również komponent po stronie klienta, który jest uruchamiany **po stronie klienta** (czyli w przeglądarce).
 
-<%= diagram "client-server", "Pushing a subset of the database to the client.", "pull-right" %>
+<%= diagram "client-server", "Przesyłanie podzbioru bazy danych do klienta.", "pull-right" %>
 
-////
+Odpowiada to sprzedawcy, który nie tylko znajduje dla Ciebie książki, ale również idzie z Tobą do domu i czyta je dla Ciebie w nocy (przyznajmy, że przyprawia to trochę o gęsią skórkę).
 
-////
+Taka architektura pozwala na osiągnięcie Meteorowi wielu ciekawych rzeczy, między innymi bardzo znane śą metody erwerowym (ang. Meteor calls) [database everywhere](http://docs.meteor.com/#sevenprinciples). Mowiąc prostym językiem, Meteor kopiuje część bazy danych i *przesyła ją klientowi*.
 
-////
+Ma to dwie duże konsekwencje: po pierwsze, zamiast wysyłać klientowi kod HTML, aplikacja Meteora wyśle **prawdziwe, surowe dane** i pozwoli klientowi nimi zarządzać i je wyświetlać ([data on the wire](http://docs.meteor.com/#sevenprinciples)). Po drugie, będziesz miał *natychmiastowy dostęp do danych** bez konieczności na oczekiwanie na odpowiedź serwera ([kompensacja lagów](http://docs.meteor.com/#sevenprinciples)).
 
 ### Publishing
 
