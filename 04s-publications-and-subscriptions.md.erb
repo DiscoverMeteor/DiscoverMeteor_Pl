@@ -38,81 +38,81 @@ Taka architektura pozwala na osiągnięcie Meteorowi wielu ciekawych rzeczy, mi�
 
 Ma to dwie duże konsekwencje: po pierwsze, zamiast wysyłać klientowi kod HTML, aplikacja Meteora wyśle **prawdziwe, surowe dane** i pozwoli klientowi nimi zarządzać i je wyświetlać ([data on the wire](http://docs.meteor.com/#sevenprinciples)). Po drugie, będziesz miał *natychmiastowy dostęp do danych** bez konieczności na oczekiwanie na odpowiedź serwera ([kompensacja lagów](http://docs.meteor.com/#sevenprinciples)).
 
-### Publishing
+### Publikowanie kolekcji
 
-////
+Baza danych aplikacji może zawierać dziesiątki tysięcy dokumentów, niektóre z nich mogą być prywatne lub utajnione. Z tego względu nie powinniśmy robić wiernej kopii całej bazy po stronie klienta, z uwagi na prywatność jak i skalowanie aplikacji.
 
-////
+Potrzebujemy zatem znaleźć sposób na przekazanie przez Meteora jedynie **podzbioru** danych, które mogą zostać wysłane do klienta. Osiągniemy to za pomocą **publikacji**.
 
-////
+Wróćmy do Microscope. Poniżej znajdziesz wszystkie posty znajdujące się w bazie danych aplikacji:
 
-<%= diagram "collections-1", "All the posts contained in our database.", "pull-center" %>
+<%= diagram "collections-1", "Wszystkie posty znajdujące się w bazie danych.", "pull-center" %>
 
-////
+Co prawda taka funkcjonalność nie istnieje w aplikacji Microscope, ale wyobraźmy sobie, że niektóre z postów zostały zaznaczone jako posiadające obraźliwe słownictwo. Mimo to, że chcemy je dalej przechowywać w bazie danych, nie powinny być udostępniane użytkownikom (tj. wysyłane do klienta).
 
-////
+Naszym pierwszym zadaniem będzie przekazanie Meteorowi które dane *chcemy* wysłać klientowi. Bedą **publikowane** wyłącznie te posty, które nie zostały oznaczone flagą jako obraźliwe.
 
-<%= diagram "collections-2", "Excluding flagged posts.", "pull-center" %>
+<%= diagram "collections-2", "Wyłączenie zaznaczonych postów.", "pull-center" %>
 
-////
+Oto kod odpowiadający tej funkcjonalności po stronie serwera:
 
 ~~~js
-// on the server
+// na serwerze
 Meteor.publish('posts', function() {
   return Posts.find({flagged: false}); 
 });
 ~~~
 
-////
+Upewnia się to, że **nie ma możliwości** tego, że klient będzie miał dostęp do oflagowanych postów. Jest to dokładnie sposób, w jaki zabezpieczysz aplikację: przez upewnienie się, że publikujesz tylko te dane, do których bieżący użytkownik ma dostęp.
 
 <% note do %>
 
 ### DDP
 
-////
+Zasadniczo możesz wyobrazić sobie system publikacji/subskrypcji jako rurę, która transferuje dane ze strony serwera (źródłowej kolekcji) do klienta (docelowej kolekcji).
 
-////
+Protokół, przez który odbywa się komunikacja nazywa się **DDP** (ang. Distributed Data Protocol). Aby dowiedzieć się więcej o protokole DDP, możesz obejrzeć [wystąpienie Matta DeBergalisa z `The Real-time Conference`](http://2012.realtimeconf.com/video/matt-debergalis) (jednego z założycieli Meteora), lub [ten screencast](http://www.eventedmind.com/posts/meteor-subscriptions-and-ddp) autorstwa Chrisa Mathera, który wprowadza w ten protokół bardziej szczegółowo.
 
 <% end %>
 
-### Subscribing
+### Subskrybowanie kolekcji
 
-////
+Mimo tego, że chcemy udostępnić klientowi wszystkie nieoflagowane posty, nie możemy tak po prostu wysłać tysięcy postów jednocześnie. Potrzebujemy znaleźć sposób na przekazanie klientowi jaki podzbiór danych potrzebują w danej chwili i właśnie to zapewniają **subskrypcje**.
 
-////
+Jakiekolwiek dane, które będziesz subskrybował, będą miały **w całości kopiowane** klientowi dzięki MiniMongo, implementacji bazy MongoDB po stronie klienta.
 
-////
+Przykładowo, załóżmy, że przeglądamy stronę z profilem Boba Smitha i chcemy wyświetlić wyłącznie *jego* posty.
 
-<%= diagram "collections-3", "Subscribing to Bob's posts will mirror them on the client.", "pull-center" %>
+<%= diagram "collections-3", "Subskrybowanie postów Boba skopiuje je po stronie klienta.", "pull-center" %>
 
-////
+Na początek zmodyfikujemy naszą publikację i dodamy do niej parametr:
 
 ~~~js
-// on the server
+// na serwerze
 Meteor.publish('posts', function(author) {
   return Posts.find({flagged: false, author: author});
 });
 ~~~
 
-////
+A następnie zdefiniujemy ten parametr, gdy **subskrybujemy** tą publikację w kodzie aplikacji po stronie klienta:
 
 ~~~js
-// on the client
+// po stronie klienta
 Meteor.subscribe('posts', 'bob-smith');
 ~~~
 
-////
+Właśnie w ten sposób zapewniasz skalowalność aplikacji po stronie klienta: zamiast subskrybować **wszystkie** dostępne dane, po prostu wybierasz te, które bieżąco potrzebujesz. W ten sposób unikasz zapełnienia pamięci przeglądarki niezależnie od wielkości bazy danych po stronie serwera.
 
-### Finding
+### Szukanie w bazie danych
 
-////
+Okazuje się, że post Boba jest przyporządkowany do kliku kategorii (np. “JavaScript”, ”Ruby” i ”Python”). Możliwe jest, że nadal chcemy wczytać wszystkie posty Boba do pamięci, ale chcemy wyświetlić tylko te z kategorii "JavaScript". Pomocne w tym będzie tworzenie zapytań w bazie za pomocą `find`.
 
-<%= diagram "collections-4", "Selecting a subset of documents on the client.", "pull-center" %>
+<%= diagram "collections-4", "Zaznaczanie podzbioru dokumentów po stronie klienta.", "pull-center" %>
 
-////
+Tak, jak po stronie serwera, użyjemy funkcję `Posts.find()` do zaznaczenia pozdbioru danych.
 
 ~~~js
-// on the client
+// po stronie klienta
 Template.posts.helpers({
   posts: function(){
     return Posts.find(author: 'bob-smith', category: 'JavaScript');
@@ -120,25 +120,25 @@ Template.posts.helpers({
 });
 ~~~
 
-////
+Teraz gdy mamy ogólne pojęcie na temat roli, jaką odgrywają publikacje i subskrypcje, spójrzmy na te pojęcia bardziej szczegółowo i poznajmy kilka powszechnych wzorców implementacji.
 
-### Autopublish
+### Autopublikacja
 
-////
+Jeżeli tworzysz projekt Meteora od podstaw, (tj. używając `meteor create`), projekt będzie automatycznie wyposażony w pakiet `autopublish`. Aby zacząć porozmawiajmy o tym, jak ten pakiet dokładnie działa.
 
-////
+Celem `autopublish` jest ułatwienie implementacji aplikacji Meteora poprzez automatyczne kopiowanie __wszystkich danych__ przechowywanych na serwerze do klienta, obsługując za Ciebie wszystkie publikacje i subskrypcje za jednym zamachem.
 
-<%= diagram "autopublish", "Autopublish", "pull-center"%>
+<%= diagram "autopublish", "Autopublikacja", "pull-center"%>
 
-////
+Jak to działa? Przyjmijmy, że posiadasz aplikację `'posts'` po stronie serwera. W takim przypadku `autopublish` wyśle wszystkie posty, które znajdzie w kolekcji posts po stronie serwera do kolekcji `'posts'` po stronie klienta (zakładając, że istnieje).
 
-////
+Jeżeli zatem używasz pakietu `autopublish`, nie musisz się troszczyć o publikacje. Dane są wszechobecne i wszystko jest proste. Oczywiście możesz napotkać oczywiste problemy związane z utrzymywaniem kompletnej kopii bazy danych po stronie klienta na każdej maszynie po stronie klienta. 
 
-////
+Z tego powodu użycie autopublish jest odpowiednie wyłącznie wtedy gdy zaczynasz implementację i nie uzwględniłeś publikacji.
 
-### Publishing Full Collections
+### Publikowanie całych kolekcji
 
-////
+Zaraz po tym, jak usuniesz `autopublish`, szybko zdasz sobie sprawę, że zniknęły dane po stronie klienta. Łatwym sposobem na ich odzyskanie jest zduplikowanie funkcjonalności pakietu autopublish przez publikowanie całej kolekcji. Przykładowo:
 
 ~~~js 
 Meteor.publish('allPosts', function(){
@@ -148,11 +148,11 @@ Meteor.publish('allPosts', function(){
 
 <%= diagram "fullcollection", "Publishing a full collection", "pull-center" %>
 
-////
+W dalszym ciągu publikujemy całą kolekcję, ale przynajmniej mamy kontrolę nad tym, które kolekcje publikować, a które nie. W tym przypadku, publikujemy kolekcję `Posts`, ale nie publikujemy `Comments`.
 
-### Publishing Partial Collections
+### Częściowe publikowanie kolekcji
 
-////
+Następnym poziomem kontroli publikacji danych jest publikacja _części_ kolekcji. Na przykład publikacja postów należących do danego autora:
 
 ~~~js 
 Meteor.publish('somePosts', function(){
@@ -160,11 +160,11 @@ Meteor.publish('somePosts', function(){
 });
 ~~~
 
-<%= diagram "partialcollection", "Publishing a partial collection", "pull-center" %>
+<%= diagram "partialcollection", "Częściowe publikowanie kolekcji", "pull-center" %>
 
 <% note do %>
 
-### Behind The Scenes
+### Za kulisami
 
 ////
 
