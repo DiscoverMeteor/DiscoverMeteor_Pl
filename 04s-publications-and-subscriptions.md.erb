@@ -38,32 +38,32 @@ Taka architektura pozwala na osiągnięcie Meteorowi wielu ciekawych rzeczy, mi�
 
 Ma to dwie duże konsekwencje: po pierwsze, zamiast wysyłać klientowi kod HTML, aplikacja Meteora wyśle **prawdziwe, surowe dane** i pozwoli klientowi nimi zarządzać i je wyświetlać ([data on the wire](http://docs.meteor.com/#sevenprinciples)). Po drugie, będziesz miał *natychmiastowy dostęp do danych** bez konieczności na oczekiwanie na odpowiedź serwera ([kompensacja lagów](http://docs.meteor.com/#sevenprinciples)).
 
-### Publishing
+### Publikowanie kolekcji
 
-////
+Baza danych aplikacji może zawierać dziesiątki tysięcy dokumentów, niektóre z nich mogą być prywatne lub utajnione. Z tego względu nie powinniśmy robić wiernej kopii całej bazy po stronie klienta, z uwagi na prywatność jak i skalowanie aplikacji.
 
-////
+Potrzebujemy zatem znaleźć sposób na przekazanie przez Meteora jedynie **podzbioru** danych, które mogą zostać wysłane do klienta. Osiągniemy to za pomocą **publikacji**.
 
-////
+Wróćmy do Microscope. Poniżej znajdziesz wszystkie posty znajdujące się w bazie danych aplikacji:
 
-<%= diagram "collections-1", "All the posts contained in our database.", "pull-center" %>
+<%= diagram "collections-1", "Wszystkie posty znajdujące się w bazie danych.", "pull-center" %>
 
-////
+Co prawda taka funkcjonalność nie istnieje w aplikacji Microscope, ale wyobraźmy sobie, że niektóre z postów zostały zaznaczone jako posiadające obraźliwe słownictwo. Mimo to, że chcemy je dalej przechowywać w bazie danych, nie powinny być udostępniane użytkownikom (tj. wysyłane do klienta).
 
-////
+Naszym pierwszym zadaniem będzie przekazanie Meteorowi które dane *chcemy* wysłać klientowi. Bedą **publikowane** wyłącznie te posty, które nie zostały oznaczone flagą jako obraźliwe.
 
-<%= diagram "collections-2", "Excluding flagged posts.", "pull-center" %>
+<%= diagram "collections-2", "Wyłączenie zaznaczonych postów.", "pull-center" %>
 
-////
+Oto kod odpowiadający tej funkcjonalności po stronie serwera:
 
 ~~~js
-// on the server
+// na serwerze
 Meteor.publish('posts', function() {
   return Posts.find({flagged: false}); 
 });
 ~~~
 
-////
+Upewnia się to, że **nie ma możliwości** tego, że klient będzie miał dostęp do oflagowanych postów. Jest to dokładnie sposób, w jaki zabezpieczysz aplikację: przez upewnienie się, że publikujesz tylko te dane, do których bieżący użytkownik ma dostęp.
 
 <% note do %>
 
