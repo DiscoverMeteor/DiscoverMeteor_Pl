@@ -69,50 +69,50 @@ Upewnia się to, że **nie ma możliwości** tego, że klient będzie miał dost
 
 ### DDP
 
-////
+Zasadniczo możesz wyobrazić sobie system publikacji/subskrypcji jako rurę, która transferuje dane ze strony serwera (źródłowej kolekcji) do klienta (docelowej kolekcji).
 
-////
+Protokół, przez który odbywa się komunikacja nazywa się **DDP** (ang. Distributed Data Protocol). Aby dowiedzieć się więcej o protokole DDP, możesz obejrzeć [wystąpienie Matta DeBergalisa z `The Real-time Conference`](http://2012.realtimeconf.com/video/matt-debergalis) (jednego z założycieli Meteora), lub [ten screencast](http://www.eventedmind.com/posts/meteor-subscriptions-and-ddp) autorstwa Chrisa Mathera, który wprowadza w ten protokół bardziej szczegółowo.
 
 <% end %>
 
-### Subscribing
+### Subskrybowanie kolekcji
 
-////
+Mimo tego, że chcemy udostępnić klientowi wszystkie nieoflagowane posty, nie możemy tak po prostu wysłać tysięcy postów jednocześnie. Potrzebujemy znaleźć sposób na przekazanie klientowi jaki podzbiór danych potrzebują w danej chwili i właśnie to zapewniają **subskrypcje**.
 
-////
+Jakiekolwiek dane, które będziesz subskrybował, będą miały **w całości kopiowane** klientowi dzięki MiniMongo, implementacji bazy MongoDB po stronie klienta.
 
-////
+Przykładowo, załóżmy, że przeglądamy stronę z profilem Boba Smitha i chcemy wyświetlić wyłącznie *jego* posty.
 
-<%= diagram "collections-3", "Subscribing to Bob's posts will mirror them on the client.", "pull-center" %>
+<%= diagram "collections-3", "Subskrybowanie postów Boba skopiuje je po stronie klienta.", "pull-center" %>
 
-////
+Na początek zmodyfikujemy naszą publikację i dodamy do niej parametr:
 
 ~~~js
-// on the server
+// na serwerze
 Meteor.publish('posts', function(author) {
   return Posts.find({flagged: false, author: author});
 });
 ~~~
 
-////
+A następnie zdefiniujemy ten parametr, gdy **subskrybujemy** tą publikację w kodzie aplikacji po stronie klienta:
 
 ~~~js
-// on the client
+// po stronie klienta
 Meteor.subscribe('posts', 'bob-smith');
 ~~~
 
-////
+Właśnie w ten sposób zapewniasz skalowalność aplikacji po stronie klienta: zamiast subskrybować **wszystkie** dostępne dane, po prostu wybierasz te, które bieżąco potrzebujesz. W ten sposób unikasz zapełnienia pamięci przeglądarki niezależnie od wielkości bazy danych po stronie serwera.
 
-### Finding
+### Szukanie w bazie danych
 
-////
+Okazuje się, że post Boba jest przyporządkowany do kliku kategorii (np. “JavaScript”, ”Ruby” i ”Python”). Możliwe jest, że nadal chcemy wczytać wszystkie posty Boba do pamięci, ale chcemy wyświetlić tylko te z kategorii "JavaScript". Pomocne w tym będzie tworzenie zapytań w bazie za pomocą `find`.
 
-<%= diagram "collections-4", "Selecting a subset of documents on the client.", "pull-center" %>
+<%= diagram "collections-4", "Zaznaczanie podzbioru dokumentów po stronie klienta.", "pull-center" %>
 
-////
+Tak, jak po stronie serwera, użyjemy funkcję `Posts.find()` do zaznaczenia pozdbioru danych.
 
 ~~~js
-// on the client
+// po stronie klienta
 Template.posts.helpers({
   posts: function(){
     return Posts.find(author: 'bob-smith', category: 'JavaScript');
@@ -120,9 +120,9 @@ Template.posts.helpers({
 });
 ~~~
 
-////
+Teraz gdy mamy ogólne pojęcie na temat roli, jaką odgrywają publikacje i subskrypcje, spójrzmy na te pojęcia bardziej szczegółowo i poznajmy kilka powszechnych wzorców implementacji.
 
-### Autopublish
+### Autopublikacja
 
 ////
 
