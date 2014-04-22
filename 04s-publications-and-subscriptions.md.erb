@@ -124,19 +124,19 @@ Teraz gdy mamy ogólne pojęcie na temat roli, jaką odgrywają publikacje i sub
 
 ### Autopublikacja
 
-////
+Jeżeli tworzysz projekt Meteora od podstaw, (tj. używając `meteor create`), projekt będzie automatycznie wyposażony w pakiet `autopublish`. Aby zacząć porozmawiajmy o tym, jak ten pakiet dokładnie działa.
 
-////
+Celem `autopublish` jest ułatwienie implementacji aplikacji Meteora poprzez automatyczne kopiowanie __wszystkich danych__ przechowywanych na serwerze do klienta, obsługując za Ciebie wszystkie publikacje i subskrypcje za jednym zamachem.
 
-<%= diagram "autopublish", "Autopublish", "pull-center"%>
+<%= diagram "autopublish", "Autopublikacja", "pull-center"%>
 
-////
+Jak to działa? Przyjmijmy, że posiadasz aplikację `'posts'` po stronie serwera. W takim przypadku `autopublish` wyśle wszystkie posty, które znajdzie w kolekcji posts po stronie serwera do kolekcji `'posts'` po stronie klienta (zakładając, że istnieje).
 
-////
+Jeżeli zatem używasz pakietu `autopublish`, nie musisz się troszczyć o publikacje. Dane są wszechobecne i wszystko jest proste. Oczywiście możesz napotkać oczywiste problemy związane z utrzymywaniem kompletnej kopii bazy danych po stronie klienta na każdej maszynie po stronie klienta. 
 
-////
+Z tego powodu użycie autopublish jest odpowiednie wyłącznie wtedy gdy zaczynasz implementację i nie uzwględniłeś publikacji.
 
-### Publishing Full Collections
+### Publikowanie całych kolekcji
 
 ////
 
