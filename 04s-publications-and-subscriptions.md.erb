@@ -182,11 +182,11 @@ Zatem w powyższym przykładzie byliśmy w stanie upewnić się, że użytkownik
 
 <% end %>
 
-### Publishing Partial Properties
+### Publikowanie wyłącznie niektórych pól kolekcji
 
-////
+Poznaliśmy jak publikować niektóre posty, ale możemy w większym stopniu ograniczyć liczbę przesyłanych danych! Zobaczmy jak publikować wyłącznie wybrane *pola* kolekcji.
 
-////
+Tak, jak poprzednio, użyjemy metody `find()` , aby zwróciła kursor, ale tym razem wyłączymy z zapytania niektóre pola:
 
 ~~~js
 Meteor.publish('allPosts', function(){
@@ -196,9 +196,9 @@ Meteor.publish('allPosts', function(){
 });
 ~~~
 
-<%= diagram "partialproperties", "Publishing partial properties", "pull-center" %>
+<%= diagram "partialproperties", "Publikowanie niektórych pól", "pull-center" %>
 
-////
+Oczywiście możemy połączyć oba rozwiązania. Na przykład, jeżeli chcemy zwrócić wszystkie posty napisane przez Toma, ale nie publikować daty napisania postów, napisalibyśmy:
 
 ~~~js
 Meteor.publish('allPosts', function(){
@@ -208,10 +208,10 @@ Meteor.publish('allPosts', function(){
 });
 ~~~
 
-### Summing Up
+### Podsumowanie
 
-////
+Przeszliśmy drogę od opublikowania wszystkich pól wszystkich dokumentów danej kolekcji (za pomocą `autopublish`) do publikowania _wyłącznie niektórych_ pól _niektórych_ dokumentów _wybranych_ kolekcji.
 
-////
+To podsumowuje podstawę pracy z publikacjami Meteora i techniki poznane powyżej są w stanie pokryć znaczną większość powszechnych zastosowań.
 
-////
+Czasami jednak będziesz musiał wyjść poza te ramy przez łączenie, linkowanie lub mergowanie publikacji. Opiszemy to w kolejnym rozdziale!
