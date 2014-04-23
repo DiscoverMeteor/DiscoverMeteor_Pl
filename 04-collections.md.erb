@@ -28,21 +28,21 @@ Posts = new Meteor.Collection('posts');
 
 <%= commit "4-1", "Dodano kolekcję posts." %>
 
-////
+Kod, który nie znajduje się ani w folderze `client/` ani w `server/` będzie uruchamiany po *obu* stronach. Zatem kolekcja `Posts` jest dostępna zarówno po stronie klienta i serwera. Jednakże, sposób działania kolekcji po stronach znacznie różni się od siebie. 
 
 <% note do %>
 
-### To Var Or Not To Var?
+### Używać Var czy nie?
 
-////
+W Meteorze słowo kluczowe `var` ogranicza zagres obiektu do bieżącego pliku. Ponieważ chcemy udostępnić kolekcję `Posts` całej aplikacji, *nie* używamy słowa kluczowego `var`.
 
 <% end %>
 
-////
+Po stronie serwera kolekcja kontaktuje się z bazą danych Mongo, czyta i zapisuje dowolne zmiany. W ten sposób może być porównana do standardowej biblioteki bazy danych. Po stroni klienta kolekcja jest *bezpieczną* kopią *pozdbioru* prawdziwej, kanonicznej kolekcji. Kolekcja po stronie klienta jest na bieżąco i (w większości) niewidowicznie uaktualniana w czasie rzeczywistym z oznaczonym podzbiorem danych.
 
 <% note do %>
 
-### Console vs Console vs Console
+### Konsola vs Konsola vs Konsola
 
 ////
 
