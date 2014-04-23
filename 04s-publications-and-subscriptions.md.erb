@@ -166,19 +166,19 @@ Meteor.publish('somePosts', function(){
 
 ### Za kulisami
 
-////
+Jeżeli czytałeś [dokumentację publikacji Meteora](http://docs.meteor.com/#publishandsubscribe), mogłeś być przytłoczony fragmentem nakazującym używania funkcji `added()` i `ready()` do ustawiania atrybutów rekordów po stronie klienta i mogłeś być zaskoczony tym, że nie widziałeś nigdy użycia powyższych metod w żadnej widzianej aplikacji Meteora.
 
-////
+Jest to spowodowane bardzo ważnym ułatwieniem, które dostarcza Meteor: metodą `_publishCursor()`. Nie widziałeś również tej metody? Może nie bezpośrednio, ale jeżeli zwracasz [kursor](/chapter/meteor-vocabulary/) (np. `Posts.find({'author':'Tom'})`) w funkcji dokonującej publikacji, to Meteor używa właśnie tej funkcji.
 
-////
+Gdy Meteor rozpoznaje, że publikacjia `somePosts` zwraca kursor, woła metodę `_publishCursor()` aby -- tak, zgadłeś -- automatycznie publikować powyższy kursor.
 
-////
+Pokrótce opiszmy sposób działania `_publishCursor()`:
 
-- ////
-- ////
-- ////
+- Sprawdza nazwę kolekcji po stronie serwera.
+- Wczytuje z bazy danych wszystkie pasujące do danego kursora dokumenty i wysyła je do kolekcji po stronie klienta *która ma tą samą nazwę, co na serwerze*. (Wewnętrznie używa metodę `.added()` aby to osiągnąć).
+- Za każdym razem, gdy dodano, zmieniono lub usunięto dokument, wysyła zmiany do kolekcji po stronie klienta. (Wewnętrznie używa metodę `.observe()` na kursorze i `.added()`, `.changed()` oraz `removed()`).
 
-////
+Zatem w powyższym przykładzie byliśmy w stanie upewnić się, że użytkownik otrzymał wyłącznie te posty, które go interesowały (te napisane przez Toma), dostępne w cache'u po stronie klienta.
 
 <% end %>
 
