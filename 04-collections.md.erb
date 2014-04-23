@@ -1,87 +1,87 @@
 ---
-title: Collections
+title: Kolekcje
 slug: collections
 date: 0004/01/01
 number: 4
-contents: Learn about Meteor's core feature, realtime collections.|Understand how Meteor's data synchronization works.|Integrate collections with our templates.|Turn our basic prototype into a functioning realtime application!
+contents: O fundamentalnej funkcjonalności Meteora, reaktywnych kolekcjach.|Zrozumiesz jak działa synchronizacja danych w Meteorze.|Zintegrujesz kolekcje z szablonami.|Jak przekształcić nasz podstawowy prototyp w prawdziwą aplikację czasu rzeczywistego!
 paragraphs: 72
 ---
 
-////
+W pierwszym rozdziale rozmawialiśmy o podstawowej funkcjonalności Meteorą jaką jest synchronizacja danych między klientem i serwerem.
 
-////
+W bieżącym rozdziale przyjrzymy się bliżej tej funkcjonalności i sposobie działania kluczowego elementu technologii, która to umożliwia, kolekcji Meteora.
 
-////
+Budujemy aplikację społeczonościową wyświetlającą wiadomości, zatem pierwszą rzeczą, którą chcemy osiągnąć, jest stworzenie listy listy linków do postów. Nazwiemy każdy z tych linków "postem".
 
-////
+Oczywiście potrzebujemy te posty gdzieś przechowywać. Meteor domyślnie pracuje z bazą danych MongoDB, która jest uruchomiona po stronie serwera i jest twoim stałym magazynem danych.
 
-////
+Z tego względu, mimo to, że przeglądarka może przechowywać pewien stan aplikacji (na przykład bieżącą stronę, lub aktualnie wpisywany komentarz), serwer, a szczególniej Mongo zawiera stały, kanoniczny magazyn danych. Przez *kanoniczny* rozumiemy, że jest taki sam dla wszystkich użytkowników: każdy użytkownik może być na innej stronie, ale główna lista postów jest taka sama dla wszystkich użykowników.
 
-////
+Te dane są przechowane w **Kolekcji** Meteora. Kolekcja jest specjalną strukturą danych, która poprzez publikacje i subskrypcje troszczy się o synchronizację danych w czasie rzeczywistym między każdą podłączoną przeglądarką po stronie klienta i bazą danych Mongo. Przyjrzyjmy się temu bliżej.
 
-////
+Chcemy, aby nasze posty były stałe i aby były współdzielone między wszystkich użytkowników, zatem zaczniemy od utworzenia kolekcji `Posts`, w której będziemy je przechowywali. Jeżeli jeszcze tego nie zrobiłeś, utwórz folder `collections/` w głównym folderze aplikacji i plik `posts.js` w tym folderze. Następnie dodaj:
 
 ~~~js
 Posts = new Meteor.Collection('posts');
 ~~~
 <%= caption "collections/posts.js" %>
 
-<%= commit "4-1", "Added a posts collection" %>
+<%= commit "4-1", "Dodano kolekcję posts." %>
 
-////
+Kod, który nie znajduje się ani w folderze `client/` ani w `server/` będzie uruchamiany po *obu* stronach. Zatem kolekcja `Posts` jest dostępna zarówno po stronie klienta i serwera. Jednakże, sposób działania kolekcji po stronach znacznie różni się od siebie. 
 
 <% note do %>
 
-### To Var Or Not To Var?
+### Używać Var czy nie?
 
-////
+W Meteorze słowo kluczowe `var` ogranicza zagres obiektu do bieżącego pliku. Ponieważ chcemy udostępnić kolekcję `Posts` całej aplikacji, *nie* używamy słowa kluczowego `var`.
 
 <% end %>
 
-////
+Po stronie serwera kolekcja kontaktuje się z bazą danych Mongo, czyta i zapisuje dowolne zmiany. W ten sposób może być porównana do standardowej biblioteki bazy danych. Po stroni klienta kolekcja jest *bezpieczną* kopią *pozdbioru* prawdziwej, kanonicznej kolekcji. Kolekcja po stronie klienta jest na bieżąco i (w większości) niewidowicznie uaktualniana w czasie rzeczywistym z oznaczonym podzbiorem danych.
 
 <% note do %>
 
-### Console vs Console vs Console
+### Konsola vs Konsola vs Konsola
 
-////
+W niniejzym rozdziale zaczniemy korzystać z **konsoli przeglądarki**, której nie należy mylić z **terminalem** czy **konsolą Mongo**. Poniżej znajdziesz szybkie wprowadzenie do każdej z nich.
 
 #### Terminal
 
-<%= screenshot "terminal", "The Terminal" %>
+<%= screenshot "terminal", "Terminal" %>
 
-- ////
-- ////
-- ////
-- ////
+- Wołany na poziomie systemu operacyjnego
+- **Serwerowe** funkcje `console.log()` wypisują tutaj informacje.
+- Tzw. znak zachęty to: `$`. (Linux, Mac OSX)
+- Znany również jako: Shell, Bash
 
-#### Browser Console
+#### Konsola przeglądarki
 
 <%= screenshot "browser-console", "The Browser Console" %>
 
-- ////
-- ////
-- ////
-- ////
+- Wołana z poziomu przeglądarki, uruchamia kod JavaScript
+- **Klienckie** funkcje `console.log()` wypisują tutaj informacje.
+- Znak zachęty to: `❯`.
+- Znana również jako: Konsola JavaScript, Konsola DevTools
 
-#### Mongo Shell
+#### Konsola Mongo
 
-<%= screenshot "mongo-shell", "The Mongo Shell" %>
+<%= screenshot "mongo-shell", "Konsola Mongo" %>
 
-- ////
-- ////
-- ////
-- ////
+- Uruchamiana z terminala za pomocą `meteor mongo` lub `mrt mongo`.
+- Daje bezpośredni dostęp do bazy danych aplikacji.
+- Znak zachęty:  `>`.
+- Również znana jako: Mongo Shell
 
-////
+Zauważ, że w każdym przypadku, nie jest wymagane wpisywanie znaku zachęty (`$`, `❯`, czy `>`), jako części komendy. Możesz także przyjąć, że jakakolwiek linia *nie* zaczynająca się od znaku zachęty jest wynikiem wywołania poprzedniej komendy.
 
 <% end %>
 
-### Server-Side Collections
+### Kolekcje po stronie serwera
 
-////
+Po stronie serwera kolekcja działa jako API dla bazy danych Mongo. Pozwala to na pisanie w Twoim kodzie wykonywanym na serwerze poleceń takich jak `Posts.insert()` czy `Posts.update()`, które zmienią dane w kolekcji `posts` zapisanej w bazie danych Mongo.
 
-////
+Aby zajrzeć bezpośrednio do bazy danych Mongo, otwórz drugie okno terminala (podczas gdy `meteor` jest uruchomiony w pierwszym oknie) i przejdź do głównego folderu aplikacji. Następnie wykonaj polecenie `meteor mongo` aby uruchomić konsolę Mongo, w której możesz wpisywać standardowe polecenia Mongo (jak zwykle możesz opuścić terminal korzystając z kombinacji klawiszy `ctrl+c`. Przykładowo wstawmy nowy post do bazy danych:
 
 ~~~bash
 > db.posts.insert({title: "A new post"});
@@ -89,37 +89,37 @@ Posts = new Meteor.Collection('posts');
 > db.posts.find();
 { "_id": ObjectId(".."), "title" : "A new post"};
 ~~~
-<%= caption "The Mongo Shell" %>
+<%= caption "Konsola Mongo" %>
 
 <% note do %>
 
-### Mongo on Meteor.com
+### Mongo na Meteor.com
 
-////
+Zauważ, że gdy umieszczasz swoją aplikację na *.meteor.com, możesz mieć również dostęp do produkcyjnej bazy danych za pomocą polecenia `meteor mongo mojaAplikacja`. 
 
-////
+Możesz również przeczytać logi aplikacji przez wpisanie polecenia `meteor logs mojaAplikacja`.
 
 <% end %>
 
-////
+Składnia Mongo wydaje się być znajoma, pownieważ używa interfejsu Javascript. Nie będziemy przeprowadzali kolejnych zmian w konsoli Mongo, ale od czasu do czasu sprawdzimy czy oczekiwane dane faktycznie znajdują się w bazie.
 
-### Client-Side Collections
+### Kolekcje po stronie klienta
 
-////
+Kolekcje stają się bardziej interesujące po stronie klienta. Gdy deklarujesz `Posts = new Meteor.Collection('posts');` tworzysz po stronie klienta _lokalny, dostępny z poziomu przeglądarki, cache_ prawdziwej kolekcji znajdującej się w bazie danych Mongo. Gdy wspominamy, że kolekcje po stronie klienta działają jako cache, mamy na myśli, że zawierają *podzbiór* danych oraz *bardzo* szybki dostęp do tych danych.
 
-////
+Ważne jest, aby zrozumieć to w tym miejscu, ponieważ jest to fundamentalna zasada działania Meteora. Ogólnie rzecz biorąc, kolekcje po stronie klienta składają się z podzbioru wszystkich dokumentów zapisanych w kolekcji Mongo (nie chcemy przecież wysyłać całej bazy danych klientowi).
 
-////
+Po drugie, te dokumenty są przechowywane *w pamięci przeglądarki*, co oznacza że dostęp do nich jest praktycznie natychmiastowy. Nie ma zatem powolnego oczekiwania na odpowiedź serwera lub bazy danych na pobranie danych po zawołaniu `Posts.find()` po stronie klienta, ponieważ dane są już załadowane i dostępne.
 
 <% note do %>
 
-### Introducing MiniMongo
+### Wprowadzenie do MiniMongo
 
-////
+Implementacja bazy danych Mongo po stronie klienta ma nazwę MiniMongo. Nie jest to jeszcze doskonała implementacja i można napotkać pewne ograniczenia, które nie działają jeszcze w Minimongo. Mimo wszystko, wszystkie pojęcia opisane w tej książce działają podobnie w Mongo i MiniMongo.
 
 <% end %>
 
-### Client-Server Communication
+### Komunikacja Klient-Serwer
 
 ////
 
