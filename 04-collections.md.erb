@@ -105,15 +105,15 @@ Składnia Mongo wydaje się być znajoma, pownieważ używa interfejsu Javascrip
 
 ### Kolekcje po stronie klienta
 
-////
+Kolekcje stają się bardziej interesujące po stronie klienta. Gdy deklarujesz `Posts = new Meteor.Collection('posts');` tworzysz po stronie klienta _lokalny, dostępny z poziomu przeglądarki, cache_ prawdziwej kolekcji znajdującej się w bazie danych Mongo. Gdy wspominamy, że kolekcje po stronie klienta działają jako cache, mamy na myśli, że zawierają *podzbiór* danych oraz *bardzo* szybki dostęp do tych danych.
 
-////
+Ważne jest, aby zrozumieć to w tym miejscu, ponieważ jest to fundamentalna zasada działania Meteora. Ogólnie rzecz biorąc, kolekcje po stronie klienta składają się z podzbioru wszystkich dokumentów zapisanych w kolekcji Mongo (nie chcemy przecież wysyłać całej bazy danych klientowi).
 
-////
+Po drugie, te dokumenty są przechowywane *w pamięci przeglądarki*, co oznacza że dostęp do nich jest praktycznie natychmiastowy. Nie ma zatem powolnego oczekiwania na odpowiedź serwera lub bazy danych na pobranie danych po zawołaniu `Posts.find()` po stronie klienta, ponieważ dane są już załadowane i dostępne.
 
 <% note do %>
 
-### Introducing MiniMongo
+### Wprowadzenie do MiniMongo
 
 ////
 
