@@ -77,11 +77,11 @@ Zauważ, że w każdym przypadku, nie jest wymagane wpisywanie znaku zachęty (`
 
 <% end %>
 
-### Server-Side Collections
+### Kolekcje po stronie serwera
 
-////
+Po stronie serwera kolekcja działa jako API dla bazy danych Mongo. Pozwala to na pisanie w Twoim kodzie wykonywanym na serwerze poleceń takich jak `Posts.insert()` czy `Posts.update()`, które zmienią dane w kolekcji `posts` zapisanej w bazie danych Mongo.
 
-////
+Aby zajrzeć bezpośrednio do bazy danych Mongo, otwórz drugie okno terminala (podczas gdy `meteor` jest uruchomiony w pierwszym oknie) i przejdź do głównego folderu aplikacji. Następnie wykonaj polecenie `meteor mongo` aby uruchomić konsolę Mongo, w której możesz wpisywać standardowe polecenia Mongo (jak zwykle możesz opuścić terminal korzystając z kombinacji klawiszy `ctrl+c`. Przykładowo wstawmy nowy post do bazy danych:
 
 ~~~bash
 > db.posts.insert({title: "A new post"});
@@ -89,21 +89,21 @@ Zauważ, że w każdym przypadku, nie jest wymagane wpisywanie znaku zachęty (`
 > db.posts.find();
 { "_id": ObjectId(".."), "title" : "A new post"};
 ~~~
-<%= caption "The Mongo Shell" %>
+<%= caption "Konsola Mongo" %>
 
 <% note do %>
 
-### Mongo on Meteor.com
+### Mongo na Meteor.com
 
-////
+Zauważ, że gdy umieszczasz swoją aplikację na *.meteor.com, możesz mieć również dostęp do produkcyjnej bazy danych za pomocą polecenia `meteor mongo mojaAplikacja`. 
 
-////
+Możesz również przeczytać logi aplikacji przez wpisanie polecenia `meteor logs mojaAplikacja`.
 
 <% end %>
 
-////
+Składnia Mongo wydaje się być znajoma, pownieważ używa interfejsu Javascript. Nie będziemy przeprowadzali kolejnych zmian w konsoli Mongo, ale od czasu do czasu sprawdzimy czy oczekiwane dane faktycznie znajdują się w bazie.
 
-### Client-Side Collections
+### Kolekcje po stronie klienta
 
 ////
 
