@@ -44,36 +44,36 @@ Po stronie serwera kolekcja kontaktuje się z bazą danych Mongo, czyta i zapisu
 
 ### Konsola vs Konsola vs Konsola
 
-////
+W niniejzym rozdziale zaczniemy korzystać z **konsoli przeglądarki**, której nie należy mylić z **terminalem** czy **konsolą Mongo**. Poniżej znajdziesz szybkie wprowadzenie do każdej z nich.
 
 #### Terminal
 
-<%= screenshot "terminal", "The Terminal" %>
+<%= screenshot "terminal", "Terminal" %>
 
-- ////
-- ////
-- ////
-- ////
+- Wołany na poziomie systemu operacyjnego
+- **Serwerowe** funkcje `console.log()` wypisują tutaj informacje.
+- Tzw. znak zachęty to: `$`. (Linux, Mac OSX)
+- Znany również jako: Shell, Bash
 
-#### Browser Console
+#### Konsola przeglądarki
 
 <%= screenshot "browser-console", "The Browser Console" %>
 
-- ////
-- ////
-- ////
-- ////
+- Wołana z poziomu przeglądarki, uruchamia kod JavaScript
+- **Klienckie** funkcje `console.log()` wypisują tutaj informacje.
+- Znak zachęty to: `❯`.
+- Znana również jako: Konsola JavaScript, Konsola DevTools
 
-#### Mongo Shell
+#### Konsola Mongo
 
-<%= screenshot "mongo-shell", "The Mongo Shell" %>
+<%= screenshot "mongo-shell", "Konsola Mongo" %>
 
-- ////
-- ////
-- ////
-- ////
+- Uruchamiana z terminala za pomocą `meteor mongo` lub `mrt mongo`.
+- Daje bezpośredni dostęp do bazy danych aplikacji.
+- Znak zachęty:  `>`.
+- Również znana jako: Mongo Shell
 
-////
+Zauważ, że w każdym przypadku, nie jest wymagane wpisywanie znaku zachęty (`$`, `❯`, czy `>`), jako części komendy. Możesz także przyjąć, że jakakolwiek linia *nie* zaczynająca się od znaku zachęty jest wynikiem wywołania poprzedniej komendy.
 
 <% end %>
 
