@@ -119,27 +119,27 @@ Implementacja bazy danych Mongo po stronie klienta ma nazwę MiniMongo. Nie jest
 
 <% end %>
 
-### Komunikacja Klient-Serwer
+### Komunikacja między Klientem i Serwerem
 
-////
+Kluczowym zagadnieniem jest sposób, w jaki kolekcja po stronie klienta synchronizuje dane z kolekcją serwerową o tej samej nazwie (w naszym przypadku `'posts'`).
 
-////
+Zamiast wyjaśniać to szczegółowo zobaczmy co dzieje się podczas synchronizacji.
 
-////
+Otwórz dwa okna przeglądarki i uruchom konsolę przeglądarki w każdej z nich. Następnie uruchom konsolę Mongo z linii komend. W tym momencie, powinieneś zobaczyć w każdym z trzech miejsc pojedyńczy dokument, który utworzyliśmy wcześniej.
 
 ~~~bash
 > db.posts.find();
 {title: "A new post", _id: ObjectId("..")};
 ~~~
-<%= caption "The Mongo Shell" %>
+<%= caption "Konsola Mongo" %>
 
 ~~~js
 ❯ Posts.findOne();
 {title: "A new post", _id: LocalCollection._ObjectID};
 ~~~
-<%= caption "First browser console" %>
+<%= caption "Konsola pierwszej przeglądarki" %>
 
-////
+Utwórzmy nowy post. W jednym z okien przeglądarki wykonaj komendę insert:
 
 ~~~js
 ❯ Posts.find().count();
@@ -149,54 +149,54 @@ Implementacja bazy danych Mongo po stronie klienta ma nazwę MiniMongo. Nie jest
 ❯ Posts.find().count();
 2
 ~~~
-<%= caption "First browser console" %>
+<%= caption "Konsola pierwszej przeglądarki" %>
 
-////
+Bez większych niespodzianek post został dodany do lokalnej kolekcji. Sprawdźmy teraz bazę Mongo:
 
 ~~~bash
 ❯ db.posts.find();
 {title: "A new post", _id: ObjectId("..")};
 {title: "A second post", _id: 'yyy'};
 ~~~
-<%= caption "The Mongo Shell" %>
+<%= caption "Konsola Mongo" %>
 
-////
+Jak widać, post został przeniesiony z powrotem do bazy danych Mongo po stronie serwera bez potrzeby pisania pojedyńczej linii kodu (tak naprawdę to napisaliśmy _jedną_ linię kodu: `new Meteor.Collection('posts')`). Ale to nie wszystko!
 
-////
+Przejdź do drugiej instancji przeglądarki i wpisz w konsoli:
 
 ~~~js
 ❯ Posts.find().count();
 2
 ~~~
-<%= caption "Second browser console" %>
+<%= caption "Druga konsola przeglądarki" %>
 
-////
+Post również jest tutaj dostępny! Pomimo tego, że nie odświeżyliśmy strony czy w jakimkolwiek stopniu działaliśmy z drugą przeglądarką, jak również nie napisaliśmy nowego kodu, który miałby przesłać uaktualnione dane. Wszystko to stało się automagicznie -- oraz natychmiastowo, stanie się to oczywiste później.
 
-////
+Co dokładnie się stało - nasza kolekcja po stronie serwera została poinformowana przez klienta o nowym poście i przejęła zadanie dystrybucji powyższego posta do bazy danych Mongo i do wszystkich podłączonych kolekcji `post`.
 
-////
+Czytanie postów z poziomu konsoli przeglądarki nie jest za bardzo użyteczne. Nauczymy się, jak przekazać dane szablonom i konsekwentnie przekształcić nasz pierwszy prototyp HTML w aplikację webową działającą w czasie rzeczywistym.
 
-### Keeping it Real-time
+### Działanie w czasie rzeczywistym
 
-////
+Obserwacja zawartości kolekcji w konsoli przeglądarki to jedno, a wyświetlanie i zmienianie danych na ekranie, to całkiem co innego. Aby to osiągnąć przekształcimy naszą aplikację z prostej *strony* wyświetlającej statyczne dane w *aplikację* webową czasu rzeczywistego z dynamicznymi, zmieniającymi się danymi.
 
-////
+Spójrzmy poniżej, jak to osiągnąć.
 
-### Populating the Database
+### Zapełnienie bazy danych
 
-////
+Pierwszą rzeczą, którą zrobimy, będzie wstawienie danych do bazy danych. Osiągniemy to za pomocą pliku zawierającego dane początkowe (ang. fixture). Plik zawiera uporządkowany zbiór danych, który zostanie wstawiony do bazy podczas pierwszego uruchomienia serwera.
 
-////
+Upewnijmy się najpierw, że baza danych jest pusta. Użyjemy polecenia `meteor reset`, które opróżnia bazę danych i resetuje cały projekt. Oczywiście musisz być bardzo ostrożny z wykonywaniem tej komendy gdy zaczniesz pracę z prawdziwymi projektami.
 
-////
+Zatrzymaj serwer Meteora (za pomocą `ctrl-c`), a następnie wykonaj z linii komend polecenie:
 
 ~~~bash
 $ meteor reset
 ~~~
 
-////
+Polecenie reset całkowicie usuwa bazę danych Mongo. Jest to użyteczne polecenie podczas implementacji aplikacji, gdzie istnieje duże prawdopodobieństwo wprowadzenia bazy danych w niespójny stan.
 
-////
+Teraz, skoro baza danych jest pusta, możemy dodać poniższy kod, który wczyta trzy posty po każdym starcie serwerea gdy kolekcja `Posts` jest pusta:
 
 ~~~js
 if (Posts.find().count() === 0) {
@@ -221,11 +221,11 @@ if (Posts.find().count() === 0) {
 ~~~
 <%= caption "server/fixtures.js" %>
 
-<%= commit "4-2", "Added data to the posts collection." %>
+<%= commit "4-2", "Dodane dane do kloekcji posts." %>
 
-////
+Umieściliśmy powyższy plik w folderze `server/`, zatem nie zostanie on nigdy załadowany do przeglądarki użytkownika. Kod zostanie natychmiastowo uruchomiony po starcie serwera i wykona funkcje `insert`, które dodadzą trzy proste posty do kolekcji `Posts`. Ponieważ nie zatroszczyliśmy się jeszcze o bezpieczeństwo danych, nie ma żadnej różnicy między uruchomieniem tych poleceń po stronie serwera i klienta.
 
-////
+Teraz uruchom ponownie serwer za pomocą polecenia `meteor` i powyższe trzy posty zostaną wprowadzone do bazy danych.
 
 ### Wiring the data to our HTML with helpers
 
