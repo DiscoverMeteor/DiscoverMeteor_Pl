@@ -119,27 +119,27 @@ Implementacja bazy danych Mongo po stronie klienta ma nazwę MiniMongo. Nie jest
 
 <% end %>
 
-### Komunikacja Klient-Serwer
+### Komunikacja między Klientem i Serwerem
 
-////
+Kluczowym zagadnieniem jest sposób, w jaki kolekcja po stronie klienta synchronizuje dane z kolekcją serwerową o tej samej nazwie (w naszym przypadku `'posts'`).
 
-////
+Zamiast wyjaśniać to szczegółowo zobaczmy co dzieje się podczas synchronizacji.
 
-////
+Otwórz dwa okna przeglądarki i uruchom konsolę przeglądarki w każdej z nich. Następnie uruchom konsolę Mongo z linii komend. W tym momencie, powinieneś zobaczyć w każdym z trzech miejsc pojedyńczy dokument, który utworzyliśmy wcześniej.
 
 ~~~bash
 > db.posts.find();
 {title: "A new post", _id: ObjectId("..")};
 ~~~
-<%= caption "The Mongo Shell" %>
+<%= caption "Konsola Mongo" %>
 
 ~~~js
 ❯ Posts.findOne();
 {title: "A new post", _id: LocalCollection._ObjectID};
 ~~~
-<%= caption "First browser console" %>
+<%= caption "Konsola pierwszej przeglądarki" %>
 
-////
+Utwórzmy nowy post. W jednym z okien przeglądarki wykonaj komendę insert:
 
 ~~~js
 ❯ Posts.find().count();
@@ -149,34 +149,34 @@ Implementacja bazy danych Mongo po stronie klienta ma nazwę MiniMongo. Nie jest
 ❯ Posts.find().count();
 2
 ~~~
-<%= caption "First browser console" %>
+<%= caption "Konsola pierwszej przeglądarki" %>
 
-////
+Bez większych niespodzianek post został dodany do lokalnej kolekcji. Sprawdźmy teraz bazę Mongo:
 
 ~~~bash
 ❯ db.posts.find();
 {title: "A new post", _id: ObjectId("..")};
 {title: "A second post", _id: 'yyy'};
 ~~~
-<%= caption "The Mongo Shell" %>
+<%= caption "Konsola Mongo" %>
 
-////
+Jak widać, post został przeniesiony z powrotem do bazy danych Mongo po stronie serwera bez potrzeby pisania pojedyńczej linii kodu (tak naprawdę to napisaliśmy _jedną_ linię kodu: `new Meteor.Collection('posts')`). Ale to nie wszystko!
 
-////
+Przejdź do drugiej instancji przeglądarki i wpisz w konsoli:
 
 ~~~js
 ❯ Posts.find().count();
 2
 ~~~
-<%= caption "Second browser console" %>
+<%= caption "Druga konsola przeglądarki" %>
 
-////
+Post również jest tutaj dostępny! Pomimo tego, że nie odświeżyliśmy strony czy w jakimkolwiek stopniu działaliśmy z drugą przeglądarką, jak również nie napisaliśmy nowego kodu, który miałby przesłać uaktualnione dane. Wszystko to stało się automagicznie -- oraz natychmiastowo, stanie się to oczywiste później.
 
-////
+Co dokładnie się stało - nasza kolekcja po stronie serwera została poinformowana przez klienta o nowym poście i przejęła zadanie dystrybucji powyższego posta do bazy danych Mongo i do wszystkich podłączonych kolekcji `post`.
 
-////
+Czytanie postów z poziomu konsoli przeglądarki nie jest za bardzo użyteczne. Nauczymy się, jak przekazać dane szablonom i konsekwentnie przekształcić nasz pierwszy prototyp HTML w aplikację webową działającą w czasie rzeczywistym.
 
-### Keeping it Real-time
+### Działanie w czasie rzeczywistym
 
 ////
 
