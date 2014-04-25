@@ -227,18 +227,18 @@ Umieściliśmy powyższy plik w folderze `server/`, zatem nie zostanie on nigdy 
 
 Teraz uruchom ponownie serwer za pomocą polecenia `meteor` i powyższe trzy posty zostaną wprowadzone do bazy danych.
 
-### Wiring the data to our HTML with helpers
+### Przekazanie danych z bazy do HTML za pomocą helperów szablonu
 
-////
+Teraz, gdy otworzymy konsolę przeglądarki, zobaczymy wszystkie trzy posty wczytane do MiniMongo:
 
 ~~~js
 ❯ Posts.find().fetch();
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Aby przekształcić te dane w renderowany HTML, możemy użyć funkcji pomocniczych szablonu (helper). W rozdziale 3 zobaczyliśmy jak Meteor pozwala na połączenie *kontekstu danych* z szablonami Handlebards aby budować strony zawierające proste struktury danych. W ten sam sposób możemy je połączyć z danymi z kolekcji. Po prostu zamienimy statyczny obiekt `postsData` przez dynamiczną kolekcję.
 
-////
+Skoro o tym mowa, możesz usunąć kod `postsData`. Oto jak `posts_list.js` powinien teraz wyglądać:
 
 ~~~js
 Template.postsList.helpers({
@@ -250,7 +250,7 @@ Template.postsList.helpers({
 <%= caption "client/views/posts/posts_list.js" %>
 <%= highlight "2~4" %>
 
-<%= commit "4-3", "Wired collection into `postsList` template." %>
+<%= commit "4-3", "Połączenie kolekcji z szablonem `postsList`." %>
 
 <% note do %>
 
