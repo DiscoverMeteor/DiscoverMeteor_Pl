@@ -70,9 +70,9 @@ Następnie przejdźmy do tego folderu używając `cd` i zacznijmy używać konso
 $ cd github_microscope
 ~~~
 
-////
+Teraz gdy sklonowaliśmy respozytorium z GitHub, pobraliśmy *cały* kod aplikacji, co oznacza że mamy dostęp do najnowszego commita.
 
-////
+Na szczęście jest możliwość wrócenia do dowolnego miejsca w czasie i pobranie (ang. "check out") danego commita bez wpływania na pozostałe. Wypróbujmy to teraz:
 
 ~~~bash
 $ git checkout chapter3-1
@@ -90,17 +90,17 @@ do so (now or later) by using -b with the checkout command again. Example:
 HEAD is now at a004b56... Added basic posts list template and static data.
 ~~~
 
-////
+Git poinformował, że jesteśmy obecnie w stanie “detached HEAD”, co oznacza, że możemy obserwować poprzednie commity, ale nie możemy ich modyfikować. Możesz wyobrazić sobie w tym momencie wróżkę patrzącą w szklaną kulę. 
 
-////
+(Uwaga: Git posiada w swoim arsenale również komendy pozwalające na *zmianę* poprzednich commitów. Tu mógłbyś wyobrazić sobie podróżnika w czasie zmieniającego przeszłość, ale jest to poza zakresem tego krótkiego wstępu do Gita).
 
-////
+Powodem, dla którego mogłeś wpisać `chapter3-1` jest to, że otagowaliśmy wszystkie commity Microscope poprawnym znacznikiem rozdziału. Gdybyśmy tego nie zrobili, konieczne byłoby odnalezienie **hasha** lub mówiąc inaczej unikalnego idetyikatora danego commita.
 
-////
+Ponownie w takim przypadku GitHub ułatwia pracę. Można znaleźć tag commita w dolnym prawym rogu niebieskiego przycisku nagłówka, jak pokazano poniżej:
 
-<%= screenshot "s3-4", "Finding a commit hash." %>
+<%= screenshot "s3-4", "Znajdowanie hasha commita." %>
 
-////
+Wypróbujmy zatem użyć hash zamiast taga:
 
 ~~~bash
 $ git checkout c7af59e425cd4e17c20cf99e51c8cd78f82c9932
@@ -108,7 +108,7 @@ Previous HEAD position was a004b56... Added basic posts list template and static
 HEAD is now at c7af59e... Augmented the postsList route to take a limit
 ~~~
 
-////
+A co, jeżeli znudzi nam się patrzenie w szklaną kulę i chcemy wrócić do stanu początkowego? W takim przypadku nakazujemy Git, aby pobrał branch **master**:
 
 ~~~bash
 $ git checkout master
