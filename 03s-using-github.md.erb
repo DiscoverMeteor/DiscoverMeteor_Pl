@@ -1,78 +1,78 @@
 ---
-title: Using Git & GitHub
+title: Używanie Git & GitHub
 slug: github
 date: 0003/01/02
 number: 3.5
 sidebar: true
-contents: Learn how to use GitHub to follow along with the book.
+contents: Jak używać GitHub pracując z książką.
 paragraphs: 32
 ---
 
-////
+[GitHub](https://github.com/) jest społecznościowym repozytorium dla projektów open-source bazujących na systemie kontroli wersji [Git](http://git-scm.com/) i jego podstawową funkcją jest ułatwienie współdzielenia kodu i współpracy przy pracy nad projektami.
 
-////
+Ten rozdział zakłada, że nie jesteś zaznajomiony z Git i GitHub. Jeżeli znasz oba, możesz przeskoczyć do następnego rozdziału!
 
-### Being Committed
+### Praca z commitami
 
-////
+Podstawowym narzędziem, zmianą części pliku jest *commit*. Możesz myślić o commit jak o zrzucie stanu bazy plików w danym momencie czasu.
 
-////
+Zamiast dostarczenia całego kodu Microcope, robiliśmy takie zrzuty w trakcie pisania książki i możesz je zobaczyć online na GitHub.
 
-////
+Przykładowo, tak wygląda [ostatni commit poprzedniego rozdziału](https://github.com/DiscoverMeteor/Microscope/commit/chapter3-2):
 
-<%= screenshot "s3-1", "A Git commit as shown on GitHub." %>
+<%= screenshot "s3-1", "Commit Git wyświetlany na GitHub." %>
 
-////
+Możesz tutaj zobaczć "diff" (skrót z ang. difference) pliku `post_item.js`, innymi słowy zmiany, jakie zostały dokonane w danym `commicie`. W tym przypadku, stworzyliśmy od postaw plik `posts_item.js`, zatem cała jego zawartość jest podświetlona na zielono.
 
-////
+Porównajmy ten przykład z przykładem z [dalszej części książki](https://github.com/DiscoverMeteor/Microscope/commit/chapter13-1):
 
-<%= screenshot "s3-2", "Modifying code." %>
+<%= screenshot "s3-2", "Wprowadzanie zmian kodu." %>
 
-////
+Tym razem wyłącznie zmienione linie zostały podświetlone na zielono.
 
-////
+Oczywiście czasami ani nie dodajesz ani zmieniasz linie kody, ale [je usuwasz](https://github.com/DiscoverMeteor/Microscope/commit/chapter12-2): 
 
-<%= screenshot "s3-3", "Deleting code." %>
+<%= screenshot "s3-3", "Usuwanie kodu." %>
 
-////
+Pierwszy raz użyliśmy GitHub: zmiany są widoczne natychmiastowo.
 
-### Browsing A Commit's Code
+### Przeglądanie kodu commita
 
-////
+Okno przeglądania commita Gita pokazuje zmiany zawarte w danym commicie, ale czasem chciałbyś spojrzeć na pliki, które *nie uległy zmianie*, aby się upewnić, że ich zawartość jest poprawna w danym momencie czasu.
 
-////
+Ponownie GitHub okazuje się pomocny. Gdy jesteś na stronie commita, kliknij na przycisk **Browse code**:
 
-<%= screenshot "s3-5", "The Browse code button." %>
+<%= screenshot "s3-5", "Przycisk `Browse code`." %>
 
-////
+Będziesz miał teraz dostęp do całego repozytorium *w momencie danego commita*.
 
-<%= screenshot "s3-6", "The repository at commit 3-2." %>
+<%= screenshot "s3-6", "Repozytorium podczas commita 3-2." %>
 
-////
+GitHub nie pokazuje wielu wizualizacji tego, co obserwujemy patrząc na commit, ale możesz go porównać z ""normalnym" widokiem brancha `master` i zerknąć na różnice w strukturze pliku:
 
-<%= screenshot "s3-7", "The repository at commit 14-2." %>
+<%= screenshot "s3-7", "Repozytorium podczas commita 14-2." %>
 
-### Accessing A Commit Locally
+### Lokalny dostęp do commita
 
-////
+Zobaczyliśmy przed chwilą, jak przeglądać kod danego commita online na GitHub. Ale co jeśli chciałbyć osiągnąć to samo lokalnie? Przykładowo, mógłbyś mieć ochotę na uruchomienie aplikacji lokalnie na danym commicie, aby zobaczyć jak ma się zachowywać w danym momencie czasu.
 
-////
+Aby to osiągnąć, przejdziemy przez pierwsze kroki (przynajmniej w tej książce) z konsolową aplikacją `git`. Dla początkujących, [upewnij się, że zainstalowałeś Git](http://git-scm.com/downloads). Następnie **sklonuj** (inaczej mówiąc, pobierz z serwera kopię) repozytorium Microscope za pomocą:
 
 ~~~bash
 $ git clone git@github.com:DiscoverMeteor/Microscope.git github_microscope
 ~~~
 
-////
+Ostatni parametr `github_microscope` jest lokalną nazwą repozytorium, do którego będziesz klonował aplikację. Zakładając, że już posiadasz folder `microscope`, wybierz dowolną nazwę (nie musi być taka sama, jak repozytorium na GitHub).
 
-////
+Następnie przejdźmy do tego folderu używając `cd` i zacznijmy używać konsolową aplikację `git`:
 
 ~~~bash
 $ cd github_microscope
 ~~~
 
-////
+Teraz gdy sklonowaliśmy respozytorium z GitHub, pobraliśmy *cały* kod aplikacji, co oznacza że mamy dostęp do najnowszego commita.
 
-////
+Na szczęście jest możliwość wrócenia do dowolnego miejsca w czasie i pobranie (ang. "check out") danego commita bez wpływania na pozostałe. Wypróbujmy to teraz:
 
 ~~~bash
 $ git checkout chapter3-1
@@ -90,17 +90,17 @@ do so (now or later) by using -b with the checkout command again. Example:
 HEAD is now at a004b56... Added basic posts list template and static data.
 ~~~
 
-////
+Git poinformował, że jesteśmy obecnie w stanie “detached HEAD”, co oznacza, że możemy obserwować poprzednie commity, ale nie możemy ich modyfikować. Możesz wyobrazić sobie w tym momencie wróżkę patrzącą w szklaną kulę. 
 
-////
+(Uwaga: Git posiada w swoim arsenale również komendy pozwalające na *zmianę* poprzednich commitów. Tu mógłbyś wyobrazić sobie podróżnika w czasie zmieniającego przeszłość, ale jest to poza zakresem tego krótkiego wstępu do Gita).
 
-////
+Powodem, dla którego mogłeś wpisać `chapter3-1` jest to, że otagowaliśmy wszystkie commity Microscope poprawnym znacznikiem rozdziału. Gdybyśmy tego nie zrobili, konieczne byłoby odnalezienie **hasha** lub mówiąc inaczej unikalnego idetyikatora danego commita.
 
-////
+Ponownie w takim przypadku GitHub ułatwia pracę. Można znaleźć tag commita w dolnym prawym rogu niebieskiego przycisku nagłówka, jak pokazano poniżej:
 
-<%= screenshot "s3-4", "Finding a commit hash." %>
+<%= screenshot "s3-4", "Znajdowanie hasha commita." %>
 
-////
+Wypróbujmy zatem użyć hash zamiast taga:
 
 ~~~bash
 $ git checkout c7af59e425cd4e17c20cf99e51c8cd78f82c9932
@@ -108,32 +108,34 @@ Previous HEAD position was a004b56... Added basic posts list template and static
 HEAD is now at c7af59e... Augmented the postsList route to take a limit
 ~~~
 
-////
+A co, jeżeli znudzi nam się patrzenie w szklaną kulę i chcemy wrócić do stanu początkowego? W takim przypadku nakazujemy Git, aby pobrał branch **master**:
 
 ~~~bash
 $ git checkout master
 ~~~
 
-### Historical Perspective
+Zanotuj, że możesz również uruchomić aplikację za pomocą komendy `meteor` w dowolnym momencie tego procesu, nawet w stanie "detached HEAD". Może zaistnieć konieczność zawołania `mrt update` jeżeli Meteor wyświetli komunikat błędu o brakującym pakiecie, ponieważ kod pakietów nie jest dołączony do repozytorium Git dla Microscope.
 
-////
+### Oglądanie historii zmian
 
-////
+Często napotkasz następujący scenariusz: patrzysz na plik i zauważasz zmiany, których wcześniej nie widziałeś. Nie pamiętasz *kiedy* plik uległ zmianie. Możesz sprawdzić każdy commit po kolei, aż nie znajdziesz prawidłowego, ale istnieje łatwiejszy sposób aby to odnaleźć dzięki funkcji **Historia** (ang. History) w GitHub.
 
-<%= screenshot "s3-8", "GitHub's History button." %>
+Po pierwsze, znajdź dany plik w repozytorium w GitHub, następnie odszukaj przycisk "History.
 
-////
+<%= screenshot "s3-8", "Przycisk History w GitHub." %>
 
-<%= screenshot "s3-9", "Displaying a file's history." %>
+Widzimy teraz uporządkowaną listę commitów, które zmieniły dany plik:
 
-### The Blame Game
+<%= screenshot "s3-9", "Wyświetlenie historii plików." %>
 
-////
+### Znajdowanie osoby odpowiedzialnej za dokonane zmiany
 
-<%= screenshot "s3-10", "GitHub's Blame button." %>
+Aby zebrać wszystkie informacje, przyjrzymy się bliżej **Blame**.
 
-////
+<%= screenshot "s3-10", "Przycisk Blame w GitHub." %>
 
-<%= screenshot "s3-11", "GitHub's Blame view." %>
+Uporządkowany widok informuje kto i w jakim commicie modyfikował dany plik (innymi słowo, kogo winić za popełnione czyny, jeżeli coś nie chce działać).
 
-////
+<%= screenshot "s3-11", "Widok Blame w GitHub." %>
+
+Ponieważ Git oraz GitHub są całkiem skomplikowanymi narzędziami, nie mamy zamiaru przedstawić wszystkich informacji na ich temat w pojedyńczym rozdziale. Tak naprawdę dotknęliśmy tylko czubka góry lodowej, ale mamy nadzieję, że przedstawiona wiedza okaże się przydatna podczas dalszego czytania tej książki.
