@@ -3,7 +3,7 @@ title: Kolekcje
 slug: collections
 date: 0004/01/01
 number: 4
-contents: O fundamentalnej funkcjonalności Meteora, reaktywnych kolekcjach.|Zrozumiesz jak działa synchronizacja danych w Meteorze.|Zintegrujesz kolekcje z szablonami.|Jak przekształcić nasz podstawowy prototyp w prawdziwą aplikację czasu rzeczywistego!
+contents: O reaktywnych kolekcjach, fundamentalnej funkcjonalności Meteora.|Zrozumiesz jak działa synchronizacja danych w Meteorze.|Zintegrujesz kolekcje z szablonami.|Jak przekształcić nasz podstawowy prototyp w prawdziwą aplikację czasu rzeczywistego!
 paragraphs: 72
 ---
 
@@ -254,21 +254,21 @@ Template.postsList.helpers({
 
 <% note do %>
 
-### Find & Fetch
+### Znajdowanie i pobieranie danych z bazy
 
-////
+Funkcja `find()` w Meteorze zwraca *kursor*, który jest [reaktywnym źródłem danych](http://docs.meteor.com/#find). Jeżeli chemy pobrać jego zawartość, możemy użyć funkcję `fetch()` na tym kursorze, która przekształci go w tablicę z danymi.
 
-////
+W obrębie aplikacji Meteor jest sprytny na tyle, aby iterować po kursorze bez potrzeby jawnego przekształcania go w tablicę. Z tego powodu nie zobaczysz pojawiającej się często w kodzie Meteora funkcji `fetch()` (i jest to powód, dla którego nie użyliśmy jej w powyższym przykładzie).
 
 <% end %>
 
-////
+Teraz, zamiast wczytywać statyczną tablicę z listą postów za pomocą zmiennej, zwracamy kursor do helpera `posts`. Ale co tym sposobem osiągneliśmy? Jeżeli wrócimy do przeglądarki, zobaczymy:
 
-<%= screenshot "4-3", "Using live data" %>
+<%= screenshot "4-3", "Użycie zmiennych danych" %>
 
-////
+Widzimy wyraźnie, że helper `{{#each}}` przeiterował wszystkie dostępne dane z kolekcji `Posts` i wyświetlił je na ekranie. Kolekcja po stronie serwera wczytała posty z bazy danych Mongo, przesłała je do kolekcji klienta, a helper Handlebars przekazał je do szablonu.
 
-////
+Pójdziemy jeden krok naprzód; dodajmy kolejny post w konsoli:
 
 ~~~js
 ❯ Posts.insert({
@@ -277,13 +277,13 @@ Template.postsList.helpers({
   url: 'http://docs.meteor.com'
 });
 ~~~
-<%= caption "Browser console" %>
+<%= caption "Konsola przeglądarki" %>
 
-////
+Spójrz na przeglądarkę -- powinieneś zobaczyć:
 
-<%= screenshot "4-4", "Adding posts via the console" %>
+<%= screenshot "4-4", "Dodawanie postów przez konsolę" %>
 
-////
+Właśnie pierwszy raz byłeś naocznym świadkiem działania reaktywności. Gdy nakazaliśmy Handlebars iterować po kursorze `Posts.find()`, framework wiedział jak obserwować kursor na zachodzące zmiany i patchować wynikowy HTML w najprostszy sposób, aby wyświetlać prawidłowe dane na ekranie.
 
 <% note do %>
 
