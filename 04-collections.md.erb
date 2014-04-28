@@ -287,29 +287,29 @@ Właśnie pierwszy raz byłeś naocznym świadkiem działania reaktywności. Gdy
 
 <% note do %>
 
-### Inspecting DOM Changes
+### Inspekcja zmian w DOM
 
-////
+W tym przypadku, najprostszą zmianą było dodanie kolejnego `<div class="post">...</div>`. Jeżeli chcesz się upewnić, że to się na pewno wydarzyło, otwórz DOM inspector i zaznacz element `<div>` odpowiadający jednemu z istniejących postów. 
 
-////
+Teraz, w konsoli JavaScript, wstaw kolejny post. Jeżeli przejdziesz z powrotem do inspectora DOM, zobaczysz dodatkowy element `<div>` odpowiadający nowemu postowi, ale nadal będzie zaznaczony *ten sam* element `<div>` co poprzednio. Jest to użyteczny sposób na sprawdzenie, kiedy elementy zostały przerenderowane i kiedy nie ulegają zmianie.
 
 <% end %>
 
-### Connecting Collections: Publications and Subscriptions
+### Łączenie kolekcji: Publikacje i Subsrkrypcje
 
-////
+Do tej pory używaliśmy pakietu `autopublish`, który nie jest zamierzony do użycia w środowisku produkcyjnym. Jak nazwa wskazuje, pakiet ten automatycznie publikuje w całości wszystkie kolekcje każdemu podłączonemu klientowi. Nie jest to, co chcemy osiągnąć, więc wyłączmy to.
 
-////
+Otwórz nowe okno terminala i wpisz:
 
 ~~~bash
 $ meteor remove autopublish
 ~~~
 
-////
+Ma to efekt natychmiastowy. Jeżeli będziesz obserwował przeglądarkę, zobaczysz, że wszystkie posty zniknęły! Dzieje się tak, poniewaź polegaliśmy na pakiecie `autopublish`, który tworzył lustrzane odbicie wszystkich postów z bazy danych w kolekcji po stronie klienta.
 
-////
+W końcu będzieli musieli się upewnić, że przesyłamy wyłącznie te posty, które użytkownik będzie miał zobaczyć (biorąc również po uwagę np. dzielenie dokumentu na strony). Na teraz, ustawimy publikację kolekcji `Posts` w całości.
 
-////
+Aby to osiągnąć, utworzymy prostą funkcję `publish()`, która zwraca kursor posiadający referencję do wszystkich postów:
 
 ~~~js
 Meteor.publish('posts', function() {
@@ -318,17 +318,17 @@ Meteor.publish('posts', function() {
 ~~~
 <%= caption "server/publications.js" %>
 
-////
+Po stronie klienta musimy *zasubskrybować* publikację. Dodamy poniższą linię do `main.js`:
 
 ~~~js
 Meteor.subscribe('posts');
 ~~~
 <%= caption "client/main.js" %>
 
-<%= commit "4-4", "Removed `autopublish` and set up a basic publication." %>
+<%= commit "4-4", "Usunięto `autopublish` i ustawiono podstawową publikację." %>
 
-////
+Jeżeli ponownie sprawdzimy przeglądarkę, zobaczymy ponownie nasze posty. Świetnie!
 
-### Conclusion
+### Konluzja
 
-////
+Co zatem osiągnęliśmy? Pomimo tego, że jeszcze nie posiadamy interfejsu użytkownika, mamy funkcjonalną aplikację webową. Moglibyśmy wystawić aplikację na zewnętrznym internetowym serwerze i (używając konsolę przeglądarki) zacząć dodawać posty, które byłyby widziane w każdej podłączonej do strony przeglądarki na całym świecie.
