@@ -48,23 +48,23 @@ Będziesz miał teraz dostęp do całego repozytorium *w momencie danego commita
 
 <%= screenshot "s3-6", "Repozytorium podczas commita 3-2." %>
 
-////
+GitHub nie pokazuje wielu wizualizacji tego, co obserwujemy patrząc na commit, ale możesz go porównać z ""normalnym" widokiem brancha `master` i zerknąć na różnice w strukturze pliku:
 
-<%= screenshot "s3-7", "The repository at commit 14-2." %>
+<%= screenshot "s3-7", "Repozytorium podczas commita 14-2." %>
 
-### Accessing A Commit Locally
+### Lokalny dostęp do commita
 
-////
+Zobaczyliśmy przed chwilą, jak przeglądać kod danego commita online na GitHub. Ale co jeśli chciałbyć osiągnąć to samo lokalnie? Przykładowo, mógłbyś mieć ochotę na uruchomienie aplikacji lokalnie na danym commicie, aby zobaczyć jak ma się zachowywać w danym momencie czasu.
 
-////
+Aby to osiągnąć, przejdziemy przez pierwsze kroki (przynajmniej w tej książce) z konsolową aplikacją `git`. Dla początkujących, [upewnij się, że zainstalowałeś Git](http://git-scm.com/downloads). Następnie **sklonuj** (inaczej mówiąc, pobierz z serwera kopię) repozytorium Microscope za pomocą:
 
 ~~~bash
 $ git clone git@github.com:DiscoverMeteor/Microscope.git github_microscope
 ~~~
 
-////
+Ostatni parametr `github_microscope` jest lokalną nazwą repozytorium, do którego będziesz klonował aplikację. Zakładając, że już posiadasz folder `microscope`, wybierz dowolną nazwę (nie musi być taka sama, jak repozytorium na GitHub).
 
-////
+Następnie przejdźmy do tego folderu używając `cd` i zacznijmy używać konsolową aplikację `git`:
 
 ~~~bash
 $ cd github_microscope
