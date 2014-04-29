@@ -124,15 +124,15 @@ $ mup init
 
 ### Konfiguracja Meteor Up
 
-////
+Podczas inicjalizacji nowego projektu Meteor Up stworzy dwa nowe pliki: `mup.json` oraz `settings.json`. 
 
-////
+W `mup.json` znajdziesz wszystkie ustawienia dotyczące publikacji aplikacji, a w `settings.json`, wszystkie ustawienia związane z aplikacją (tokeny OAuth, Google Analytics itp.).
 
-////
+Następnym krokiem jest konfiguracja pliku `mup.json`. Poniżej znajdziesz domyślny plik `mup.json` wygenerowany przez `mup init` i wszystko co należy zrobić, to uzupełnić w nim puste pola:
 
 ~~~js
 {
-  //server authentication info
+  //informacje logowania na serwer
   "servers": [{
     "host": "hostname",
     "username": "root",
@@ -141,13 +141,13 @@ $ mup init
     //"pem": "~/.ssh/id_rsa"
   }],
 
-  //install MongoDB in the server
+  //instaluj MongoDB na serwerze
   "setupMongo": true,
 
-  //location of app (local directory)
+  //ścieżka do aplikacji (lokalny folder)
   "app": "/path/to/the/app",
 
-  //configure environmental
+  //konfiguracja zmiennych środowiskowych
   "env": {
     "ROOT_URL": "http://supersite.com"
   }
@@ -155,7 +155,7 @@ $ mup init
 ~~~
 <%= caption "mup.json" %>
 
-////
+Zapoznajmu się po kolei z każdym z ustawień.
 
 **Server Authentication**
 
