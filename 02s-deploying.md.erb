@@ -175,32 +175,32 @@ Ponieważ nasza konfiguracja Meteor Up jest umieszczona w innym folerze, musimy 
 
 **Zmienne Środowiskowe**
 
-////
+Możesz określić wszystkie zmienne środowiskowe aplikacji (takie jak `ROOT_URL`, `MAIL_URL`, `MONGO_URL`, itd.) w środku bloku `env`. 
 
-### Setting Up and Deploying
+### Ustawienia i publikacja aplikacji
 
-////
+Zanim będziemy mogli opublikować aplikację, musimy przygotować serwer, aby był gotowy na hosting aplikacji Meteora. Na szczęście ten skomplikowany proces został uproszczony do zawołania pojedyńczej komendy!
 
 ~~~bash
 $ mup setup
 ~~~
 
-////
+W zależności od szybkości serwa i łącza może to zająć do kilku minut. Jeżeli wszystko zostało ustawione prawidłowo, możemy opublikować aplikację za pomocą:
 
 ~~~bash
 $ mup deploy
 ~~~
 
-////
+To polecenie przygotuje i opublikuje aplikację Meteora na serwer, który właśnie przygotowaliśmy.
 
-### Displaying Logs
+### Wyświetlanie logów.
 
-////
+Logi są bardzo istotne i Meteor Up umożliwia łatwy dostęp do nich przez emulację polecenia `tail -f`. Wpisz:
 
 ~~~bash
 $ mup logs -f
 ~~~
 
-////
+To podsumowuje nasz przegląd możliwości Meteor Up. Aby uzyskać więcej informacji sugerujemy zaznajomienie się z [repozytorium Meteor Up na GitHub](https://github.com/arunoda/meteor-up).
 
-////
+Powyższe trzy sposoby publikacji aplikacji powinny wystarczyć w większości przypadków. Wiemy, że wielu czytelników wolałoby mieć pełną kontrolę i ustawić serwer Meteora od podstaw. Jest to jednak temat, który może być poruszony innym razem...lub w innej książce!
