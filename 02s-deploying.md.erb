@@ -159,21 +159,21 @@ Zapoznajmu się po kolei z każdym z ustawień.
 
 **Server Authentication**
 
-////
+Zauważysz, że Meteor Up wspiera logowanie za pomocą haseł i prywatnych kluczy (PEM), zatem może być używany z większością firm hostingowych w chmurze.
 
-////
+**Ważna uwaga**: jeżeli zdecydujesz się na użycie logowania za pomocą hasła, zainstaluj najpierw pakiet `sshpass`  ([zgodnie z tym tutorialem](https://gist.github.com/arunoda/7790979)).
 
-**MongoDB Configuration**
+**Konfiguracja MongoDB**
 
-////
+Kolejnym krokiem jest konfiguracja bazy danych MongoDB dla Twojej aplikacji. Polecamy [MongoHQ](https://www.mongohq.com/home) lub jakąkolwiek inną firmę hostingową dla MongoDB, ponieważ oferują profesjonalne wsparcie i lepsze narzędzia do zarządzania bazą.
 
-////
+Jeżeli zdecydowałeś się użyć MongoHQ, ustaw pole `setupMongo` na `false` i dodaj zmienną środowiskową `MONGO_URL` w bloku `env` w pliku `mup.json`. Jeżeli zdecydowałeś się na hosting Meteor Up, ustaw pole `setupMongo` na true, a Meteor Up zatroszczy się o resztę.
 
-**Meteor App Path**
+**Ścieżka Aplikacji Meteora**
 
-////
+Ponieważ nasza konfiguracja Meteor Up jest umieszczona w innym folerze, musimy wskazać Meteorowi z powrotem na naszą aplikację używając pola `app`. Wpisz lokalną ścieżkę, którą możesz otrzymać po wpisaniu `pwd` w konsoli w głównym folderze danej aplikacji.
 
-**Environment Variables**
+**Zmienne Środowiskowe**
 
 ////
 
