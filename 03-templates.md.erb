@@ -114,17 +114,17 @@ Mówiąc inaczej, rola szablonów jest ograniczona do wyświetlania lub iterowan
 
 <% note do %>
 
-### Managerowie?
+### Manager?
 
-////
+Gdy zapytaliśmy programistów, jakie nazwy nadają managerom szablonu, połowa nazwała je "kontrolery", a druga połowa "te pliki, w których umieszczam kod JavaScript".
 
-////
+Manager nie jest tak naprawdę kontrolerem (przynajmniej w sensie kontrolera MVC) a termin "TFWIPMJSC" (przyp. tlum. ang. akronim od 'te pliki,...') nie dawał się łatwo zapamiętać, więc odrzuciliśmy obie propozycje.
 
-////
+Nadal potrzebowaliśmy nadać nazwę czemuś, nad czym pracujemy i wymyśliśmy nazwę "manager", która wcześniej nie miała swojego odpowiednika w innych frameworkach webowych.
 
 <% end %>
 
-////
+Aby uprościć sytuację, zaadoptujemy konwencję nazywania managera tak samo, jak szablon, z wyjątkiem rozszerzenia **.js**. Stwórzmy zatem `posts_list.js` w folderze `/client/views/posts` i zacznijmy budowę pierwszego managera:
 
 ~~~js
 var postsData = [
@@ -150,11 +150,11 @@ Template.postsList.helpers({
 ~~~
 <%= caption "client/views/posts/posts_list.js" %>
 
-////
+Jeżeli wszystko zostało wpisane poprawnie, powinieneś zobaczyć w przeglądarce:
 
-<%= screenshot "3-1", "Our first templates with static data" %>
+<%= screenshot "3-1", "Pierwszy szablon zawierający dane statyczne" %>
 
-<%= commit "3-1", "Added basic posts list template and static data." %>
+<%= commit "3-1", "Dodany szablon listy postów i statyczne dane szablonu." %>
 
 ////
 
