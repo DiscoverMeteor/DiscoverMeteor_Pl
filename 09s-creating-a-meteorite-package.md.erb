@@ -212,11 +212,11 @@ Po pierwsze, musimy dodać plik `smart.json`, aby przekazać ważne szczegóły 
 
 <%= scommit "9-5-3", "Dodanie pliku smart.json" %>
 
-////
+Wstawiliśmy powyżej podstawowe metadane, które informują o pakiecie, opisują co robi, jego lokalizację git i początkowy numer wersji. Jeżeli nasz pakiet polegał na innych pakietach dostępnych w Atmosphere, możemy dodać sekcję `"packages"` aby opisać zależności.
 
-////
+Gdy wszystko to zostało dodane, publikacja pakietu jest łatwa. Musimy utworzyć repozytorium Git, następnie za pomocą git push opublikować kod na zdalnym serwerze i dodać link do niego w `smart.json`.
 
-////
+Proces, który należy wykonać na [GitHub](http://github.com), to utworzenie nowego repozytorium, a następnie podążanie za standardowymi krokami pozwalającymi umieścić kod pakietu w danym repozytorium. Następnie należy użyć polecenie `mrt release` aby go opublikować:
 
 ~~~bash
 $ git init
@@ -229,11 +229,11 @@ Zrobione!
 ~~~
 <%= caption "Terminal (run from within `packages/errors`)" %>
 
-////
+Uwaga: nazwy pakietów muszą być unikatowe. Jeżeli utworzysz nazwę pakietu, który już istnieje nastąpi konflikt. W przyszłości Atmosphere będzie miało własną przestrzeń nazw dla każdego użytkownika, zatem weź po uwagę, że może się to zmienić.
 
-////
+Kolejna uwaga: Musisz się zalogować do http://atmosphere.meteor.com/accounts i stworzyć nowego użytkownika z hasłem, które będziesz wpisywał po wydaniu polecenia `mrt release`.
 
-////
+Teraz skoro pakiet został opublikowany, możemy usunąć go z projektu i dodać go bezpośrednio za pomocą Meteorite:
 
 ~~~bash
 $ rm -r packages/errors
@@ -243,4 +243,4 @@ $ mrt add errors
 
 <%= scommit "9-5-4", "Usunięto pakiet z aplikacji." %>
 
-////
+Powinieneś zobaczyć teraz w konsoli pierwsze pobieranie pakietu. Dobra robota!
