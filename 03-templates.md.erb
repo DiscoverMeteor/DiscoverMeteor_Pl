@@ -102,19 +102,19 @@ Skąd pochodzi obiekt `posts`? DObre pytanie. Jest to helper szablonu, który zd
 
 Szablon `postItem` jest w miarę prosty do opisania. Używa tylko trzech wyrażeń: `{{url}}` i `{{title}}` zwracają pola dokumentu, a `{{domain}}` woła helper szablonu.
 
-Wiele razy wspomnieliśmy o "helperach szablonu" bez wyjaśniania jak działają. Aby do tego przejść, musimy najpierw wyjaśnić zasadę działania managerów szablonu.
+Wiele razy wspomnieliśmy o "helperach szablonu" bez wyjaśniania jak działają. Aby do tego przejść, musimy najpierw wyjaśnić zasadę działania managera szablonu.
 
 ### Manager szablonu
 
-////
+DO tej pory mieliśmy styczność z Handlebars, które jest tak naprawdę HTML z kilkoma dodatkami w postaci tagów. W przeciwieństwie do innych języków takich jak PHP (czy nawet zwykłych stron HTML, które mogą zawierać JavaScript), Meteor oddziela szablony i ich logikę, a same szablony nie robią nic same z siebie.
 
-////
+Aby je ożywić, szablon potrzebuje **managera**. Możesz wyobrazić sobie analogię do szefa kuchni, który biorąc składniki potraw przygotowuje je przed podaniem kelnerowi (szablonowi), który go Tobie prezentuje.
 
-////
+Mówiąc inaczej, rola szablonów jest ograniczona do wyświetlania lub iterowania przez zmienne, manager wykonuje trudniejsze zadanie przez przypisanie wartości każdej zmiennej szablonu.
 
 <% note do %>
 
-### Managers?
+### Managerowie?
 
 ////
 
