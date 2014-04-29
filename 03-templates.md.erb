@@ -36,21 +36,21 @@ Będzie to nasz główny szablon aplikacji. Jak widać jest to HTML z wyjątkiem
 
 ### Szablony Meteora
 
-////
+Jądrem serwisu wiadomości społecznościowych jest lista postów. Dokładnie w taki sposób zorganizujemy szablony.
 
-////
+Stwórzmy folder `/views` w folderze `/client`. Będzie to miejsce wstawienia wszystkich szablonów. Aby trzymać porządek utworzymy również folder `/posts` w folderze `/views` przechowujący szablony mające związek z postami.
 
 <% note do %>
 
-### Finding Files
+### Znajdowanie plików
 
-////
+Meteor doskonale radzi sobie ze znajdowaniem plików. Nieważne gdzie wstawisz kod w folderz `/client`, Meteor go znajdzie i odpowiednio skompiluje. Oznacza to, że nigdy nie będziesz musiał wstawiał ścieżek 'include' do plików JavaScript czy CSS.
 
-////
+Oznacza to również, że mógłbyś równie dobrze wstawić wszystkie pliki w jeden folder, czy nawet cały kod w jeden plik. Ponieważ Meteor i tak skompiluje wszystko w jeden pojedyńczy skompresowany plik, chcielibyśmy raczej trzymać porządek i dobrze zorganizować strukturę plików.
 
 <% end %>
 
-////
+W końcu jesteśmy gotowi utworzyć kolejny szablon. Utwórz plik `posts_list.html` w folderze `client/views/posts`:
 
 ~~~html
 <template name="postsList">
@@ -63,7 +63,7 @@ Będzie to nasz główny szablon aplikacji. Jak widać jest to HTML z wyjątkiem
 ~~~
 <%= caption "client/views/posts/posts_list.html" %>
 
-////
+Oraz `post_item.html`:
 
 ~~~html
 <template name="postItem">
