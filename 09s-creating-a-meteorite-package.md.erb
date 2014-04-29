@@ -30,7 +30,7 @@ Package.on_use(function (api, where) {
 ~~~
 <%= caption "packages/errors/package.js" %>
 
-Dodajmy trzy pliki do nowego pakietu. Możemy je skopiować z Microscope bez większych zmian z wyjątkiem zmiany przestrzeni nazw i bardziej uporządkowanego API:  
+Dodajmy trzy pliki do nowego pakietu. Możemy je skopiować z Microscope bez większych zmian z wyjątkiem konieczności zmiany przestrzeni nazw i bardziej uporządkowanego API:  
 
 ~~~js
 Errors = {
@@ -82,7 +82,7 @@ Template.meteorError.rendered = function() {
 
 ### Testowanie pakietu z Microscope
 
-////
+Będziemy teraz testowali pakiet lokalnie z Microscope aby upewnić się, że zmiany w kodzie działają prawidłowo. Aby zlinkować pakiet z projektem, wykonujemy polecenie `meteor add errors`. Następnie musimy usunąć istniejące pliki, które zostały zastąpione przez nowy pakiet:
 
 ~~~bash
 $ rm client/helpers/errors.js
@@ -91,7 +91,7 @@ $ rm client/views/includes/errors.js
 ~~~
 <%= caption "usuwanie starych plików z konsoli" %>
 
-////
+Kolejną rzeczą, którą należy zrobić, są małe zmiany konieczne do użycia prawidłowego API:
 
 ~~~js
 Router.before(function() { Errors.clearSeen(); });
@@ -121,9 +121,9 @@ Posts.update(currentPostId, {$set: postProperties}, function(error) {
 ~~~
 <%= caption "client/views/posts/post_edit.js" %>
 
-<%= scommit "9-5-1", "Utworzona podstawowa wersja pakietu i zlinkowanie go w aplikacji." %>
+<%= scommit "9-5-1", "Utworzona podstawowa wersja pakietu i zlinkowanie go z aplikacją." %>
 
-////
+Po zastosowaniu powyższych zmian, powinniśmy zaobserwować aplikację działającą w ten sam sposób, co przed wprowadzeniem pakietu.
 
 ### Pisanie testów
 
