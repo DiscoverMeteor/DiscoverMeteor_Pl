@@ -156,11 +156,11 @@ Jeżeli wszystko zostało wpisane poprawnie, powinieneś zobaczyć w przeglądar
 
 <%= commit "3-1", "Dodany szablon listy postów i statyczne dane szablonu." %>
 
-////
+Osiągneliśmy tutaj dwie rzeczy. Po pierwsze ustawiliśmy dane początkowe prototypu aplikacji w talbice `postsData`. Dane te normalnie zostałyby pobrane z bazy danych, ale ponieważ jeszcze się tego nie nauczyliśmy (poczekaj do kolejnego rozdziału), "oszukujemy" przez wprowadzenie statycznych danych.
 
-////
+Po drugie, użyliśmy funkcję `Template.myTemplate.helpers()` Meteora, aby zdefiniować helper szablonu o nazwie `posts` który zwraca tablicę `postsData`.
 
-////
+Zdefiniowanie helpera `posts` oznacza, że jest on dostępny do użycia w obrębie szablonu: 
 
 ~~~html
 <template name="postsList">
@@ -173,11 +173,11 @@ Jeżeli wszystko zostało wpisane poprawnie, powinieneś zobaczyć w przeglądar
 ~~~
 <%= caption "client/views/posts/posts_list.html" %>
 
-////
+Zatem nasz szablon będzie w stanie iterować po tablicy `postsData` i wysyłać każdy obiekt po kolei do szablonu `postItem`:
 
-### The Value of "this"
+### Zawartość "this"
 
-////
+Stwórzmy manager `post_item.js`:
 
 ~~~js
 Template.postItem.helpers({
