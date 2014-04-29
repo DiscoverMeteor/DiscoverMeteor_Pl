@@ -111,13 +111,13 @@ Gratulacje! Twoja pierwsza aplikacja w Meteor'ze działa. Przy okazji, aby ją z
 
 ### Dodawanie pakietu
 
-////
+Użyjemy teraz Meteorite aby dodać smart package, który pozwoli na wykorzystanie [Bootstrap](http://getbootstrap.com/)  w naszym projekcie:
 
 ~~~bash
 $ mrt add bootstrap
 ~~~
 
-<%= commit "2-2", "Added bootstrap package." %>
+<%= commit "2-2", "Dodany pakiet bootstrap." %>
 
 <% note do %>
 
@@ -172,19 +172,19 @@ Przy okazji mogłeś również zauważyć ukryty folder `.meteor`. Jest to miejs
 
 ### Stosowanie podkreślników vs CamelCase
 
-////
+Jedynym komentarzem, który określimy starą debatę co stosować lepiej, podkreślniki (`moja_zmienna`) vs camelCase (`mojaZmienna`) będzie to, że nie ważne który wybierzesz, ważne, że będziesz go konsekwentnie stosował.
 
-////
+W tej książce użyamy camelCase, ponieważ jest to rozpowszechnione w JavaScript (w końcu jest to JavaScript, a nie java_script!).
 
-////
+Jedynym wyjątkiem do tej reguły są nazwy plików, które używają podkreślników (`moj_plik.js`) oraz klasy CSS, ktore używają myślników  (`.moja-klasa`). Jest to spowodowane tym, że w systemie plików podkreślniki są najczęściej stosowane, natomiast składnia CSS używa myślników (`font-family`, `text-align`, itd.).
 
 <% end %>
 
-### Taking Care of CSS
+### Zwrócenie uwagi na CSS
 
-////
+To nie jest książka o CSS. Aby uniknąć marnowania czasu na naukę szczegółów dotyczących stylizacji strony, zdecydowaliśmy udostępnić cały plik CSS od razu na początku, aby nie trzeba było się o niego później martwić.
 
-////
+CSS jest automatycznie wczytywany i minimalizowany przez Meteora, zatem w przeciwieństwie do niektórych plików statycznych, umieszczany jest w `/client`, a nie w `/public`. Spróbuj utworzyć folder `client/stylesheets/` i zapisać w nim poniższy plik `style.css`:
 
 ~~~css
 .grid-block, .main, .post, .comments li, .comment-form {
