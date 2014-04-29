@@ -1,17 +1,17 @@
 ---
-title: Templates
+title: Szablony
 slug: templates
 date: 0003/01/01
 number: 3
-contents: Learn about Meteor's templating language, Handlebars.|Create your first three templates.|Learn how Meteor managers work.|Get a basic prototype working with static data.
+contents: O Handlebars, języku szablonów Meteora.|Jak stworzyć pierwsze trzy szablony.|Jak działają managery Meteora.|Jak ukończyć prototyp aplikacji wyświetlający statyczne dane.
 paragraphs: 46
 ---
 
-////
+Aby ułatwić wprowadzenie do Meteora, zaimplementujemy ogólny szkielet aplikacji i później przejdziemy do coraz bardziej szczegółowych zagadnień. Innymi słowy na początek zbudujemy szkielet HTML/JavaScript, następnie będziemy go podłączać etapami do kolejnych części Meteora.
 
-////
+Oznacza to, że w bieżącym rozdziale skoncentrujemy się wyłącznie na tym, co dzieje się w folderze `/client`.
 
-////
+Stwórzmy nowy plik o nazwie `main.html` w folderze `/client` i wstawmy do niego następujący kod:
 
 ~~~html
 <head>
@@ -32,25 +32,25 @@ paragraphs: 46
 ~~~
 <%= caption "client/main.html" %>
 
-////
+Będzie to nasz główny szablon aplikacji. Jak widać jest to HTML z wyjątkiem taga `{{> postsList}}`, który jest miejscem wstawienia szablonu `postsList` jak wkrótce zobaczysz. Na teraz stwórzmy jeszcze kilka szablonów.
 
-### Meteor Templates
+### Szablony Meteora
 
-////
+Jądrem serwisu wiadomości społecznościowych jest lista postów. Dokładnie w taki sposób zorganizujemy szablony.
 
-////
+Stwórzmy folder `/views` w folderze `/client`. Będzie to miejsce wstawienia wszystkich szablonów. Aby trzymać porządek utworzymy również folder `/posts` w folderze `/views` przechowujący szablony mające związek z postami.
 
 <% note do %>
 
-### Finding Files
+### Znajdowanie plików
 
-////
+Meteor doskonale radzi sobie ze znajdowaniem plików. Nieważne gdzie wstawisz kod w folderz `/client`, Meteor go znajdzie i odpowiednio skompiluje. Oznacza to, że nigdy nie będziesz musiał wstawiał ścieżek 'include' do plików JavaScript czy CSS.
 
-////
+Oznacza to również, że mógłbyś równie dobrze wstawić wszystkie pliki w jeden folder, czy nawet cały kod w jeden plik. Ponieważ Meteor i tak skompiluje wszystko w jeden pojedyńczy skompresowany plik, chcielibyśmy raczej trzymać porządek i dobrze zorganizować strukturę plików.
 
 <% end %>
 
-////
+W końcu jesteśmy gotowi utworzyć kolejny szablon. Utwórz plik `posts_list.html` w folderze `client/views/posts`:
 
 ~~~html
 <template name="postsList">
@@ -63,7 +63,7 @@ paragraphs: 46
 ~~~
 <%= caption "client/views/posts/posts_list.html" %>
 
-////
+Oraz `post_item.html`:
 
 ~~~html
 <template name="postItem">
@@ -76,55 +76,55 @@ paragraphs: 46
 ~~~
 <%= caption "client/views/posts/post_item.html" %>
 
-////
+Zwróć uwagę na atrybut `name="postsList"` elementu szablonu. Jest to nazwa, którą Meteor wykorzysta do śledzenia miejsca, w który wstawić odpowiedni szablon.
 
-////
+Nadszedł czas wprowadzić system szablonów Meteora, [Handlebars](http://handlebarsjs.com). Handlebars jest po prostu HTML z dodatkiem trzech funkcji: *partials*, *expressions* (ang. wyrażeń) i *block helpers* (ang. helperów bloków kodu).
 
-////
+*Partials* używają składni `{{> nazwaSzablonu}}` i po prostu nakazują za zamienienie tego taga szablonem o tej samej nazwie (w naszym przypadku `postItem`).
 
-////
+*Expressions*, takie jak `{{title}}` mają dwojakie znaczenie: zwracają pole danego obiektu o nazwie title lub wartość zwracaną z helpera szablonu, który został zdefiniowany w bieżącym managerze szablonu (więcej o tym później).
 
-////
-
-<% note do %>
-
-### Going Further
-
-////
-
-<% end %>
-
-////
-
-////
-
-////
-
-////
-
-////
-
-### Template Managers
-
-////
-
-////
-
-////
+Ostatecznie, *block helpers* to specjalne tagi, które kontrolują przebieg wykonania szablonu, np. `{{#each}}…{{/each}}` czy `{{#if}}…{{/if}}`.
 
 <% note do %>
 
-### Managers?
+### Więcej szczegółów na temat Handlebars
 
-////
-
-////
-
-////
+Jeżeli chciałbyś się nauczyć więcej o Handlebars, przejdź na [oficjalny serwis Handlebars](http://handlebarsjs.com) lub przeczytaj [ten przydatny tutorial](http://javascriptissexy.com/handlebars-js-tutorial-learn-everything-about-handlebars-js-javascript-templating/)
 
 <% end %>
 
-////
+Zaopatrzeni w tą wiedzę, możemy łatwo zrozumieć co dzieje się podczas wykonywania naszej aplikacji.
+
+Najpierw, w szablonie `postsList` iterujemy po obiekcie `posts` za pomocą helpera bloku `{{#each}}…{{/each}}`. Następnie w każdej iteracji wstawiamy szablon `postItem`.
+
+Skąd pochodzi obiekt `posts`? DObre pytanie. Jest to helper szablonu, który zdefiniujemy podczas zapoznawania się z managerami szablonu.
+
+Szablon `postItem` jest w miarę prosty do opisania. Używa tylko trzech wyrażeń: `{{url}}` i `{{title}}` zwracają pola dokumentu, a `{{domain}}` woła helper szablonu.
+
+Wiele razy wspomnieliśmy o "helperach szablonu" bez wyjaśniania jak działają. Aby do tego przejść, musimy najpierw wyjaśnić zasadę działania managera szablonu.
+
+### Manager szablonu
+
+DO tej pory mieliśmy styczność z Handlebars, które jest tak naprawdę HTML z kilkoma dodatkami w postaci tagów. W przeciwieństwie do innych języków takich jak PHP (czy nawet zwykłych stron HTML, które mogą zawierać JavaScript), Meteor oddziela szablony i ich logikę, a same szablony nie robią nic same z siebie.
+
+Aby je ożywić, szablon potrzebuje **managera**. Możesz wyobrazić sobie analogię do szefa kuchni, który biorąc składniki potraw przygotowuje je przed podaniem kelnerowi (szablonowi), który go Tobie prezentuje.
+
+Mówiąc inaczej, rola szablonów jest ograniczona do wyświetlania lub iterowania przez zmienne, manager wykonuje trudniejsze zadanie przez przypisanie wartości każdej zmiennej szablonu.
+
+<% note do %>
+
+### Manager?
+
+Gdy zapytaliśmy programistów, jakie nazwy nadają managerom szablonu, połowa nazwała je "kontrolery", a druga połowa "te pliki, w których umieszczam kod JavaScript".
+
+Manager nie jest tak naprawdę kontrolerem (przynajmniej w sensie kontrolera MVC) a termin "TFWIPMJSC" (przyp. tlum. ang. akronim od 'te pliki,...') nie dawał się łatwo zapamiętać, więc odrzuciliśmy obie propozycje.
+
+Nadal potrzebowaliśmy nadać nazwę czemuś, nad czym pracujemy i wymyśliśmy nazwę "manager", która wcześniej nie miała swojego odpowiednika w innych frameworkach webowych.
+
+<% end %>
+
+Aby uprościć sytuację, zaadoptujemy konwencję nazywania managera tak samo, jak szablon, z wyjątkiem rozszerzenia **.js**. Stwórzmy zatem `posts_list.js` w folderze `/client/views/posts` i zacznijmy budowę pierwszego managera:
 
 ~~~js
 var postsData = [
@@ -150,17 +150,17 @@ Template.postsList.helpers({
 ~~~
 <%= caption "client/views/posts/posts_list.js" %>
 
-////
+Jeżeli wszystko zostało wpisane poprawnie, powinieneś zobaczyć w przeglądarce:
 
-<%= screenshot "3-1", "Our first templates with static data" %>
+<%= screenshot "3-1", "Pierwszy szablon zawierający dane statyczne" %>
 
-<%= commit "3-1", "Added basic posts list template and static data." %>
+<%= commit "3-1", "Dodany szablon listy postów i statyczne dane szablonu." %>
 
-////
+Osiągneliśmy tutaj dwie rzeczy. Po pierwsze ustawiliśmy dane początkowe prototypu aplikacji w talbice `postsData`. Dane te normalnie zostałyby pobrane z bazy danych, ale ponieważ jeszcze się tego nie nauczyliśmy (poczekaj do kolejnego rozdziału), "oszukujemy" przez wprowadzenie statycznych danych.
 
-////
+Po drugie, użyliśmy funkcję `Template.myTemplate.helpers()` Meteora, aby zdefiniować helper szablonu o nazwie `posts` który zwraca tablicę `postsData`.
 
-////
+Zdefiniowanie helpera `posts` oznacza, że jest on dostępny do użycia w obrębie szablonu: 
 
 ~~~html
 <template name="postsList">
@@ -173,11 +173,11 @@ Template.postsList.helpers({
 ~~~
 <%= caption "client/views/posts/posts_list.html" %>
 
-////
+Zatem nasz szablon będzie w stanie iterować po tablicy `postsData` i wysyłać każdy obiekt po kolei do szablonu `postItem`:
 
-### The Value of "this"
+### Zawartość "this"
 
-////
+Stwórzmy manager `post_item.js`:
 
 ~~~js
 Template.postItem.helpers({
@@ -190,42 +190,42 @@ Template.postItem.helpers({
 ~~~
 <%= caption "client/views/posts/post_item.js" %>
 
-<%= commit "3-2", "Setup a `domain` helper on the `postItem`." %>
+<%= commit "3-2", "Ustawiony helper `domain` (domena) na `postItem`." %>
 
-////
+Tym razem wartością helpera `domain` nie jest tablica, ale funkcja anonimowa. Ten wzorzec jest jest częściej spotykany (i bardziej użyteczny) niż przedstawiony poprzednio przykład ze wstawieniem danych początkowych.
 
-<%= screenshot "3-2", "Displaying domains for each links." %>
+<%= screenshot "3-2", "Wyświetlenie domen dla każdego linku." %>
 
-////
+Helper `domain` ma URL jako paramter i zwraca jego domenę używając kilku sztuczek JavaScript. Ale skąd bierze się sam url?
 
-////
+Aby odpowiedzieć na to pytanie, musimy wrócić do szablonu `posts_list.html`. Block helper `{{#each}}` nie tylko iteruje po tablicy, are również **ustawia wartość `this` w środku bloku odpowiadającego iterowanemu obiektowi**.
 
-////
+Oznacza to, że pomiędzy tagami `{{#each}}`, każdy post po kolei jest równoznaczny z `this` i jest to zastosowane w każdym wstawioym managerze szablonu (`post_item.js`).
 
-////
+Rozumiemy teraz dlaczego `this.url()` zwraca URL bieżącego posta. Co więcej, jeżeli użyjemy `{{title}}` i `{{url}}` w środku szablonu `post_item.html`, Meteor rozpozna co oznacza `this.title` i `this.url` i zwróci poprawne wartości.
 
 <% note do %>
 
-### JavaScript Magic
+### Sztuczki JavaScript
 
-////
+Mimo to, że nie jest to wyłącznie domena Meteora, przedstawimy szybko kilka "sztuczek JavaScript". Na początek stworzymy pusty link HTML (`a`) i zapiszemy go w pamięci.
 
-////
+Ustawimy następnie jego atrybut `href`, aby wskazywał na URL bieżącego posta (jak przed chwilą zobaczyliśmy, `this` jest bieżącym obiektem do którego szablon ma dostęp).
 
-////
+Na końcu wykorzystujemy fakt, że specjalne pole `hostname` elementu `a` można wykorzystać do zwrócenia nazwy domeny danego linka bez zwracania całego URL/
 
 <% end %>
 
-////
+Jeżeli uważnie przeczytałeś bieżący rozdział i zastosowałeś się do instrukcji, powinieneś zobaczyć w przeglądarce listę postów. Ta lista to dane statyczne i nie wykorzystujemy jeszcze żadnych funkcji Meteora pozwalających na pracę z danymi zmieniającymi się w czasie rzeczywistym. W kolejnymi rozdziale pokażemy, jak to zmienić!
 
 <% note do %>
 
-### Hot Code Reload
+### Przeładowanie kodu podczas pracy aplikacji (ang. Hot Code Reload)
 
-////
+Mogłeś zauważyć, że nie było konieczne odświeżenia okna przeglądarki po każdej zmianie pliku.
 
-////
+Dzieje się tak, ponieważ Meteor śledzi wszystkie pliki dostępne w folderze danego projektu i automatycznie odświeża przeglądarkę za każdym razem, gdy znajdzie zmianę w jakimkolwiek pliku.
 
-////
+Przeładowanie kodu jest bardzo sprytne, zachowuje również stan aplikacji między odświeżeniami strony!
 
 <% end %>
