@@ -190,23 +190,23 @@ Template.postItem.helpers({
 ~~~
 <%= caption "client/views/posts/post_item.js" %>
 
-<%= commit "3-2", "Setup a `domain` helper on the `postItem`." %>
+<%= commit "3-2", "Ustawiony helper `domain` (domena) na `postItem`." %>
 
-////
+Tym razem wartością helpera `domain` nie jest tablica, ale funkcja anonimowa. Ten wzorzec jest jest częściej spotykany (i bardziej użyteczny) niż przedstawiony poprzednio przykład ze wstawieniem danych początkowych.
 
-<%= screenshot "3-2", "Displaying domains for each links." %>
+<%= screenshot "3-2", "Wyświetlenie domen dla każdego linku." %>
 
-////
+Helper `domain` ma URL jako paramter i zwraca jego domenę używając kilku sztuczek JavaScript. Ale skąd bierze się sam url?
 
-////
+Aby odpowiedzieć na to pytanie, musimy wrócić do szablonu `posts_list.html`. Block helper `{{#each}}` nie tylko iteruje po tablicy, are również **ustawia wartość `this` w środku bloku odpowiadającego iterowanemu obiektowi**.
 
-////
+Oznacza to, że pomiędzy tagami `{{#each}}`, każdy post po kolei jest równoznaczny z `this` i jest to zastosowane w każdym wstawioym managerze szablonu (`post_item.js`).
 
-////
+Rozumiemy teraz dlaczego `this.url()` zwraca URL bieżącego posta. Co więcej, jeżeli użyjemy `{{title}}` i `{{url}}` w środku szablonu `post_item.html`, Meteor rozpozna co oznacza `this.title` i `this.url` i zwróci poprawne wartości.
 
 <% note do %>
 
-### JavaScript Magic
+### Sztuczki JavaScript
 
 ////
 
