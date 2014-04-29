@@ -156,21 +156,21 @@ Jeżeli chcesz poznać więcej szczegółów, zachęcamy by zapoznać się z [of
 
 ### Czy Meteor używa MVC?
 
-Jeżeli posiadasz wiedzę na temat innych frameworków, takich jak Ruby on Rails, możesz się zastanawiać 
+Jeżeli posiadasz wiedzę na temat innych frameworków, takich jak Ruby on Rails, możesz się zastanawiać czy aplikacje Meteora działają zgodnie z modelem MVC (Model View Controller).
 
-////
+Krótka odpowiedź to: nie. Meteor w przeciwieństwie do Rails nie nakłada wstępnie założonej struktury na twoją aplikację. Z tego względu w tej książce rozmieścimy kod aplikacji w sposób, który ma dla nas sens, bez martwienia się o różne akronimy.
 
 <% end %>
 
 ### No public?
 
-////
+No dobrze, skłamaliśmy trochę. Nie potrzebujesz folderu `public/` z tego prostego powodu, że aplikacja Microscope nie używa żadnych plików statycznych! Ponieważ większość innych aplikacji Meteora będzie zawierała przynajmniej kilka obrazów, stwierdziliśmy, że warto o tym wspomnieć.
 
-////
+Przy okazji mogłeś również zauważyć ukryty folder `.meteor`. Jest to miejsce, w którym Meteor przechowuje swój kod i zmiana plików w tym folderze jest ogólnie rzecz biorąc złym pomysłem. Tak naprawdę nie powinieneś sobie wcale zaprzątać głowy tym folderem. Jedynym wyjątkiem do tej reguły są pliki `.meteor/packages` oraz `.meteor/release`, które odpowiednio zawierają listę `smart packages` oraz wersję Meteora, którą należy użyć. Gdy dodajesz pakiety lub zmieniasz wersję Meteora w aplikacji, sprawdzenie zmian w powyższych plikach może być pomocne.
 
 <% note do %>
 
-### Underscores vs CamelCase
+### Stosowanie podkreślników vs CamelCase
 
 ////
 
@@ -288,9 +288,9 @@ body {
 
 <% note do %>
 
-### A Note on CoffeeScript
+### Uwaga na temat CoffeeScript
 
-////
+W tej książce będziemy pisali kod w czystym JavaScript. Jeżeli wolisz CoffeeScript, Meteor ma wsparcie dla tego języka. Po prostu dodaj pakiet CoffeeScript do Twojej aplikacji:
 
 `mrt add coffeescript`
 
