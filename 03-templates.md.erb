@@ -76,35 +76,35 @@ Oraz `post_item.html`:
 ~~~
 <%= caption "client/views/posts/post_item.html" %>
 
-////
+Zwróć uwagę na atrybut `name="postsList"` elementu szablonu. Jest to nazwa, którą Meteor wykorzysta do śledzenia miejsca, w który wstawić odpowiedni szablon.
 
-////
+Nadszedł czas wprowadzić system szablonów Meteora, [Handlebars](http://handlebarsjs.com). Handlebars jest po prostu HTML z dodatkiem trzech funkcji: *partials*, *expressions* (ang. wyrażeń) i *block helpers* (ang. helperów bloków kodu).
 
-////
+*Partials* używają składni `{{> nazwaSzablonu}}` i po prostu nakazują za zamienienie tego taga szablonem o tej samej nazwie (w naszym przypadku `postItem`).
 
-////
+*Expressions*, takie jak `{{title}}` mają dwojakie znaczenie: zwracają pole danego obiektu o nazwie title lub wartość zwracaną z helpera szablonu, który został zdefiniowany w bieżącym managerze szablonu (więcej o tym później).
 
-////
+Ostatecznie, *block helpers* to specjalne tagi, które kontrolują przebieg wykonania szablonu, np. `{{#each}}…{{/each}}` czy `{{#if}}…{{/if}}`.
 
 <% note do %>
 
-### Going Further
+### Więcej szczegółów na temat Handlebars
 
-////
+Jeżeli chciałbyś się nauczyć więcej o Handlebars, przejdź na [oficjalny serwis Handlebars](http://handlebarsjs.com) lub przeczytaj [ten przydatny tutorial](http://javascriptissexy.com/handlebars-js-tutorial-learn-everything-about-handlebars-js-javascript-templating/)
 
 <% end %>
 
-////
+Zaopatrzeni w tą wiedzę, możemy łatwo zrozumieć co dzieje się podczas wykonywania naszej aplikacji.
 
-////
+Najpierw, w szablonie `postsList` iterujemy po obiekcie `posts` za pomocą helpera bloku `{{#each}}…{{/each}}`. Następnie w każdej iteracji wstawiamy szablon `postItem`.
 
-////
+Skąd pochodzi obiekt `posts`? DObre pytanie. Jest to helper szablonu, który zdefiniujemy podczas zapoznawania się z managerami szablonu.
 
-////
+Szablon `postItem` jest w miarę prosty do opisania. Używa tylko trzech wyrażeń: `{{url}}` i `{{title}}` zwracają pola dokumentu, a `{{domain}}` woła helper szablonu.
 
-////
+Wiele razy wspomnieliśmy o "helperach szablonu" bez wyjaśniania jak działają. Aby do tego przejść, musimy najpierw wyjaśnić zasadę działania managerów szablonu.
 
-### Template Managers
+### Manager szablonu
 
 ////
 
