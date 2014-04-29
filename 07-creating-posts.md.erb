@@ -114,7 +114,7 @@ Jest to prosty formularz. Nie musimy się martwić o wykonanie konkretnej akcji,
 
 ### Tworzenie postów
 
-////
+Połączmy handler zdarzeń (ang. event handler) ze zdarzeniem `submit` formularza. Lepiej użyć zdarzenie `submit`, niż `click` na przycisku, jako że to pokryje wszystkie możliwe sposoby wysyłania postów (jak na przykład wciśnięcie przycisku Enter w polu URL).
 
 ~~~js
 Template.postSubmit.events({
