@@ -4,13 +4,13 @@ slug: creating-a-meteorite-package
 date: 0009/01/02
 number: 9.5
 sidebar: true
-contents: Tworzenie lokalnego pakietu aplikacji.|Pisanie testów dla twojego pakietu.|Publikacja pakietu na Atmosphere.
+contents: Jak stworzyć lokalny pakiet.|Jak pisać testy dla twojego pakietu.|Jak opublikować pakiet na Atmosphere.
 paragraphs: 22
 ---
 
-Napisaliśmy nasz kod obsługi błędów umożliwiając jego wielokrotne wykorzystanie. Dlaczego więc nie spakować go i nie stworzyć z niego inteligentnego pakietu i nie podzielić się z nim z resztą społeczności Meteor'a?
+Napisaliśmy kod obsługi błędów umożliwiając jego wielokrotne wykorzystanie. Dlaczego więc nie spakować go i nie stworzyć z niego inteligentnego pakietu i nie podzielić się z nim z resztą społeczności Meteor'a?
 
-Najpierw musimy stworzyć strukturę plików dla naszego pakietu, w którym będzie rezydować. Umieszczamy nasz pakiet w katalogu `packages/errors/`. Tworzy to niestandardowy pakiet, który jest automatycznie przygotowany do użycia. (Mogłeś zauważyć, że Meteorite instaluje pakiety poprzez tworzenie simlink'ów w katalogu `packages/`).
+Najpierw musimy stworzyć strukturę plików dla naszego pakietu, w którym będzie rezydować. Umieszczamy nasz pakiet w katalogu `packages/errors/`. Tworzy to niestandardowy pakiet, który jest automatycznie przygotowany do użycia. (Mogłeś zauważyć, że Meteorite instaluje pakiety poprzez tworzenie linków symbolicznych w katalogu `packages/`).
 
 Następnie tworzymy w tym katalogu plik `package.js`. Plik ten informuje Meteor'a o tym jak pakiet powinien być używany oraz dostarcza informacji o zmiennych, które eksportuje.
 
@@ -30,11 +30,11 @@ Package.on_use(function (api, where) {
 ~~~
 <%= caption "packages/errors/package.js" %>
 
-////
+Dodajmy trzy pliki do nowego pakietu. Możemy je skopiować z Microscope bez większych zmian z wyjątkiem zmiany przestrzeni nazw i bardziej uporządkowanego API:  
 
 ~~~js
 Errors = {
-  // Local (client-only) collection
+  // Kolekcja lokalna (tylko po stronie klienta)
   collection: new Meteor.Collection(null),
   
   throw: function(message) {
