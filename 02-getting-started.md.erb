@@ -3,23 +3,23 @@ title: Jak zacząć
 slug: getting-started
 date: 0002/01/01
 number: 2
-contents: Instalacja Meteor & Meteorite.|Naucz się o 5 typach pakietów Meteor'a.|Ustaw strukturę plików twojej aplikcjacji.
+contents: Jak zainstalować Meteor & Meteorite.|O 5 typach pakietów Meteor'a.|O ustawieniu strukturę plików twojej aplikacji.
 paragraphs: 49
 ---
 
-Pierwsze wrażenie jest ważne - dlatego proces instalacji Meteor'a powinien być stosunkowo łatwy. W większości przypadków, będzie gotowy do działania w mniej niż pięć minut.
+Pierwsze wrażenie jest ważne - dlatego proces instalacji Meteora powinien być stosunkowo łatwy. W większości przypadków, Meteor będzie gotowy do działania w mniej niż pięć minut.
 
-Aby zacząć, możemy zainstaować Meteor'a otwierając okno terminala i wpisując:
+Aby zacząć, możemy go zainstalować otwierając okno terminala i następnie wpisując:
 
 ~~~bash
 $ curl https://install.meteor.com | sh
 ~~~
 
-To zainstaluje komendę `meteor` w twoim systemie i będziesz mógł zacząć używać Meteor'a.
+To zainstaluje konsolowe narzędzie `meteor` w twoim systemie i od tej pory będziesz mógł zacząć używać Meteora.
 
 <% note do %>
 
-### *Nie* instalowanie Meteor'a
+### *Nie* instalowanie Meteora
 
 Jeżeli nie możesz (albo nie chcesz) instalować Meteor'a lokalnie, polecamy spróbować [Nitrous.io](http://nitrous.io).
 
@@ -111,7 +111,7 @@ Gratulacje! Twoja pierwsza aplikacja w Meteor'ze działa. Przy okazji, aby ją z
 
 ### Dodawanie pakietu
 
-////
+Użyejmy teraz Meteorite, aby dodać smart package, który pozwoli na dołączenie =[Bootstrap](http://getbootstrap.com/) do projektu:
 
 ~~~bash
 $ mrt add bootstrap
@@ -290,7 +290,7 @@ body {
 
 ### Informacja CoffeeScript
 
-W tej książce będziemy pisać w czystym JavaScript'i. Jednakże jeżeli preferujesz CoffeeScript, Meteor umożliwia użycie go. Poprostu dodaj pakiet CoffeeScript i będziesz mógł go używać:
+W tej książce będziemy pisać w czystym JavaScript. Jeżeli preferujesz CoffeeScript, Meteor umożliwia użycie go. Po prostu dodaj pakiet CoffeeScript:
 
 `mrt add coffeescript`
 
