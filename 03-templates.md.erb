@@ -208,24 +208,24 @@ Rozumiemy teraz dlaczego `this.url()` zwraca URL bieżącego posta. Co więcej, 
 
 ### Sztuczki JavaScript
 
-////
+Mimo to, że nie jest to wyłącznie domena Meteora, przedstawimy szybko kilka "sztuczek JavaScript". Na początek stworzymy pusty link HTML (`a`) i zapiszemy go w pamięci.
 
-////
+Ustawimy następnie jego atrybut `href`, aby wskazywał na URL bieżącego posta (jak przed chwilą zobaczyliśmy, `this` jest bieżącym obiektem do którego szablon ma dostęp).
 
-////
+Na końcu wykorzystujemy fakt, że specjalne pole `hostname` elementu `a` można wykorzystać do zwrócenia nazwy domeny danego linka bez zwracania całego URL/
 
 <% end %>
 
-////
+Jeżeli uważnie przeczytałeś bieżący rozdział i zastosowałeś się do instrukcji, powinieneś zobaczyć w przeglądarce listę postów. Ta lista to dane statyczne i nie wykorzystujemy jeszcze żadnych funkcji Meteora pozwalających na pracę z danymi zmieniającymi się w czasie rzeczywistym. W kolejnymi rozdziale pokażemy, jak to zmienić!
 
 <% note do %>
 
-### Hot Code Reload
+### Przeładowanie kodu podczas pracy aplikacji (ang. Hot Code Reload)
 
-////
+Mogłeś zauważyć, że nie było konieczne odświeżenia okna przeglądarki po każdej zmianie pliku.
 
-////
+Dzieje się tak, ponieważ Meteor śledzi wszystkie pliki dostępne w folderze danego projektu i automatycznie odświeża przeglądarkę za każdym razem, gdy znajdzie zmianę w jakimkolwiek pliku.
 
-////
+Przeładowanie kodu jest bardzo sprytne, zachowuje również stan aplikacji między odświeżeniami strony!
 
 <% end %>
