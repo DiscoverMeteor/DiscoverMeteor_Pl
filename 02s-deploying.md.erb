@@ -1,5 +1,5 @@
 ---
-title: Wdrażanie aplikacji
+title: Umieszczanie aplikacji na zewnętrznym serwerze
 slug: deploying
 date: 0002/01/02
 number: 2.5
@@ -90,9 +90,9 @@ Mimo tego, że nowe firmy hostingowe pojawiają się jak grzyby po deszczu, czę
 
 [Meteor Up](https://github.com/arunoda/meteor-up) (lub w skrócie `mup`) jest kolejną próbą poradzenia sobie z tym problemem. Jest to narzędzie konsolowe, które zajmuje się ustawieniem i publikacją aplikacji za ciebie. Zobaczmy zatem jak apublikować Microscope używając Meteor Up.
 
-////
+Zanim będziemy mogli kontynuować, potrzebujemy serwer na który możemy opublikować aplikację. Polecamy [Digital Ocean](http://digitalocean.com), gdzie hosting zaczyna się od 5$ miesięcznie lub [AWS](http://aws.amazon.com/), który ma darmowe instancje Micro (szybko napotkasz problemy związane ze skalowaniem aplikacji, ale jeżeli chcesz się pobawić, na początek powinno wystarczyć).
 
-////
+Niezależenie, który serwis wybierzesz, powinieneś skończyć mając dostępne trzy rzeczy: adres IP twojego serwera, nazwę użytkownika umożliwiającego zalogowanie (zwykle `root` lub `ubuntu`) i hasło. Trzymaj je w bezpiecznym miejscu, wkrótce będziesz go potrzebował!
 
 ### Initializing Meteor Up
 
