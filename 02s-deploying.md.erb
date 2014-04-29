@@ -94,19 +94,19 @@ Zanim będziemy mogli kontynuować, potrzebujemy serwer na który możemy opubli
 
 Niezależenie, który serwis wybierzesz, powinieneś skończyć mając dostępne trzy rzeczy: adres IP twojego serwera, nazwę użytkownika umożliwiającego zalogowanie (zwykle `root` lub `ubuntu`) i hasło. Trzymaj je w bezpiecznym miejscu, wkrótce będziesz go potrzebował!
 
-### Initializing Meteor Up
+### Inicjalizacja Meteor Up
 
-////
+Aby rozpocząć zainstalujemy Meteor Up za pomocą `npm`:
 
 ~~~bash
 $ npm install -g mup
 ~~~
 
-////
+Następnie utworzymy specjalny folder w którym będą przechowywane ustawienia Meteor Up dla danego serwera. Użyjemy oddzielnego folderu z dwóch powodów: po pierwsze najlepiej unikać wstawiania prywatnych danych w repozytorium Git, szczególnie gdy pracujesz nad kodem dostępnym publicznie.
 
-////
+Po drugie, używając osobnych folderów, możesz równocześnie zarządzać kilkoma konfiguracjami Meteor Up. Staje się to na przykład przydatne przy publikacji na serwerze produkcyjnym i pre-produkcyjnym (ang. staging).
 
-////
+Utwórzmy zatem ten nowy folder i zainicjalizujmy w nim nowy projekt Meteor Up:
 
 ~~~bash
 $ mkdir ~/microscope-deploy
@@ -116,13 +116,13 @@ $ mup init
 
 <% note do %>
 
-### Sharing with Dropbox
+### Wspóldzielenie ustawień za pomocą Dropbox
 
-////
+Świetnym sposobem na współdzielenie ustawień przez Ciebie i cały Twój zespół jest stworzenie folderu z konfiguracjami w twoim DropBoxie lub podobnym serwisie.
 
 <% end %>
 
-### Meteor Up Configuration
+### Konfiguracja Meteor Up
 
 ////
 
