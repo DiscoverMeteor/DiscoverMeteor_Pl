@@ -16,91 +16,79 @@ Nauczymy się jak opublikować aplikację Meteora na kilka różnych sposobów. 
 
 <% note do %>
 
-### Introducing Sidebars
+### Wprowadzenie do Sidebars
 
-////
+Jest to rozdział poświęcony **Sidebars**. Bardziej szczegółowo jest opisany w dalszej części książki.
 
-////
+Jeżeli wolisz kontynuwać pracę nad Microscope, możesz przeskoczyć ten rozdział i wrócić do niego w dowolnym momencie.
 
 <% end %>
 
-### Deploying On Meteor
+### Publikacja aplikacji na serwerach Meteora
 
-////
+Publikacja aplikacji w domenie Meteora (np. `http://myapp.meteor.com`) jest najłatwiejszym rozwiązaniem i będzie pierwszym, które wypróbujemy. Może być to użyteczne do pokazania aplikacji w fazie rozwoju, lub szybkiego ustawienia serwera pre-produkcyjnego.
 
-////
+Publikacja na serwerach Meteora jest całkiem prosta. Otwórz terminal, przejdź do folderu aplikacji Meteora i wpisz:
 
 ~~~bash
 $ meteor deploy myapp.meteor.com
 ~~~
 
-////
+Oczywiście musisz się zatroszczyć o zmianę "myapp" dowolnie wybraną nazwą aplikacji, która nie jest jeszcze zajęta. Jeżeli pierwszy raz publikujesz aplikację, zostaniesz poproszony o dodanie konta Meteora. Jeżeli wszystko zostanie wykonane poprawnie, po kilku sekundach będziesz miał dostęp do swojej aplikacji na `http://myapp.meteor.com`.
 
-////
-
-### Password Protection
-
-////
-
-~~~~bash
-$ meteor deploy myapp.meteor.com -p
-~~~~
-
-////
-
-////
+Możesz skorzystać z [oficjalnej dokumentacji](http://docs.meteor.com/#deploying), aby uzyskać więcej informacji na tematy takie jak bezpośredni dostęp do bazy danych opublikowanej aplikacji czy konfiguracja innej domeny dla twojej aplikacji.
 
 ### Deploying On Modulus
 
-////
+[Modulus](https://modulus.io/) jest świetnym wyborem, jeżeli chodzi o hosting aplikacji NodeJS. Jest to jeden z niewielu firm PaaS (platform-as-a-service), która wspiera oficjalnie Meteora i jest już całkiem pokaźna liczna osób posiadająch produkcyjne aplikacje na ich serwerach.
 
 <% note do %>
 
 ### Demeteorizer
 
-////
+Narzędzie open source Modulusa [demeteorizer](https://github.com/onmodulus/demeteorizer) konwertuje aplikację Meteora w standardową aplikację NodeJS.
 
 <% end %>
 
-////
+Zacznij od [utworzenia konta](https://modulus.io/register). Aby opublikować aplikację na serwerach Modulusa, musisz zainstalować konsolowe narzędzie 'modulus':
 
 ~~~bash
 $ npm install -g modulus
 ~~~
 
-////
+A następnie zalogować się za pomocą:
 
 ~~~bash
 $ modulus login
 ~~~
 
-////
+Utworzymy teraz projekt Modulusa (uwaga: można to także wykonać na ich stronie www przez przeglądarkę):
 
 ~~~bash
 $ modulus project create
 ~~~
 
-////
+Następnym krokiem jest utworzenie bazy danych MongoDB dla aplikacji. Możemy ją utworzyć także w [Modulus](https://modulus.io/codex/database/getting_started), [MongoHQ](https://www.mongohq.com/) lub jakimkolwiek innym hostingu MongoDB.
 
-////
+Po utworzeniu bazy danych MongoDB, możemy otrzymać adres `MONGO_URL` bazy z webowego interfejsu Modulusa (Dashboard > Databases > Select your database > Administration) i następnie użyć go do konfiguracji aplikacji jak poniżej:
 
 ~~~bash
 $ modulus env set MONGO_URL "mongodb://<user>:<pass>@mongo.onmodulus.net:27017/<database_name>"
 ~~~
 
-////
+Jesteśmy gotowi opublikować aplikację. Jest bardzo proste:
 
 ~~~bash
 $ modulus deploy
 ~~~
 
-////
+Właśnie opublikowaliśmy aplikację na serwerach Modulusa. Aby uzyskać więcej informacji o dostępie do logów, ustawieniu dowolnej domeny czy SSL, przejdź do [dokumentacji Modulusa](https://modulus.io/codex/projects).
 
 ### Meteor Up
 
-////
+Mimo tego, że nowe firmy hostingowe pojawiają się jak grzyby po deszczu, często napotkasz problemy związane z konkretnym hostingiem i jego ograniczeniami. Na dzień dzisiejszy publikacja aplikacji na własnym serwerze jest najlepszym sposobem na umieszczenie aplikacji Meteora w internecie. Jedyną przeszkodą może być to, że publikacja na własnym serwerze nie jest prosta, szczególnie gdy szukasz środowiska produkcyjnego o wysokiej jakości.
 
-////
+[Meteor Up](https://github.com/arunoda/meteor-up) (lub w skrócie `mup`) jest kolejną próbą poradzenia sobie z tym problemem. Jest to narzędzie konsolowe, które zajmuje się ustawieniem i publikacją aplikacji za ciebie. Zobaczmy zatem jak apublikować Microscope używając Meteor Up.
 
 ////
 
