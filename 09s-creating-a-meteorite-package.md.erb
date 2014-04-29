@@ -127,9 +127,9 @@ Po zastosowaniu powyższych zmian, powinniśmy zaobserwować aplikację działaj
 
 ### Pisanie testów
 
-////
+Pierwszym krokiem podczas tworzenia pakietu jest testowanie go z aplikacją, a kolejnym jest napisanie zbioru testów, które odpowiednio testują sposób działania pakietu. Meteor pracuje z Tinytest (wbudowanym testerem pakietów), który ułatwia uruchamianie testów i zapewnia spokojny sen po udostępnieniu pakietu innym użytkownikom.
 
-////
+Stwórzmy plik z testami, który będzie używany przez Tinytest z kolekcją przechowującą błędy:
 
 ~~~js
 Tinytest.add("Kolecja Errors funkcjonuje poprawnie.", function(test) {
