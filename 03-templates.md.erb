@@ -1,17 +1,17 @@
 ---
-title: Templates
+title: Szablony
 slug: templates
 date: 0003/01/01
 number: 3
-contents: Learn about Meteor's templating language, Handlebars.|Create your first three templates.|Learn how Meteor managers work.|Get a basic prototype working with static data.
+contents: O Handlebars, języku szablonów Meteora.|Jak stworzyć pierwsze trzy szablony.|Jak działają managery Meteora.|Jak ukończyć prototyp aplikacji wyświetlający statyczne dane.
 paragraphs: 46
 ---
 
-////
+Aby ułatwić wprowadzenie do Meteora, zaimplementujemy ogólny szkielet aplikacji i później przejdziemy do coraz bardziej szczegółowych zagadnień. Innymi słowy na początek zbudujemy szkielet HTML/JavaScript, następnie będziemy go podłączać etapami do kolejnych części Meteora.
 
-////
+Oznacza to, że w bieżącym rozdziale skoncentrujemy się wyłącznie na tym, co dzieje się w folderze `/client`.
 
-////
+Stwórzmy nowy plik o nazwie `main.html` w folderze `/client` i wstawmy do niego następujący kod:
 
 ~~~html
 <head>
@@ -32,9 +32,9 @@ paragraphs: 46
 ~~~
 <%= caption "client/main.html" %>
 
-////
+Będzie to nasz główny szablon aplikacji. Jak widać jest to HTML z wyjątkiem taga `{{> postsList}}`, który jest miejscem wstawienia szablonu `postsList` jak wkrótce zobaczysz. Na teraz stwórzmy jeszcze kilka szablonów.
 
-### Meteor Templates
+### Szablony Meteora
 
 ////
 
