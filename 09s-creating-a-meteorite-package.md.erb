@@ -163,11 +163,11 @@ Tinytest.addAsync("Errors template works", function(test, done) {
 ~~~
 <%= caption "packages/errors/errors_tests.js" %>
 
-////
+W powyższych testach sprawdzamy, że podstawowe funkcje `Meteor.Errors` działają poprawnie i upewniamy się, że kod `rendered` w szablonie nadal działa.
 
-////
+Nie opiszemy tu w pełni dokładnie jak pisać testy pakietów Meteora (ponieważ API nie jest jeszcze finalne i często ulega zmianom), ale mamy nadzieję, że kod jest zrozumiały.
 
-////
+Aby uruchomić testy w `pacakge.js`, użyj poniższy kod:
 
 ~~~js
 Package.on_test(function(api) {
@@ -181,7 +181,7 @@ Package.on_test(function(api) {
 
 <%= scommit "9-5-2", "Dodanie testów do pakietu." %>
 
-////
+Nstępnie można uruchomić testy za pomocą:
 
 ~~~bash
 $ meteor test-packages errors
@@ -192,9 +192,9 @@ $ meteor test-packages errors
 
 ### Publikacja pakietu
 
-////
+Teraz chcemy opublikować pakiet dla wszystkich użytkowników Meteora. Osiągniemy to przez opublikowanie go w Atmoshpere.
 
-////
+Po pierwsze, musimy dodać plik `smart.json`, aby przekazać ważne szczegóły dotyczące pakietu dla Meteora i Atmosphere:
 
 ~~~json
 {
