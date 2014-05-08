@@ -9,7 +9,7 @@ paragraphs: 72
 
 Teraz skoro mamy listę postów (która w końcu będzie wysłana) potrzebujemy stronę dla każdego posta, na której użytkownicy będą mogli prowadzić dyskuję.
 
-Chcielibyśmy, żeby te strony były dostępne za pomocą *permamentnego linka*, URLa w formie `http://myapp.com/posts/xyz` (gdzie `xyz` jest identifaktorem MongoDB `_id`), który jest unikalny dla każdego posta.
+Chcielibyśmy, żeby te strony były dostępne za pomocą *permanentnego linka*, URLa w formie `http://myapp.com/posts/xyz` (gdzie `xyz` jest identyfikatorem MongoDB `_id`), który jest unikalny dla każdego posta.
 
 Oznacza to, że potrzebujemy pewnego rodzaju *routera*, który sprawdza, jaki URL został wpisany w przeglądarce i przekierowuje do właściwej podstrony i wyświetla pożądaną treść.
 
@@ -34,7 +34,7 @@ Zauważ, że Iron Router jest pakietem niedostępnym w standardowych pakietach M
 
 ### Słowniczek Routera
 
-Poruszymy wiele różnych tematów routera w tym rozdziale. Jeżeli masz doświadczenie z frameworkiem takim jak Rails, będziesz już zaznajomiony z większością tych konceptów. Jeżeli nie jesteś, oto kilka pojęć, które przyspieszą pracę ( zachowujemy oryginalne nazewnictwo, ponieważ jest stosowane w kodzie źródłowym, niektórych się z reguły nie tłumaczy. Podajemy tłumaczenie w nawiasie - przyp. tłum.):
+Poruszymy wiele różnych tematów routera w tym rozdziale. Jeżeli masz doświadczenie z frameworkiem takim jak Rails, będziesz już zaznajomiony z większością tych konceptów. Jeżeli nie jesteś, oto kilka pojęć, które przyspieszą pracę (zachowujemy oryginalne nazewnictwo, ponieważ jest stosowane w kodzie źródłowym, niektórych się z reguły nie tłumaczy. Podajemy tłumaczenie w nawiasie - przyp. tłum.):
 
 - **Routes** (trasy): Trasa jest fundamentalnym pojęciem routera. Jest to zbiór instrukcji, który wskaże aplikacji gdzie się kierować i co robić po napotkaniu danego URL.
 - **Paths** (ścieżki): Ścieżka jest dowolnym URLem dostępnym w Twojej aplikacji. Może być statyczna (`/terms_of_service`) lub dynamiczna (`/posts/xyz`) i może nawet zawierać parametry zapytań (`/search?keyword=meteor`). 
@@ -51,11 +51,11 @@ Aby dowiedzieć się więcej o Iron Router, sprawdź [pełną dokumentację na G
 
 ### Routing: Mapowanie URL na odpowiednie szablony
 
-Jak do tej pory budowaliśmy layout za pomocą zahardcode'owanych dołączeń szablonu (takich jak `{{>postsList}}`). Zatem mimo to, że zawartość strony może ulec zmianom, struktora strony pozostanie  taka sama: nagłówek z listą postów poniżej.
+Jak do tej pory budowaliśmy layout za pomocą zahardcode'owanych dołączeń szablonu (takich jak `{{>postsList}}`). Zatem mimo to, że zawartość strony może ulec zmianom, struktura strony pozostanie taka sama: nagłówek z listą postów poniżej.
 
-Iron Router pozwala na przerwanie tego schematu przez przecięcia kontroli nad zawartością renderowaną w tagu HTML `<body>`. Nie definiujemy zatem zawartości nagłówka sami, jak by to było w przypadku normalnej trony HTML. Zamiast tego wskazujemy routerowi specjalny szablon layoutu zawierający helper szablonuzawierający `{{> yield}}`. 
+Iron Router pozwala na przerwanie tego schematu przez przejęcie kontroli nad zawartością renderowaną w tagu HTML `<body>`. Nie definiujemy zatem zawartości nagłówka sami, jak by to było w przypadku normalnej strony HTML. Zamiast tego wskazujemy routerowi specjalny szablon layoutu zawierający helper szablonu zawierający `{{> yield}}`. 
 
-Powyższy helper `{{> yield}}` zdefiniuje specjalną dynamiczny obszar, który zostanie automatycznie przerenderowany za każdym razem, gdy szablon będzie odpowiadał bieżacej ścieżce (przyjmijmy, że ten specjalny szablon będzie się nazywał od tej pory "szablonem trasy" ang. “route templates”):
+Powyższy helper `{{> yield}}` zdefiniuje specjalny dynamiczny obszar, który zostanie automatycznie przerenderowany za każdym razem, gdy szablon będzie odpowiadał bieżącej ścieżce (przyjmijmy, że ten specjalny szablon będzie się nazywał od tej pory "szablonem trasy" ang. “route templates”):
 
 <%= diagram "router-diagram", "Layouts and templates.", "pull-center" %>
 
@@ -81,14 +81,14 @@ A nowo utworzony `layout.html` będzie zawierał zewnętrzny layout aplikacji:
     </div>
   </header>
   <div id="main" class="row-fluid">
-    {{yield}}
+    {{> yield}}
   </div>
   </div>
 </template>
 ~~~
 <%= caption "client/views/application/layout.html" %>
 
-Zauważyłeś zapewne, że zamieniliśmy włączenie szablonu `postsList` zawołaniem helpera `yield`. Po zastosowaniu tej zmiany nie zobaczysz nic na ekranie. Dzieje się tak, ponieważ nie wskazaliśmy routerowi jak stosować się do URL `/` i pokazuje nam domyślnie pusty szablon.
+Zauważyłeś zapewne, że zamieniliśmy włączenie szablonu `postsList` wywołaniem helpera `yield`. Po zastosowaniu tej zmiany nie zobaczysz nic na ekranie. Dzieje się tak, ponieważ nie wskazaliśmy routerowi jak stosować się do URL `/` i pokazuje nam domyślnie pusty szablon.
 
 Aby rozpocząć, możemy przywrócić poprzednią funkcjonalność przez przemapowanie głównego URL `/` do szablonu `postList`. Utworzymy folder `/lib` w głównym folderze projektu i plik `router.js` w tym folderze.
 
@@ -141,7 +141,7 @@ Chcemy, aby nasz link do strony domowej wskazywał na listę postów, zatem zami
 
 ### Oczekiwanie na dane
 
-Jeżeli uruchomisz bieżącą wersję aplikacji w środowisku produkcyjnym przez zawołanie meteor deploy (lub uruchomisz instancję dostępną w linku powyżej) zauważysz, że lista przez momeny jest pusta, zanim posty pojawią się na ekranie. Dzieje się tak, ponieważ podczas ładowania strony nie ma żadnych postów do wyświetlenia, aż do momentu gdy subskrypcja `posts` zakończy pobieranie danych z serwera.
+Jeżeli uruchomisz bieżącą wersję aplikacji w środowisku produkcyjnym przez zawołanie meteor deploy (lub uruchomisz instancję dostępną w linku powyżej) zauważysz, że lista przez moment jest pusta, zanim posty pojawią się na ekranie. Dzieje się tak, ponieważ podczas ładowania strony nie ma żadnych postów do wyświetlenia, aż do momentu gdy subskrypcja `posts` zakończy pobieranie danych z serwera.
 
 O wiele lepszym rozwiązaniem byłoby przedstawienie w sposób wizualny użytkownikowi, że coś się w tym czasie dzieje i że powinien przez chwilę poczekać.
 
@@ -199,11 +199,11 @@ Na razie nie zastanawiajmy się nad tym. Ale nie martw się, dowiesz się o tym 
 
 ### Przekierowanie do konkretnego posta
 
-Teraz po tym, jak dowiedzieliśmy się jak przekierowywać na szablon `postsList`, zaimplementujmy ścieżkę, która umożliwi wyświetlenie szczegółów pojedyńczego posta.
+Teraz po tym, jak dowiedzieliśmy się jak przekierowywać na szablon `postsList`, zaimplementujmy ścieżkę, która umożliwi wyświetlenie szczegółów pojedynczego posta.
 
-Jest tutaj jeden haczyk: nie możemy kontynuować i definiować osobne trasy dla każdego nowego posta, ponieważ może być ich setki. Potrzebujemy zatem ustawić jedną *dynamiczną* trasę i sprawić, aby ta trasa wyświetlała żądany post.
+Jest tutaj jeden haczyk: nie możemy kontynuować i definiować osobnych tras dla każdego nowego posta, ponieważ może być ich setki. Potrzebujemy zatem ustawić jedną *dynamiczną* trasę i sprawić, aby ta trasa wyświetlała żądany post.
 
-Aby rozpocząć, utworzymy nowy szablon, który po prostu renderuje ten sam szablon posta, który użyliśmy wcześniej w liście postów.
+Aby rozpocząć, utworzymy nowy szablon, który po prostu renderuje ten sam szablon posta, którego użyliśmy wcześniej w liście postów.
 
 ~~~html
 <template name="postPage">
@@ -229,7 +229,7 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "4~6" %>
 
-Specjalna składnia `:_id` informuje router o dwóch sprawach: po pierwsze aby skojarzyć jakąkolwiek trasę o formacie `/posts/xyz/`, gdzie “xyz” może być dowolne. Po drugie, aby wsawił cokolwiek znajdzie w “xyz” do własności `_id` tablicy parametrów routera (`params`).
+Specjalna składnia `:_id` informuje router o dwóch sprawach: po pierwsze aby skojarzyć jakąkolwiek trasę o formacie `/posts/xyz/`, gdzie “xyz” może być dowolne. Po drugie, aby wstawił cokolwiek znajdzie w “xyz” do własności `_id` tablicy parametrów routera (`params`).
 
 Zwróć uwagę, że używamy `_id` tylko ze względu na łatwość i wygodę implementacji. Router nie ma możliwości, aby dowiedzieć się że przekazujemy właściwy `_id`, czy dowolny losowy ciąg znaków.
 
@@ -255,7 +255,7 @@ Router.map(function() {
 <%= caption "lib/router.js" %>
 <%= highlight "4~7" %>
 
-Zatem za każdym razem, gdy użytkownik uzyska dostęp do tej trasy, odpowiedni post zostanie znaleziony i przekazany do szablonu. Pamiętaj, że `findOne` zwraca pojedyńczy post, który jest wynikiem zapytania i że przekazanie `id` jako parametru funkcji jest skrótem dla `{_id: id}`.
+Zatem za każdym razem, gdy użytkownik uzyska dostęp do tej trasy, odpowiedni post zostanie znaleziony i przekazany do szablonu. Pamiętaj, że `findOne` zwraca pojedynczy post, który jest wynikiem zapytania i że przekazanie `id` jako parametru funkcji jest skrótem dla `{_id: id}`.
 
 W ciele funkcji `data` dla danej trasy, `this` odpowiada bieżącej trasie i możemy użyć `this.params` aby uzyskać dostęp do nazwanych części trasy (które oznaczyliśmy za pomocą przedrostka `:` w naszej `ścieżce`).
 
@@ -291,7 +291,7 @@ Okazuje się, że możemy to również osiągnąć jawnie przez przesłanie kont
 
 ### Używanie dynamicznego helpera nazwanej trasy
 
-Na końcu musimy się upewnić, że wskazujemy na właściwe miejsce, gdy chcemy linkować pojedyńczy post. Moglibyśmy to osiągnąć również przez `<a href="/posts/{{_id}}">`, ale użycie helpera trasy jest po prostu bardziej solidne.
+Na końcu musimy się upewnić, że wskazujemy na właściwe miejsce, gdy chcemy linkować pojedynczy post. Moglibyśmy to osiągnąć również przez `<a href="/posts/{{_id}}">`, ale użycie helpera trasy jest po prostu bardziej solidne.
 
 Nazwaliśmy ścieżkę posta `postPage`, zatem możemy użyć helpera `{{pathFor 'postPage'}}`:
 
