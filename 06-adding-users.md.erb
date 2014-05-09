@@ -3,21 +3,21 @@ title: Dodawanie użytkowników
 slug: adding-users
 date: 0006/01/01
 number: 6
-contents: o kontach użytkowników w Meteorze.|jak dodać wszystkie potrzebne poświadczenia tożsamości do Microscope.|jak użyć wbudowany pakiet accounts-ui aby natychmiastowo otrzymać interfejs użytkownika potrzebny do zalogowania.
+contents: o kontach użytkowników w Meteorze.|jak dodać wszystkie potrzebne poświadczenia tożsamości do Microscope.|jak użyć wbudowanego pakietu accounts-ui aby natychmiastowo otrzymać interfejs użytkownika potrzebny do zalogowania.
 paragraphs: 27
 ---
 
 Do tej pory zdołaliśmy w miarę sensownie utworzyć i wyświetlić trochę statycznych danych początkowych i połączyć wszystko razem w prosty prototyp aplikacji.
 
-Widzieliśmy nawet jak nasz UI reaguje na żywo na zmiany danych i wstawione czy zmienione dane pojawiają się natychmiastowo. Nadal jednak nasza strona jest sparaliżowana przez fakt, że nie możemy wstawiać danych. Faktycznie, nawet nie mamy żanych użytkowników! 
+Widzieliśmy nawet jak nasz UI reaguje na żywo na zmiany danych i wstawione czy zmienione dane pojawiają się natychmiastowo. Nadal jednak nasza strona jest sparaliżowana przez fakt, że nie możemy wstawiać danych. Faktycznie, nawet nie mamy żadnych użytkowników!
 
-Sprawdźmy jak można to naprawić
+Sprawdźmy jak można to naprawić.
 
 ### Konta: proste podejście do użytkowników
 
 W większości frameworków webowych dodawanie kont użytkowników jest znajomą przeszkodą. Na pewno trzeba to robić prawie w każdym projekcie, ale nigdy nie jest to tak łatwe jak powinno być. Co więcej, kiedy tylko musisz pracować z OAuth lub jakimkolwiek innym schematem logowania, sprawy szybko się komplikują.
 
-Na szczęście Metor troszczy się o to wszystko. Dzieki temu, że pakiety Meteora mogą dodać kod zarówno po stronie serwera (JavaScript) i klienta (JavaScript, HTML i CSS), możemy dostać system logowania prawie za darmo.
+Na szczęście Metor troszczy się o to wszystko. Dzięki temu, że pakiety Meteora mogą dodać kod zarówno po stronie serwera (JavaScript) i klienta (JavaScript, HTML i CSS), możemy dostać system logowania prawie za darmo.
 
 Mógłbyś po prostu użyć wbudowanego w Meteorze UI dla kont użytkowników (za pomocą `mrt add accounts-ui`), ale ponieważ zbudowaliśmy całą aplikację za pomocą Bootstrap, użyjemy zamiast tego pakiet `accounts-ui-bootstrap-dropdown` (nie martw się, jedyna różnica to styl UI). Wpisz w linii komend:
 
@@ -34,9 +34,9 @@ Dodamy przyciski do naszego nagłówka. Ponieważ nasz nagłówek zaczyna się r
 ~~~html
 <template name="layout">
   <div class="container">
-    {{>header}}
+    {{> header}}
     <div id="main" class="row-fluid">
-      {{yield}}
+      {{> yield}}
     </div>
   </div>
 </template>
@@ -56,7 +56,7 @@ Dodamy przyciski do naszego nagłówka. Ponieważ nasz nagłówek zaczyna się r
       <a class="brand" href="{{pathFor 'postsList'}}">Microscope</a>
       <div class="nav-collapse collapse">
         <ul class="nav pull-right">
-          <li>{{loginButtons}}</li>
+          <li>{{> loginButtons}}</li>
         </ul>
       </div>
     </div>
@@ -82,7 +82,7 @@ Accounts.ui.config({
 
 <%= commit "6-1", "Added accounts and added template to the header" %>
 
-### Creating Our First User
+### Dodanie pierwszego użytkownika
 
 Spróbuj dodać konto użytkownika: przycisk "Sign in" zmieni się i pokaże twoją nazwę użytkownika. Potwierdza to, że konto użytkownika zostało dla Ciebie utworzone. Ale skąd pochodzą dane konta użytkownika?
 
@@ -105,7 +105,7 @@ Teraz wyloguj się i ponownie utwórz konto z inną nazwą użytkownika. `Meteor
 
 Konsola zwraca wartość 1. Czy nie powinna mieć wartości 2? Czy pierwszy użytkownik został usunięty? Jeżeli spróbujesz zalogować się jako pierwszy użytkownik, zobaczysz, że tak się nie stało.
 
-Upewnijmy się i sprawdzimy w kanonicznym magazynie danych, czyli bazie danych Mongo. Zalogujemy się do Mongo (`meteor mogno` w terminalu) i sprawdzimy:
+Upewnijmy się i sprawdźmy w kanonicznym magazynie danych, czyli bazie danych Mongo. Zalogujemy się do Mongo (`meteor mongo` w terminalu) i sprawdzimy:
 
 ~~~bash
 > db.users.count()
@@ -117,11 +117,11 @@ Zdecydowanie jest dwóch użytkowników w bazie. Dlaczego więc widzimy jednego 
 
 ### Tajemnicza publikacja!
 
-Jeżeli wrócisz w myślach do rozdziału 4, możesz pamiętać, że przez wyłączenie `autopublish` zablokowaliśmy automatyczne wysyłanie wszystkich danych przez kolekcje z serwera do każdego podłączonego klienta i jego lokalnej wersji kolekcji. Potrzebowaliśmy stworzyć parę publikację i subskrypcję aby przesyłać dane przez kanał klient-serwer.
+Jeżeli wrócisz w myślach do rozdziału 4, możesz pamiętać, że przez wyłączenie `autopublish` zablokowaliśmy automatyczne wysyłanie wszystkich danych przez kolekcje z serwera do każdego podłączonego klienta i jego lokalnej wersji kolekcji. Potrzebowaliśmy stworzyć parę, publikację i subskrypcję, aby przesyłać dane przez kanał klient-serwer.
 
 Nie ustawialiśmy jednak żadnej publikacji dla użytkownika. Dlaczego zatem widzimy jakiekolwiek dane użytkownika?
 
-Odpowiedź jest taka, że pakiet `accounts` automatycznie pzeprowadza `auto-publish` aktualnie zalogowanego użytkownika, bez względu na inne ustawienia. Jeżeli by tego nie robił, użytkownik nie mógłby się nigdy zalogować na stronę!
+Odpowiedź jest taka, że pakiet `accounts` automatycznie przeprowadza `auto-publish` aktualnie zalogowanego użytkownika, bez względu na inne ustawienia. Jeżeli by tego nie robił, użytkownik nie mógłby się nigdy zalogować na stronę!
 
 Pakiet `accounts` publikuje wyłącznie *bieżącego* użytkownika. Wyjaśnia to, dlaczego użytkownik nie może widzieć szczegółów kont innych użytkowników.
 
@@ -164,7 +164,7 @@ Object {_id: "kYdBd9hr3fWPGPcii", username: "tmeasday"}
 ~~~
 <%= caption "Konsola przeglądarki" %>
 
-Powyższy przykład pokazuje jak lokalna kolekcji może być *bezpiecznym podzbiorem* prawdziwej bazy danych. Zalogowany użytkownik widzi wyłącznie tyle prawdziwego zbioru danych, ile potrzebuje (w tym przypadku do zalogowania). Jest to użyteczny wzorzec do zapamiętania, jak zobaczyć później.
+Powyższy przykład pokazuje jak lokalna kolekcja może być *bezpiecznym podzbiorem* prawdziwej bazy danych. Zalogowany użytkownik widzi wyłącznie tyle prawdziwego zbioru danych, ile potrzebuje (w tym przypadku do zalogowania). Jest to użyteczny wzorzec do zapamiętania, jak zobaczymy później.
 
-Nie oznacza to, że nie możesz sprawić, aby większa część danych użytkownika była publiczna, jeżeli tylko chcesz. Możesz odnieść się do [Dokumentacji Meteora](http://docs.meteor.com/#meteor_users) aby sprawdzić jak opcjonalnie publikować więcej pól w klekcji `Meteor.users()`.
+Nie oznacza to, że nie możesz sprawić, aby większa część danych użytkownika była publiczna, jeżeli tylko chcesz. Możesz odnieść się do [Dokumentacji Meteora](http://docs.meteor.com/#meteor_users) aby sprawdzić jak opcjonalnie publikować więcej pól w kolekcji `Meteor.users()`.
 
