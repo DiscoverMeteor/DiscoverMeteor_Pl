@@ -105,7 +105,7 @@ Router.configure({
 
 Zauważ, że aby uruchomić powyższy kod ustawiający dane początkowe, będziesz musiał wykonać `meteor reset` aby wyczyścić bazę danych. Po resecie nie zapomnij utworzyć nowego konta i się do niego zalogować!
 
-Na początek stworzyliśmy kilku (całkowicie wymyślonych) użytowników, wstawiliśmy ich dane do bazy danych i użyliśmy ich `id` aby później pobrać ich z bazy. Następnie dodaliśmy komentarz każdemu użytkownikowi do pierwszego posta, łącząc komentarz do posta (z `postId`) i użytkownika (z `userId`). Dodaliśmy także datę dodania posta i jego treść, jak również zdenormalizowane pole `author` wskazujące na autora komentarza.
+Na początek stworzyliśmy kilku (całkowicie wymyślonych) użytkowników, wstawiliśmy ich dane do bazy danych i użyliśmy ich `id` aby później pobrać ich z bazy. Następnie dodaliśmy komentarz każdemu użytkownikowi do pierwszego posta, łącząc komentarz do posta (z `postId`) i użytkownika (z `userId`). Dodaliśmy także datę dodania posta i jego treść, jak również zdenormalizowane pole `author` wskazujące na autora komentarza.
 
 Również zmieniliśmy router, aby obsługiwał zarówno posty jak i komentarze.
 
@@ -318,7 +318,7 @@ Meteor.methods({
 <%= caption "collections/comments.js" %>
 <%= highlight "3~25" %>
 
-<%= commit "10-3", "Utworzony formularz do dodawania koentarzy." %>
+<%= commit "10-3", "Utworzony formularz do dodawania komentarzy." %>
 
 Nie dzieje się tutaj nic szczególnego, jest tu proste sprawdzenie, że użytkownik jest zalogowany, komentarz ma treść i że jest połączony z postem.
 

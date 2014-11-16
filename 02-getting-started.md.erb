@@ -25,7 +25,7 @@ Jeżeli nie możesz (albo nie chcesz) instalować Meteor'a lokalnie, polecamy sp
 
 Nitrous.io to serwis pozwalający Ci uruchamiać aplikacje i edytować ich kod w twojej przeglądarce, napisaliśmy [krótki poradnik](https://www.discovermeteor.com/2013/10/04/meteor-nitrous/) aby pomóc ci w konfiguracji.
 
-Możesz także wykonwać tę instrukcję aż do sekcji "Instalacja Meteor'a i Meteorite" (włącznie), i następnie przejść przez książkę ponownie rozpoczynając od sekcji "Tworzenie prostej aplikacji" z tego rozdziału.
+Możesz także wykonać tę instrukcję aż do sekcji "Instalacja Meteor'a i Meteorite" (włącznie), i następnie przejść przez książkę ponownie rozpoczynając od sekcji "Tworzenie prostej aplikacji" z tego rozdziału.
 
 <% end %>
  
@@ -42,7 +42,7 @@ Musisz się upewnić że node i git są zainstalowane na twoim komputerze. Zains
 - [strona do pobrania Node](http://nodejs.org/download/)
 - [strona do pobrania Git](http://git-scm.com/downloads)
 
-Następnie, zainstalujmy Meteorite. Jest to pakiet [npm](https://npmjs.org/) (ang Node Package Module, standarowy format modułów Node'a), instalujemy go za pomocą:
+Następnie, zainstalujmy Meteorite. Jest to pakiet [npm](https://npmjs.org/) (ang Node Package Module, standardowy format modułów Node'a), instalujemy go za pomocą:
 
 ~~~bash
 $ npm install -g meteorite
@@ -50,7 +50,7 @@ $ npm install -g meteorite
 
 <% note do %>
 
-### Błedy uprawnień?
+### Błędy uprawnień?
 
 Na niektórych komputerach możesz potrzebować uprawnień root'a aby zainstalować Meteorite. Aby uniknąć problemów, upewnij się że używasz `sudo -H`:
 
@@ -70,7 +70,7 @@ Notka: nie ma jeszcze obsługie Meteorite dla Windows, ale możesz spojrzeć na 
 
   ### `mrt` vs `meteor`
   
-Meteorite zainstaluje komendę `mrt`, którą będziemy używać do isntalacji pakietów dla naszej aplikacji. Jednakże kiedy chcemy uruchomić nasz serwer, nadal używamy komendy `meteor`.
+Meteorite zainstaluje komendę `mrt`, którą będziemy używać do instalacji pakietów dla naszej aplikacji. Jednakże kiedy chcemy uruchomić nasz serwer, nadal używamy komendy `meteor`.
   
 <% end %>
 
@@ -100,7 +100,7 @@ $ cd microscope
 $ meteor
 ~~~
 
-Teraz wpisz w swojeje przeglądarce adres `http://localhost:3000/` (lub odpowiednik `http://0.0.0.0:3000/`) i powinieneś zobaczyć mniej więcej coś takiego: 
+Teraz wpisz w swojej przeglądarce adres `http://localhost:3000/` (lub odpowiednik `http://0.0.0.0:3000/`) i powinieneś zobaczyć mniej więcej coś takiego: 
 
 
 <%= screenshot "2-1", "Meteor's Hello World." %>
@@ -111,7 +111,7 @@ Gratulacje! Twoja pierwsza aplikacja w Meteor'ze działa. Przy okazji, aby ją z
 
 ### Dodawanie pakietu
 
-Użyejmy teraz Meteorite, aby dodać smart package, który pozwoli na dołączenie =[Bootstrap](http://getbootstrap.com/) do projektu:
+Użyjemy teraz Meteorite, aby dodać smart package, który pozwoli na dołączenie =[Bootstrap](http://getbootstrap.com/) do projektu:
 
 ~~~bash
 $ mrt add bootstrap
@@ -125,9 +125,9 @@ $ mrt add bootstrap
 
 Kiedy mówimy o pakietach w kontekście Meteor'a, warto pomówić o szczegółach. Meteor używa pięciu typów pakietów:
 
-- Rdzeń Meteor'a jako takie jest podzielone na **rdzenne pakiety**. Są one zawarte w każdej aplikacji Meteor'a i pradopobonie nigdy nie będziesz musiał się o nie martwić.
+- Rdzeń Meteor'a jako takie jest podzielone na **rdzenne pakiety**. Są one zawarte w każdej aplikacji Meteor'a i prawdopodobnie nigdy nie będziesz musiał się o nie martwić.
 - Meteor **pakiety smart** (ang. smart packages) są grupą [około 37 pakietów](http://docs.meteor.com/#packages) (możesz zobaczyć całą listę za pomocą `meteor list`), które są dostarczane razem z Meteor'em i możesz je opcjonalnie zaimportować do swojej aplikacji. Możesz dodać je nawet, gdy nie używasz Meteorite, za pomocą `meteor add packagename`.
-- **Pakiety lokalne** to pakeity które możesz swtorzyć sam i włożyć je do katalogu `/packages`. Także nie potrzebujesz Meteorite by z nich korzystać.
+- **Pakiety lokalne** to pakiety które możesz stworzyć sam i włożyć je do katalogu `/packages`. Także nie potrzebujesz Meteorite by z nich korzystać.
 - **pakiety smart Atmosphere** to pakiety do Meteor'a trzecich firmy znajdujące się na [Atmosphere](http://atmosphere.meteor.com). By je importować i używać potrzebny jest Meteorite.
 - **pakiety NPM** (Node Packaged Modules) to pakiety Node.js. Mimo, iż nie współpracują one od razu z Meteorem w stanie w jakim są dostarczane, *mogą* być używane przez wyżej wymienione typy pakietów.
 
@@ -158,7 +158,7 @@ Jeżeli chcesz poznać więcej szczegółów, zachęcamy by zapoznać się z [of
 
 Jeżeli używałeś wcześniej innych frameworków, takich jak Ruby on Rails, możesz się zastanawiać czy Meteor zaadoptował wzorzec MVC
 
-Krótka odpowiedź to: nie. W przeciwieństwie do Rails'ów, Meteor nie narzuca żadnej predefiniowanej struktury dla Twojej aplikacji. Także w tej książce poprostu układamy kod w sposób, który ma dla nas największy sens, nie martwiąc się przy tym za bardzo o akronimy.
+Krótka odpowiedź to: nie. W przeciwieństwie do Rails'ów, Meteor nie narzuca żadnej predefiniowanej struktury dla Twojej aplikacji. Także w tej książce po prostu układamy kod w sposób, który ma dla nas największy sens, nie martwiąc się przy tym za bardzo o akronimy.
 
 <% end %>
 
@@ -166,11 +166,11 @@ Krótka odpowiedź to: nie. W przeciwieństwie do Rails'ów, Meteor nie narzuca 
 
 Ok, skłamaliśmy. Nie potrzebujemy katalogu `public/` z tego prostego powodu że Microscope nie potrzebuje żadnych statycznych zasobów. Ale odkąd większość aplikacji napisanych w Meteor'ze zawiera co najmniej kilka obrazków, uznaliśmy że warto poruszyć ten temat.
 
-Przy okazji, mogłeś już zauważyć ukryty katalog `.meteor`. To jest miejsce w którym Meteor przechowuje swój własny kod - modyfikacja rzeczy znajdujących się tam to zazwyczaj bardzo zły pomysł. Prawdę ówiąc nie potrzebujesz nigdy zaglądać do tego katalogu. Jedynym wyjątkiem są pliki `.meteor/packages` and `.meteor/release`, które odpowiednio są używane do wylistowania twoich pakietów i wersji Meteor'a którą używasz. Kiedy dodajesz pakiet albo zmieniasz wersję Meteor'a, może być pomocne sprawdzenie zmian w tych plikach.
+Przy okazji, mogłeś już zauważyć ukryty katalog `.meteor`. To jest miejsce w którym Meteor przechowuje swój własny kod - modyfikacja rzeczy znajdujących się tam to zazwyczaj bardzo zły pomysł. Prawdę mówiąc nie potrzebujesz nigdy zaglądać do tego katalogu. Jedynym wyjątkiem są pliki `.meteor/packages` and `.meteor/release`, które odpowiednio są używane do wylistowania twoich pakietów i wersji Meteor'a którą używasz. Kiedy dodajesz pakiet albo zmieniasz wersję Meteor'a, może być pomocne sprawdzenie zmian w tych plikach.
 
 <% note do %>
 
-### Podkreślenia vs CamelCase
+### Podkreślenia vs. CamelCase
 
 Jedyne co mamy do powiedzenia na temat debaty pomiędzy podkreśleniami (`my_variable`) kontra camelCase (`myVariable`) jest to że naprawdę nie ma znaczenia którą konwencję przyjmiesz, jeżeli tylko się do niej konsekwentnie stosujesz.
 
@@ -182,7 +182,7 @@ Jedynym wyjątkiem do tej reguły są nazwy plików, które będą używały pod
 
 ### Zatroszcz się o CSS
 
-To nie jest książka o CSS. Aby nie zwalniać zajmując się szczegółami styli, zdecydowaliśmy zrobić cały zestaw styli dostępny od początku, tak żebyś nie musiał się nim przejmować od początku.
+To nie jest książka o CSS. Aby nie zwalniać zajmując się szczegółami stylów, zdecydowaliśmy zrobić cały zestaw stylów dostępnych od początku, tak żebyś nie musiał się nim przejmować od początku.
 
 CSS automatycznie jest zminimalizowany i załadowany przez Meteor'a, i w odróżnieniu do innych statycznych zasobów idzie do katalogu `/client`, a nie `/public`, także włóż do pliku `style.css`:
 

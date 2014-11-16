@@ -10,7 +10,7 @@ paragraphs: 29
 
 Rzadko zachodzi potrzeba napisania samemu kodu do śledzenia zależności, ale z pewnością warto zrozumieć ten mechanizm aby później móc śledzić sposób jego działania.
 
-Wyobraź sobie, że chcemy śledzić liczbę przyjaciół danego użytkownika Facebooka, którzy 'polubili' każdy post na Microscope. Przyjmijmy, że już zaimplementowaliśmy logowanie użytkownika za pomocą Facebooka, wywołaliśmy odpowiednie funkcje API i parsowaliśmy odpowienie dane. Mamy asynchroniczną funkcję po stronie klienta, która zwraca liczbę polubień posta, `getFacebookLikeCount(user, url, callback)`.
+Wyobraź sobie, że chcemy śledzić liczbę przyjaciół danego użytkownika Facebooka, którzy 'polubili' każdy post na Microscope. Przyjmijmy, że już zaimplementowaliśmy logowanie użytkownika za pomocą Facebooka, wywołaliśmy odpowiednie funkcje API i parsowaliśmy odpowiednie dane. Mamy asynchroniczną funkcję po stronie klienta, która zwraca liczbę polubień posta, `getFacebookLikeCount(user, url, callback)`.
 
 Ważną sprawą wartą zapamiętania jest, w jakim stopniu taka funkcja jest *niereaktywna* i w jakim stopniu nie jest czasu rzeczywistego. Funkcja wywołuje żądanie HTTP do Facebooka, odczyta trochę danych i udostępni je aplikacji w asynchronicznym callbacku. Nie wywoła się ponownie sama gdy liczba polubień ulegnie zmianie i nasze UI nie uaktualni się podczas zmiany danych.
 
@@ -50,7 +50,7 @@ Możesz myśleć o komputacji, jako o sekcji kodu, która "troszczy się" o reak
 
 ### Przemiana zwykłej zmiennej w funkcję reaktywną
 
-Aby zmienić naszą zmienną `currentLikeCount` w reaktywne źródło danych, musimy śledziź wszystkie komputacje, które używają jej w zależności. Wymaga to zmiany ze zmiennej na funkcję (która zwróci wartość):
+Aby zmienić naszą zmienną `currentLikeCount` w reaktywne źródło danych, musimy śledzić wszystkie komputacje, które używają jej w zależności. Wymaga to zmiany ze zmiennej na funkcję (która zwróci wartość):
 
 ~~~js
 var _currentLikeCount = 0;
@@ -76,7 +76,7 @@ Meteor.setInterval(function() {
 ~~~
 <%= highlight "1~7,14~17" %>
 
-Co osiągneliśmy to ustawienie zależności `_currentLikeCountListeners`, która śledzi wszystkie komputacje w której użyty był `currentLikeCount()`. Gdy wartość `_currentLikeCountListeners` ulega zmianie, wołamy funkcję `changed()` na tej zależności, która unieważnia wszystkie śledzone komputacje.
+Co osiągnęliśmy to ustawienie zależności `_currentLikeCountListeners`, która śledzi wszystkie komputacje w której użyty był `currentLikeCount()`. Gdy wartość `_currentLikeCountListeners` ulega zmianie, wołamy funkcję `changed()` na tej zależności, która unieważnia wszystkie śledzone komputacje.
 
 Wtedy komputacje mogą kontynuować i reagować na zmiany odpowiednio do każdego przypadku. W przypadku komputacji szablonu oznacza to, że szablon się renderuje.
 
@@ -92,7 +92,7 @@ Po pierwsze, helper `{{#constant}}` *wyłącza* reaktywność. Jakiekolwiek dane
 
 Po drugie, helper `{{#isolate}}` ustawia *nową* komputację w środku szablonu. Innymi słowy ma taki sam efekt jak zagnieżdżony szablon.
 
-Zatem jeżeli jeden z reaktywnych źródeł danych będący w obrębie bloku isolate zmieni się, izolowany obszer ulegnie odświeżeniu, ale reszta zawierającego go szablonu nie. Jednakże gdy szablon zewnętrzny się odświeży, odświeży się także izolowany obszar.
+Zatem jeżeli jeden z reaktywnych źródeł danych będący w obrębie bloku isolate zmieni się, izolowany obszar ulegnie odświeżeniu, ale reszta zawierającego go szablonu nie. Jednakże gdy szablon zewnętrzny się odświeży, odświeży się także izolowany obszar.
 
 ### Porównianie zależności do Angular
 
@@ -118,9 +118,9 @@ Oczywiście tak rzadko, jak ustawia się komputacje w Meteorze, zarówno w Angul
 
 Po zmianie takiej reaktywnej zmiennej, musi być zawołana `scope.$apply()`. Funkcja ta przechodzi przez każdego obserwatora `scope` ale wywołuje wyłącznie funkcje obserwujące obserwatorów, których *zmieniła się* wartość wyrażenia.
 
-Zatem `scope.$apply()` jest podobne do `dependency.changed()`, z tym wyjątkiem, że działa z poziomu `scope` raczej niż daje pełną kontrolę nad tym, które funkcje oberwujące mają być przeliczone. Mówiąc o tym, ten lekki brak całkowitej kontroli daje Angular możliwość bycia sprytnym i wydajnym w sposobie w jakim ustalone zostaje które funkcje obserwujące mają być przeliczone.
+Zatem `scope.$apply()` jest podobne do `dependency.changed()`, z tym wyjątkiem, że działa z poziomu `scope` raczej niż daje pełną kontrolę nad tym, które funkcje obserwujące mają być przeliczone. Mówiąc o tym, ten lekki brak całkowitej kontroli daje Angular możliwość bycia sprytnym i wydajnym w sposobie w jakim ustalone zostaje które funkcje obserwujące mają być przeliczone.
 
-Z Angular, kod naszej funkcji`getFacebookLikeCount()` wyglądałby mniej więcej tak:
+Z Angular, kod naszej funkcji `getFacebookLikeCount()` wyglądałby mniej więcej tak:
 
 ~~~js
 Meteor.setInterval(function() {

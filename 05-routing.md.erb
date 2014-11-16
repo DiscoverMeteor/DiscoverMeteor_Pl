@@ -7,7 +7,7 @@ contents: o routingu w Meteorze.|jak tworzyć stronę z dyskusją o postach, z u
 paragraphs: 72
 ---
 
-Teraz skoro mamy listę postów (która w końcu będzie wysłana) potrzebujemy stronę dla każdego posta, na której użytkownicy będą mogli prowadzić dyskuję.
+Teraz skoro mamy listę postów (która w końcu będzie wysłana) potrzebujemy stronę dla każdego posta, na której użytkownicy będą mogli prowadzić dyskusję.
 
 Chcielibyśmy, żeby te strony były dostępne za pomocą *permanentnego linka*, URLa w formie `http://myapp.com/posts/xyz` (gdzie `xyz` jest identyfikatorem MongoDB `_id`), który jest unikalny dla każdego posta.
 
@@ -39,11 +39,11 @@ Poruszymy wiele różnych tematów routera w tym rozdziale. Jeżeli masz doświa
 - **Routes** (trasy): Trasa jest fundamentalnym pojęciem routera. Jest to zbiór instrukcji, który wskaże aplikacji gdzie się kierować i co robić po napotkaniu danego URL.
 - **Paths** (ścieżki): Ścieżka jest dowolnym URLem dostępnym w Twojej aplikacji. Może być statyczna (`/terms_of_service`) lub dynamiczna (`/posts/xyz`) i może nawet zawierać parametry zapytań (`/search?keyword=meteor`). 
 - **Segments** (segmenty): części ścieżki rozdzielone slashem (`/`).
-- **Hooks** (haki): Hak jest akcją, którą chciałbyć wykonać przed, po, lub podczas wykonywania procesu routowania. Typowym przykładem może być sprawdzenie, czy użytkownik ma wystarczające prawa, aby obejrzeć daną stronę. 
+- **Hooks** (haki): Hak jest akcją, którą chciałbyś wykonać przed, po, lub podczas wykonywania procesu routowania. Typowym przykładem może być sprawdzenie, czy użytkownik ma wystarczające prawa, aby obejrzeć daną stronę. 
 - **Filters** (filtry): Filtry to globalne haki, które definiuje się dla jednej lub więcej tras. 
 - **Route Templates** (szablony trasy): Każda trasa musi wskazywać na szablon. Jeżeli nie określisz konkretnego szablonu, router będzie domyślnie szukał szablonu o tej samej nazwie, co trasa.
 - **Layouts**: (układy) Możesz pomyśleć o układach jak o ramce na zdjęcia. Zawierają cały kod HTML, który opakowuje bieżący szablon i pozostanie nienaruszony po zmianach szablonu.
-- **Controllers** (kontrolery): Czasami zdasz sobie sprawę, że wiele Twoich szablonów używa tych samych parametrów. Zamiast duplikować kod, możesz sprawic aby wszystkie takie trasy dziedziczyły z jednego *kontrolera trasy*, który będzie zawierał logikę routingu. 
+- **Controllers** (kontrolery): Czasami zdasz sobie sprawę, że wiele Twoich szablonów używa tych samych parametrów. Zamiast duplikować kod, możesz sprawić aby wszystkie takie trasy dziedziczyły z jednego *kontrolera trasy*, który będzie zawierał logikę routingu. 
 
 Aby dowiedzieć się więcej o Iron Router, sprawdź [pełną dokumentację na GitHub](https://github.com/EventedMind/iron-router). 
 
@@ -103,7 +103,7 @@ Router.map(function() {
 ~~~
 <%= caption "lib/router.js"%>
 
-Osiągneliśmy dwie ważne sprawy. Po pierwsze, wskazaliśmy routerowi, aby używał layout, który właśnie utworzyliśmy jako domyślny layout dla wszystkich tras. Po drugie, zdefiniowaliśmy nową trasę o nazwie `postLists` i powiązaliśmy ją ze ścieżką `/`.
+Osiągnęliśmy dwie ważne sprawy. Po pierwsze, wskazaliśmy routerowi, aby używał layout, który właśnie utworzyliśmy jako domyślny layout dla wszystkich tras. Po drugie, zdefiniowaliśmy nową trasę o nazwie `postLists` i powiązaliśmy ją ze ścieżką `/`.
 
 <% note do %>
 
@@ -307,7 +307,7 @@ Nazwaliśmy ścieżkę posta `postPage`, zatem możemy użyć helpera `{{pathFor
 ~~~
 <%= caption "client/views/posts/post_item.html"%>
 <%= highlight "6" %>
-<%= commit "5-3", "Przekierowanie na pojedyńczą stronę posta." %>
+<%= commit "5-3", "Przekierowanie na pojedynczą stronę posta." %>
 
 Ale chwila, skąd dokładnie router wie, skąd wziąć część `xyz` z `/posts/xyz`? W końcu nie przekazujemy tu żadnego `_id`.
 
