@@ -24,7 +24,7 @@ Gdy dane zostały znalezione, kolejnym zadaniem aplikacji jest przetłumaczenie 
 
 Używając metafory księgarni, można to skojarzyć z opakowaniem właśnie zakupionej książki i wrzucenie jej do torby. Jest to część nazywana "View" w znanym modelu MVC (Model-View-Controller).
 
-Ostatecznie, aplikacja wysyła wygenerowany kod HTML do przeglądarki. Praca aplikacji jest zakończona i kontrola zostaje przekazana z dala od jej wirtualnych rąk, oczekująć na kolejny dostęp.
+Ostatecznie, aplikacja wysyła wygenerowany kod HTML do przeglądarki. Praca aplikacji jest zakończona i kontrola zostaje przekazana z dala od jej wirtualnych rąk, oczekując na kolejny dostęp.
 
 ### Jak to robi Meteor
 
@@ -50,7 +50,7 @@ Wróćmy do Microscope. Poniżej znajdziesz wszystkie posty znajdujące się w b
 
 Co prawda taka funkcjonalność nie istnieje w aplikacji Microscope, ale wyobraźmy sobie, że niektóre z postów zostały zaznaczone jako posiadające obraźliwe słownictwo. Mimo to, że chcemy je dalej przechowywać w bazie danych, nie powinny być udostępniane użytkownikom (tj. wysyłane do klienta).
 
-Naszym pierwszym zadaniem będzie przekazanie Meteorowi które dane *chcemy* wysłać klientowi. Bedą **publikowane** wyłącznie te posty, które nie zostały oznaczone flagą jako obraźliwe.
+Naszym pierwszym zadaniem będzie przekazanie Meteorowi które dane *chcemy* wysłać klientowi. Będą **publikowane** wyłącznie te posty, które nie zostały oznaczone flagą jako obraźliwe.
 
 <%= diagram "collections-2", "Wyłączenie zaznaczonych postów.", "pull-center" %>
 
@@ -109,7 +109,7 @@ Okazuje się, że post Boba jest przyporządkowany do kliku kategorii (np. “Ja
 
 <%= diagram "collections-4", "Zaznaczanie podzbioru dokumentów po stronie klienta.", "pull-center" %>
 
-Tak, jak po stronie serwera, użyjemy funkcję `Posts.find()` do zaznaczenia pozdbioru danych.
+Tak, jak po stronie serwera, użyjemy funkcję `Posts.find()` do zaznaczenia podzbioru danych.
 
 ~~~js
 // po stronie klienta
@@ -134,7 +134,7 @@ Jak to działa? Przyjmijmy, że posiadasz aplikację `'posts'` po stronie serwer
 
 Jeżeli zatem używasz pakietu `autopublish`, nie musisz się troszczyć o publikacje. Dane są wszechobecne i wszystko jest proste. Oczywiście możesz napotkać oczywiste problemy związane z utrzymywaniem kompletnej kopii bazy danych po stronie klienta na każdej maszynie po stronie klienta. 
 
-Z tego powodu użycie autopublish jest odpowiednie wyłącznie wtedy gdy zaczynasz implementację i nie uzwględniłeś publikacji.
+Z tego powodu użycie autopublish jest odpowiednie wyłącznie wtedy gdy zaczynasz implementację i nie uwzględniłeś publikacji.
 
 ### Publikowanie całych kolekcji
 
@@ -170,7 +170,7 @@ Jeżeli czytałeś [dokumentację publikacji Meteora](http://docs.meteor.com/#pu
 
 Jest to spowodowane bardzo ważnym ułatwieniem, które dostarcza Meteor: metodą `_publishCursor()`. Nie widziałeś również tej metody? Może nie bezpośrednio, ale jeżeli zwracasz [kursor](/chapter/meteor-vocabulary/) (np. `Posts.find({'author':'Tom'})`) w funkcji dokonującej publikacji, to Meteor używa właśnie tej funkcji.
 
-Gdy Meteor rozpoznaje, że publikacjia `somePosts` zwraca kursor, woła metodę `_publishCursor()` aby -- tak, zgadłeś -- automatycznie publikować powyższy kursor.
+Gdy Meteor rozpoznaje, że publikacja `somePosts` zwraca kursor, woła metodę `_publishCursor()` aby -- tak, zgadłeś -- automatycznie publikować powyższy kursor.
 
 Pokrótce opiszmy sposób działania `_publishCursor()`:
 

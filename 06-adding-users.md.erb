@@ -101,7 +101,7 @@ Teraz wyloguj się i ponownie utwórz konto z inną nazwą użytkownika. `Meteor
 ❯ Meteor.users.find().count();
 1
 ~~~
-<%= caption "Konsola przeglądarkiu" %>
+<%= caption "Konsola przeglądarki" %>
 
 Konsola zwraca wartość 1. Czy nie powinna mieć wartości 2? Czy pierwszy użytkownik został usunięty? Jeżeli spróbujesz zalogować się jako pierwszy użytkownik, zobaczysz, że tak się nie stało.
 
@@ -127,7 +127,7 @@ Pakiet `accounts` publikuje wyłącznie *bieżącego* użytkownika. Wyjaśnia to
 
 Publikacja zatem publikuje wyłącznie jeden obiekt użytkownika dla każdego zalogowanego użytkownika (i nie publikuje żadnego, gdy nie jesteś zalogowany).
 
-Co więcej, dokumenty w naszej kolekcji użytkownika nie zawierają tych samych pól po stronie klienta i serwera. W Mongo, użytkownik posiada wiele danych. Aby to zobaczyć, wróc do terminala Mongo i wpisz:
+Co więcej, dokumenty w naszej kolekcji użytkownika nie zawierają tych samych pól po stronie klienta i serwera. W Mongo, użytkownik posiada wiele danych. Aby to zobaczyć, wróć do terminala Mongo i wpisz:
 
 ~~~bash
 > db.users.findOne()

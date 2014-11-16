@@ -14,13 +14,13 @@ Do tej pory powinieneś się zaznajomić ze sposobem działania publikacji i sub
 
 W [rozdziale wprowadzającym publikacje i subskrypcje](/chapter/publications-and-subscriptions/) poznałeś niektóre ze wzorów stosowania publikacji i subskrypcji i nauczyłeś jak funkcja `_publishCursor` ułatwia ich implementacje podczas tworzenia własnych stron.
  
-Przypomnijmy sobie, co funkcja `publishCursor` faktycznie wykonuje: zbiera wszystkie dokumenty, które pasują do kursora i wysyła je do kolecji po stronie klienta która *ma tą samą nazwę*. Zauważ, że nazwa _publication_ nie jest w żaden sposób wymieniona.
+Przypomnijmy sobie, co funkcja `publishCursor` faktycznie wykonuje: zbiera wszystkie dokumenty, które pasują do kursora i wysyła je do kolekcji po stronie klienta która *ma tą samą nazwę*. Zauważ, że nazwa _publication_ nie jest w żaden sposób wymieniona.
  
 Oznacza to, że możemy mieć _więcej niż jedną pulikację_ łączącą wersję jakichkolwiek kolekcji po stronie klienta i serwera.
  
 Spotkaliśmy się już z tym wzorcem w [rozdziale Dzielenie dokumentu na strony](/chapter/pagination/), gdzie publikowaliśmy dzielony podzbiór wszystkich postów w dołączonych do bieżącego posta.
  
-Innym podobnym zastosowaniem publikacji jest publikacja *przeglądu* większego zbioru dokumentów, jak również szczegółów pojedyńczego elementu.
+Innym podobnym zastosowaniem publikacji jest publikacja *przeglądu* większego zbioru dokumentów, jak również szczegółów pojedynczego elementu.
  
 <%= diagram "doublecollection", "Dwukrotne publikowanie kolekcji", "pull-center" %>
 
@@ -36,9 +36,9 @@ Meteor.publish('postDetail', function(postId) {
 
 W momencie gdy klient subskrybuje powyższe dwie publikacje (używając `autorun` aby upewnić się, że właściwy `postId` jest wysyłany do subskrypcji `postDetail`), jego kolekcja `posts` jest uaktualniana danymi pochodzącymi z dwóch źródeł: listy tytułów i nazwisk autorów z pierwszej subskrypcji i pełnymi szczegółami posta z drugiej.
 
-Możesz zdać sobie sprawę, że post publikowany przez `postDetail` jest również publikowany przez `allPosts` (pomimo tego, że jedynie z podzbiorem jego danych). Jednakże, Meteor troszczey się o łączeniu pól i upewnienia się, żeby żaden post nie był duplikowany.
+Możesz zdać sobie sprawę, że post publikowany przez `postDetail` jest również publikowany przez `allPosts` (pomimo tego, że jedynie z podzbiorem jego danych). Jednakże, Meteor troszczy się o łączeniu pól i upewnienia się, żeby żaden post nie był duplikowany.
 
-Jest to bardzo duże ułatwienie, ponieważ w tym przypdaku gdy renderujemy listę streszczeń postów, mamy do czynienia z obiektami danych które mają tylko tyle danych do pokazania, ile potrzeba. Jednakże podczas renderowania strony dla pojedyńczego posta, mamy wszystkie potrzebne dane. Oczywiście musimy wziąć pod uwagę, żeby nie oczekiwać po stronie klenta dostępności wszystkich pól we wszystkich postach - jest to częste źródło nieporozumień i błędów.
+Jest to bardzo duże ułatwienie, ponieważ w tym przypadku gdy renderujemy listę streszczeń postów, mamy do czynienia z obiektami danych które mają tylko tyle danych do pokazania, ile potrzeba. Jednakże podczas renderowania strony dla pojedynczego posta, mamy wszystkie potrzebne dane. Oczywiście musimy wziąć pod uwagę, żeby nie oczekiwać po stronie klienta dostępności wszystkich pól we wszystkich postach - jest to częste źródło nieporozumień i błędów.
  
 Należy odnotować, że nie jesteś ograniczony do zmieniających się właściwości dokumentu. Mógłbyś równie dobrze publikować te same własności w obu publikacjach ale uporządkować je w inny sposób.
  
@@ -57,13 +57,13 @@ Meteor.publish('bestPosts', function(limit) {
 
 Powyżej przeczytałeś, że można publikować tą samą kolekcję wielokrotnie. Okazuje się, że można osiągnąć bardzo podobny rezultat za pomocą innego wzorca: stworzenie jednej publikacji i jej wielokrotną *subskrypcję*.
  
-W Microscope subskrybujemy publikację `posts` wielokrotnie, ale Iron Router zajmuje się tworzeniem i usuwaniem każdej z nich. Nie ma jednak przeciwskazań, aby *subskrybować* ją wiele razy.
+W Microscope subskrybujemy publikację `posts` wielokrotnie, ale Iron Router zajmuje się tworzeniem i usuwaniem każdej z nich. Nie ma jednak przeciwwskazań, aby *subskrybować* ją wiele razy.
  
 Przykładowo, załóżmy, że chcemy wczytać zarówno najnowsze i najlepsze posty do pamięci równocześnie:
  
 <%= diagram "subscribetwice", "Dwukrotna subskrypcja tej samej publikacji", "pull-center" %>
 
-Ustawiamy pojedyńczą publikację:
+Ustawiamy pojedynczą publikację:
  
 ~~~js
 Meteor.publish('posts', function(options) {
@@ -82,13 +82,13 @@ Co dokładnie tu się dzieje? Każda przeglądarka otwiera *dwie* różne subskr
 
 Każda subskrypcja dostarcza różne argumenty dla tej publikacji, ale zasadniczo za każdym razem (różny) zbiór dokumentów zostaje wydzielony z kolekcji `posts` i wysłany do kolekcji po stronie klienta.
  
-### Wiele kolekcji w pojedyńczej subskrypcji
+### Wiele kolekcji w pojedynczej subskrypcji
 
 W przeciwieństwie do tradycyjnych relacyjnych baz danych takich jak MySQL, która korzysta z łączenia tabel *joins*, bazy danych NoSQL takie jak Mongo koncentrują się wyłącznie na *denormalizacji* i *wstawianiu*. Zobaczmy jak to działa w kontekście Meteora.
  
-Wybierzmy konkretny przykład. Dodaliśmy komentarze do postów i jak do tej pory byliśmy zadowoleni z zamieszczania komentarzy do pojedyńczych postów czytanych przez użytkownika.
+Wybierzmy konkretny przykład. Dodaliśmy komentarze do postów i jak do tej pory byliśmy zadowoleni z zamieszczania komentarzy do pojedynczych postów czytanych przez użytkownika.
  
-Jednakże, przyjmijmy, że chcielibyśmy pokazać komentarze do *wszystkich* postów na stronie początkowej (miejąc na uwadze, że te posty będą się zmieniały gdy będziemy je wyświetlali strona po stronie). Jest to dobry przykład dla którego powodem jest załączanie komentarzy w postach i tak naprawdę przyczyniło się to do tego, żebyśmy zdenormalizowali *liczniki* komentarzy.
+Jednakże, przyjmijmy, że chcielibyśmy pokazać komentarze do *wszystkich* postów na stronie początkowej (mając na uwadze, że te posty będą się zmieniały gdy będziemy je wyświetlali strona po stronie). Jest to dobry przykład dla którego powodem jest załączanie komentarzy w postach i tak naprawdę przyczyniło się to do tego, żebyśmy zdenormalizowali *liczniki* komentarzy.
  
 Moglibyśmy oczywiście zawsze wstawiać komentarze do postów, pozbywając się kolekcji przechowującej komentarze (`Comments`). Ale jak widzieliśmy w rozdziale *Denormalizacja*, decydując się na to, pozbylibyśmy się dodatkowych korzyści pracy z osobnymi kolekcjami.
  
@@ -96,7 +96,7 @@ Okazuje się, że istnieje sztuczka, za pomocą której można wstawiać komenta
 
 Przyjmijmy, że zarówno z naszą pierwszą stroną pokazującą listę postów, chcemy zasubkrybować listę najlepszych 2 komentarzy do każdego posta.
  
-Byłoby to trudne do realizacji z niezależną publikacją komentarzy, szczególnie gdyby lista postów była w jakiś sposób ograniczona (przymijmy, że do 10 ostatnich postów). Musielibyśmy napisać publikację, która wyglądała by mniej więcej w taki sposób:
+Byłoby to trudne do realizacji z niezależną publikacją komentarzy, szczególnie gdyby lista postów była w jakiś sposób ograniczona (przyjmijmy, że do 10 ostatnich postów). Musielibyśmy napisać publikację, która wyglądała by mniej więcej w taki sposób:
  
 <%= diagram "multiplecollections", "Dwie kolekcje w jednej subskrypcji", "pull-center" %>
 
@@ -106,9 +106,9 @@ Meteor.publish('topComments', function(topPostIds) {
 });
 ~~~
 
-Byłby to problem z punktu widzenia wydajności, ponieważ publikacja musiałaby być usuwana i ponownie tworzona za każdym razym, gdy zmienia się lista `topPostsIds`.
+Byłby to problem z punktu widzenia wydajności, ponieważ publikacja musiałaby być usuwana i ponownie tworzona za każdym razem, gdy zmienia się lista `topPostsIds`.
  
-Jest sposób na obejście tego. Możemy wykorzystać fakt, że możemy mieć nie tylko więcej niż jedną *publikację* dla pojedyńczej *kolekcji*, ale także więcej niż jedną *kolekcję* dla jednej *publikacji*:
+Jest sposób na obejście tego. Możemy wykorzystać fakt, że możemy mieć nie tylko więcej niż jedną *publikację* dla pojedynczej *kolekcji*, ale także więcej niż jedną *kolekcję* dla jednej *publikacji*:
  
 ~~~js
 Meteor.publish('topPosts', function(limit) {
@@ -145,7 +145,7 @@ Meteor.publish('topPosts', function(limit) {
 });
 ~~~
 
-Zwróć uwagę, że nie zwracami niczego w tej publikacjim ponieważ wysyłamy ręcznie wiadomości do `pod` kolekcji nas samych (korzystając z funkcji `.added()` i jej pochodnych). Z tego powodu nie musimy prosić `_publishCursor` o zrobienie tego dla nas przez zwrócenie kursora.
+Zwróć uwagę, że nie zwracamy niczego w tej publikacji ponieważ wysyłamy ręcznie wiadomości do `pod` kolekcji nas samych (korzystając z funkcji `.added()` i jej pochodnych). Z tego powodu nie musimy prosić `_publishCursor` o zrobienie tego dla nas przez zwrócenie kursora.
  
 Od teraz za każdym razem gdy publikujemy posta, równocześnie publikujemy dwa najlepsze komentarze załączone do niego. I to wszystko za pomocą jednego wywołania subskrypcji!
  
@@ -157,13 +157,13 @@ Do czego możemy jeszcze wykorzystać nowo przyswojoną wiedzę? A więc, jeżel
  
 <%= diagram "linkedcollections", "Jedna kolekcja dla dwóch subskrypcji", "pull-center" %>
 
-Jednym z powodów, dla którego chcielibyśmy to wykorzystać, jest *Dziedziczenie Pojedyńczej Tabeli*.
+Jednym z powodów, dla którego chcielibyśmy to wykorzystać, jest *Dziedziczenie Pojedynczej Tabeli*.
  
 Przyjmijmy, że chcielibyśmy się odnieść do różnych typów obiektów z naszego posta. Każdy z nich przechowuje niektóre wspólne pola, ale różni się trochę treścią. Przykładowo, moglibyśmy budować silnik blogowy przypominający Tumblr, gdzie każdy post ma ID, datę utworzenia i tytuł; ale dodatkowo może także zawierać rysunek, video, link czy po prostu tekst.
  
-Moglibyśmy zapisywać wszystkie te obiekty w pojedyńczej kolekcji `'Resources'` po stronie serwera, używając atrybutu `type` aby określić jakim są typem obiektu (`video`, '`image`, `link` itd.).
+Moglibyśmy zapisywać wszystkie te obiekty w pojedynczej kolekcji `'Resources'` po stronie serwera, używając atrybutu `type` aby określić jakim są typem obiektu (`video`, '`image`, `link` itd.).
  
-Pomimo tego, że po stronie serwera istnieje pojedyńcza kolekcja `Resources`, moglibyśmy przekształcić ją w wiele kolekcji `Videos`, `Images`, itd. po stronie klienta używając sztuczki jak poniżej.
+Pomimo tego, że po stronie serwera istnieje pojedyncza kolekcja `Resources`, moglibyśmy przekształcić ją w wiele kolekcji `Videos`, `Images`, itd. po stronie klienta używając sztuczki jak poniżej.
  
 ~~~js
   Meteor.publish('videos', function() {

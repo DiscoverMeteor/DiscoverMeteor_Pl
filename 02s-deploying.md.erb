@@ -20,7 +20,7 @@ Nauczymy się jak opublikować aplikację Meteora na kilka różnych sposobów. 
 
 Jest to rozdział poświęcony **Sidebars**. Bardziej szczegółowo jest opisany w dalszej części książki.
 
-Jeżeli wolisz kontynuwać pracę nad Microscope, możesz przeskoczyć ten rozdział i wrócić do niego w dowolnym momencie.
+Jeżeli wolisz kontynuować pracę nad Microscope, możesz przeskoczyć ten rozdział i wrócić do niego w dowolnym momencie.
 
 <% end %>
 
@@ -88,7 +88,7 @@ Właśnie opublikowaliśmy aplikację na serwerach Modulusa. Aby uzyskać więce
 
 Mimo tego, że nowe firmy hostingowe pojawiają się jak grzyby po deszczu, często napotkasz problemy związane z konkretnym hostingiem i jego ograniczeniami. Na dzień dzisiejszy publikacja aplikacji na własnym serwerze jest najlepszym sposobem na umieszczenie aplikacji Meteora w internecie. Jedyną przeszkodą może być to, że publikacja na własnym serwerze nie jest prosta, szczególnie gdy szukasz środowiska produkcyjnego o wysokiej jakości.
 
-[Meteor Up](https://github.com/arunoda/meteor-up) (lub w skrócie `mup`) jest kolejną próbą poradzenia sobie z tym problemem. Jest to narzędzie konsolowe, które zajmuje się ustawieniem i publikacją aplikacji za ciebie. Zobaczmy zatem jak apublikować Microscope używając Meteor Up.
+[Meteor Up](https://github.com/arunoda/meteor-up) (lub w skrócie `mup`) jest kolejną próbą poradzenia sobie z tym problemem. Jest to narzędzie konsolowe, które zajmuje się ustawieniem i publikacją aplikacji za ciebie. Zobaczmy zatem jak opublikować Microscope używając Meteor Up.
 
 Zanim będziemy mogli kontynuować, potrzebujemy serwer na który możemy opublikować aplikację. Polecamy [Digital Ocean](http://digitalocean.com), gdzie hosting zaczyna się od 5$ miesięcznie lub [AWS](http://aws.amazon.com/), który ma darmowe instancje Micro (szybko napotkasz problemy związane ze skalowaniem aplikacji, ale jeżeli chcesz się pobawić, na początek powinno wystarczyć).
 
@@ -116,7 +116,7 @@ $ mup init
 
 <% note do %>
 
-### Wspóldzielenie ustawień za pomocą Dropbox
+### Współdzielenie ustawień za pomocą Dropbox
 
 Świetnym sposobem na współdzielenie ustawień przez Ciebie i cały Twój zespół jest stworzenie folderu z konfiguracjami w twoim DropBoxie lub podobnym serwisie.
 
@@ -155,7 +155,7 @@ Następnym krokiem jest konfiguracja pliku `mup.json`. Poniżej znajdziesz domy�
 ~~~
 <%= caption "mup.json" %>
 
-Zapoznajmu się po kolei z każdym z ustawień.
+Zapoznajmy się po kolei z każdym z ustawień.
 
 **Server Authentication**
 
@@ -171,7 +171,7 @@ Jeżeli zdecydowałeś się użyć MongoHQ, ustaw pole `setupMongo` na `false` i
 
 **Ścieżka Aplikacji Meteora**
 
-Ponieważ nasza konfiguracja Meteor Up jest umieszczona w innym folerze, musimy wskazać Meteorowi z powrotem na naszą aplikację używając pola `app`. Wpisz lokalną ścieżkę, którą możesz otrzymać po wpisaniu `pwd` w konsoli w głównym folderze danej aplikacji.
+Ponieważ nasza konfiguracja Meteor Up jest umieszczona w innym folderze, musimy wskazać Meteorowi z powrotem na naszą aplikację używając pola `app`. Wpisz lokalną ścieżkę, którą możesz otrzymać po wpisaniu `pwd` w konsoli w głównym folderze danej aplikacji.
 
 **Zmienne Środowiskowe**
 
@@ -179,7 +179,7 @@ Możesz określić wszystkie zmienne środowiskowe aplikacji (takie jak `ROOT_UR
 
 ### Ustawienia i publikacja aplikacji
 
-Zanim będziemy mogli opublikować aplikację, musimy przygotować serwer, aby był gotowy na hosting aplikacji Meteora. Na szczęście ten skomplikowany proces został uproszczony do zawołania pojedyńczej komendy!
+Zanim będziemy mogli opublikować aplikację, musimy przygotować serwer, aby był gotowy na hosting aplikacji Meteora. Na szczęście ten skomplikowany proces został uproszczony do zawołania pojedynczej komendy!
 
 ~~~bash
 $ mup setup

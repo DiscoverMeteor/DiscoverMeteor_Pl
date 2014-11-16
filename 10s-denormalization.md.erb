@@ -20,7 +20,7 @@ Jednakże normalne podejście do tego problemu ma także swoje minusy: bez pola 
 
 ### Specjalna publikacja
 
-*Byłoby* również możliwe utworzenie specjalnej publikacji, która wysyła wyłącznie liczniki komenterzy, którymi jesteśmy zainteresowani (tj. liczników komentarzy które aktualnie widzimy, za pomocą zapytań aggregate po stronie serwera).
+*Byłoby* również możliwe utworzenie specjalnej publikacji, która wysyła wyłącznie liczniki komentarzy, którymi jesteśmy zainteresowani (tj. liczników komentarzy które aktualnie widzimy, za pomocą zapytań aggregate po stronie serwera).
 
 Jest to jednak warte rozważenia, jeżeli stopień skomplikowania kodu takiej publikacji byłby mniejszy, niż wysiłek włożony w denormalizację...
 
@@ -32,9 +32,9 @@ Oczywiście takie rozważania są specyficzne dla konkretnych zastosowań: jeże
 
 Jeżeli jesteś zaawansowanym użytkownikiem Mongo, mogłeś się zdziwić, że utworzyliśmy drugą kolekcję tylko dla komentarzy: dlaczego po prostu nie wstawiać komentarzy do listy znajdującej się w dokumencie posta?
 
-Okazuje się, że dla wielu narzędzi które oferuje Meteor, pracowuje się lepiej gdy operujemy na poziomie kolekcji. Na przykład:
+Okazuje się, że dla wielu narzędzi które oferuje Meteor, pracuje się lepiej gdy operujemy na poziomie kolekcji. Na przykład:
 
-1. Helper `{{#each}}` jest bardzo wydajny, jeżeli chodzi o iterację po kursorze (wyniku `collection.find()`). Nie jest to prawdą, gdy iteruje po tablicy objektów w środku większego obiektu.
+1. Helper `{{#each}}` jest bardzo wydajny, jeżeli chodzi o iterację po kursorze (wyniku `collection.find()`). Nie jest to prawdą, gdy iteruje po tablicy obiektów w środku większego obiektu.
 2. `allow` i `deny` operują na poziomie dokumentu, ułatwia to potwierdzenie, że jakiekolwiek modyfikacje pojedyńczych komentarzy są poprawne i obsługa byłaby bardziej skomplikowana na poziomie posta.
 3. DDP operuje na poziomie atrybutów dokumentu najwyższego poziomu -- oznacza to, że jeżeli `comments` byłyby własnością `post`, za każdym razem, gdy komentarz byłby dodawany do posta, serwer musiałby wysyłać całą uaktualnioną listę komentarzy tego posta do wszystkich podłączonych klientów.
 4. Publikacje i subskrypcje można o wiele łatwiej kontrolować na poziomie dokumentów. Na przykład, jeżeli chcielibyśmy dzielić na strony komentarze do posta, byłoby to trudne do zrealizowania gdyby komentarze nie były umieszczone w odrębnej kolekcji. 

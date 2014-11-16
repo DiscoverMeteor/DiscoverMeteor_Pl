@@ -44,9 +44,9 @@ Stwórzmy folder `/views` w folderze `/client`. Będzie to miejsce wstawienia ws
 
 ### Znajdowanie plików
 
-Meteor doskonale radzi sobie ze znajdowaniem plików. Nieważne gdzie wstawisz kod w folderz `/client`, Meteor go znajdzie i odpowiednio skompiluje. Oznacza to, że nigdy nie będziesz musiał wstawiał ścieżek 'include' do plików JavaScript czy CSS.
+Meteor doskonale radzi sobie ze znajdowaniem plików. Nieważne gdzie wstawisz kod w folderze `/client`, Meteor go znajdzie i odpowiednio skompiluje. Oznacza to, że nigdy nie będziesz musiał wstawiał ścieżek 'include' do plików JavaScript czy CSS.
 
-Oznacza to również, że mógłbyś równie dobrze wstawić wszystkie pliki w jeden folder, czy nawet cały kod w jeden plik. Ponieważ Meteor i tak skompiluje wszystko w jeden pojedyńczy skompresowany plik, chcielibyśmy raczej trzymać porządek i dobrze zorganizować strukturę plików.
+Oznacza to również, że mógłbyś równie dobrze wstawić wszystkie pliki w jeden folder, czy nawet cały kod w jeden plik. Ponieważ Meteor i tak skompiluje wszystko w jeden pojedynczy skompresowany plik, chcielibyśmy raczej trzymać porządek i dobrze zorganizować strukturę plików.
 
 <% end %>
 
@@ -118,9 +118,9 @@ Mówiąc inaczej, rola szablonów jest ograniczona do wyświetlania lub iterowan
 
 Gdy zapytaliśmy programistów, jakie nazwy nadają managerom szablonu, połowa nazwała je "kontrolery", a druga połowa "te pliki, w których umieszczam kod JavaScript".
 
-Manager nie jest tak naprawdę kontrolerem (przynajmniej w sensie kontrolera MVC) a termin "TFWIPMJSC" (przyp. tlum. ang. akronim od 'te pliki,...') nie dawał się łatwo zapamiętać, więc odrzuciliśmy obie propozycje.
+Manager nie jest tak naprawdę kontrolerem (przynajmniej w sensie kontrolera MVC) a termin "TFWIPMJSC" (przyp. tłum. ang. akronim od 'te pliki,...') nie dawał się łatwo zapamiętać, więc odrzuciliśmy obie propozycje.
 
-Nadal potrzebowaliśmy nadać nazwę czemuś, nad czym pracujemy i wymyśliśmy nazwę "manager", która wcześniej nie miała swojego odpowiednika w innych frameworkach webowych.
+Nadal potrzebowaliśmy nadać nazwę czemuś, nad czym pracujemy i wymyśliliśmy nazwę "manager", która wcześniej nie miała swojego odpowiednika w innych frameworkach webowych.
 
 <% end %>
 
@@ -156,7 +156,7 @@ Jeżeli wszystko zostało wpisane poprawnie, powinieneś zobaczyć w przeglądar
 
 <%= commit "3-1", "Dodany szablon listy postów i statyczne dane szablonu." %>
 
-Osiągneliśmy tutaj dwie rzeczy. Po pierwsze ustawiliśmy dane początkowe prototypu aplikacji w talbice `postsData`. Dane te normalnie zostałyby pobrane z bazy danych, ale ponieważ jeszcze się tego nie nauczyliśmy (poczekaj do kolejnego rozdziału), "oszukujemy" przez wprowadzenie statycznych danych.
+Osiągnęliśmy tutaj dwie rzeczy. Po pierwsze ustawiliśmy dane początkowe prototypu aplikacji w tablice `postsData`. Dane te normalnie zostałyby pobrane z bazy danych, ale ponieważ jeszcze się tego nie nauczyliśmy (poczekaj do kolejnego rozdziału), "oszukujemy" przez wprowadzenie statycznych danych.
 
 Po drugie, użyliśmy funkcję `Template.myTemplate.helpers()` Meteora, aby zdefiniować helper szablonu o nazwie `posts` który zwraca tablicę `postsData`.
 
@@ -196,11 +196,11 @@ Tym razem wartością helpera `domain` nie jest tablica, ale funkcja anonimowa. 
 
 <%= screenshot "3-2", "Wyświetlenie domen dla każdego linku." %>
 
-Helper `domain` ma URL jako paramter i zwraca jego domenę używając kilku sztuczek JavaScript. Ale skąd bierze się sam url?
+Helper `domain` ma URL jako parametr i zwraca jego domenę używając kilku sztuczek JavaScript. Ale skąd bierze się sam url?
 
-Aby odpowiedzieć na to pytanie, musimy wrócić do szablonu `posts_list.html`. Block helper `{{#each}}` nie tylko iteruje po tablicy, are również **ustawia wartość `this` w środku bloku odpowiadającego iterowanemu obiektowi**.
+Aby odpowiedzieć na to pytanie, musimy wrócić do szablonu `posts_list.html`. Block helper `{{#each}}` nie tylko iteruje po tablicy, ale również **ustawia wartość `this` w środku bloku odpowiadającego iterowanemu obiektowi**.
 
-Oznacza to, że pomiędzy tagami `{{#each}}`, każdy post po kolei jest równoznaczny z `this` i jest to zastosowane w każdym wstawioym managerze szablonu (`post_item.js`).
+Oznacza to, że pomiędzy tagami `{{#each}}`, każdy post po kolei jest równoznaczny z `this` i jest to zastosowane w każdym wstawionym managerze szablonu (`post_item.js`).
 
 Rozumiemy teraz dlaczego `this.url()` zwraca URL bieżącego posta. Co więcej, jeżeli użyjemy `{{title}}` i `{{url}}` w środku szablonu `post_item.html`, Meteor rozpozna co oznacza `this.title` i `this.url` i zwróci poprawne wartości.
 

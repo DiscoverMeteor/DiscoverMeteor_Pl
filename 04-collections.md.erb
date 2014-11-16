@@ -15,7 +15,7 @@ Budujemy aplikację społeczonościową wyświetlającą wiadomości, zatem pier
 
 Oczywiście potrzebujemy te posty gdzieś przechowywać. Meteor domyślnie pracuje z bazą danych MongoDB, która jest uruchomiona po stronie serwera i jest twoim stałym magazynem danych.
 
-Z tego względu, mimo to, że przeglądarka może przechowywać pewien stan aplikacji (na przykład bieżącą stronę, lub aktualnie wpisywany komentarz), serwer, a szczególniej Mongo zawiera stały, kanoniczny magazyn danych. Przez *kanoniczny* rozumiemy, że jest taki sam dla wszystkich użytkowników: każdy użytkownik może być na innej stronie, ale główna lista postów jest taka sama dla wszystkich użykowników.
+Z tego względu, mimo to, że przeglądarka może przechowywać pewien stan aplikacji (na przykład bieżącą stronę, lub aktualnie wpisywany komentarz), serwer, a szczególniej Mongo zawiera stały, kanoniczny magazyn danych. Przez *kanoniczny* rozumiemy, że jest taki sam dla wszystkich użytkowników: każdy użytkownik może być na innej stronie, ale główna lista postów jest taka sama dla wszystkich użytkowników.
 
 Te dane są przechowane w **Kolekcji** Meteora. Kolekcja jest specjalną strukturą danych, która poprzez publikacje i subskrypcje troszczy się o synchronizację danych w czasie rzeczywistym między każdą podłączoną przeglądarką po stronie klienta i bazą danych Mongo. Przyjrzyjmy się temu bliżej.
 
@@ -34,17 +34,17 @@ Kod, który nie znajduje się ani w folderze `client/` ani w `server/` będzie u
 
 ### Używać Var czy nie?
 
-W Meteorze słowo kluczowe `var` ogranicza zagres obiektu do bieżącego pliku. Ponieważ chcemy udostępnić kolekcję `Posts` całej aplikacji, *nie* używamy słowa kluczowego `var`.
+W Meteorze słowo kluczowe `var` ogranicza zakres obiektu do bieżącego pliku. Ponieważ chcemy udostępnić kolekcję `Posts` całej aplikacji, *nie* używamy słowa kluczowego `var`.
 
 <% end %>
 
-Po stronie serwera kolekcja kontaktuje się z bazą danych Mongo, czyta i zapisuje dowolne zmiany. W ten sposób może być porównana do standardowej biblioteki bazy danych. Po stroni klienta kolekcja jest *bezpieczną* kopią *pozdbioru* prawdziwej, kanonicznej kolekcji. Kolekcja po stronie klienta jest na bieżąco i (w większości) niewidowicznie uaktualniana w czasie rzeczywistym z oznaczonym podzbiorem danych.
+Po stronie serwera kolekcja kontaktuje się z bazą danych Mongo, czyta i zapisuje dowolne zmiany. W ten sposób może być porównana do standardowej biblioteki bazy danych. Po stroni klienta kolekcja jest *bezpieczną* kopią *pozdbioru* prawdziwej, kanonicznej kolekcji. Kolekcja po stronie klienta jest na bieżąco i (w większości) niewidocznie uaktualniana w czasie rzeczywistym z oznaczonym podzbiorem danych.
 
 <% note do %>
 
-### Konsola vs Konsola vs Konsola
+### Konsola vs. Konsola vs. Konsola
 
-W niniejzym rozdziale zaczniemy korzystać z **konsoli przeglądarki**, której nie należy mylić z **terminalem** czy **konsolą Mongo**. Poniżej znajdziesz szybkie wprowadzenie do każdej z nich.
+W niniejszym rozdziale zaczniemy korzystać z **konsoli przeglądarki**, której nie należy mylić z **terminalem** czy **konsolą Mongo**. Poniżej znajdziesz szybkie wprowadzenie do każdej z nich.
 
 #### Terminal
 
@@ -101,7 +101,7 @@ Możesz również przeczytać logi aplikacji przez wpisanie polecenia `meteor lo
 
 <% end %>
 
-Składnia Mongo wydaje się być znajoma, pownieważ używa interfejsu Javascript. Nie będziemy przeprowadzali kolejnych zmian w konsoli Mongo, ale od czasu do czasu sprawdzimy czy oczekiwane dane faktycznie znajdują się w bazie.
+Składnia Mongo wydaje się być znajoma, ponieważ używa interfejsu Javascript. Nie będziemy przeprowadzali kolejnych zmian w konsoli Mongo, ale od czasu do czasu sprawdzimy czy oczekiwane dane faktycznie znajdują się w bazie.
 
 ### Kolekcje po stronie klienta
 
@@ -125,7 +125,7 @@ Kluczowym zagadnieniem jest sposób, w jaki kolekcja po stronie klienta synchron
 
 Zamiast wyjaśniać to szczegółowo zobaczmy co dzieje się podczas synchronizacji.
 
-Otwórz dwa okna przeglądarki i uruchom konsolę przeglądarki w każdej z nich. Następnie uruchom konsolę Mongo z linii komend. W tym momencie, powinieneś zobaczyć w każdym z trzech miejsc pojedyńczy dokument, który utworzyliśmy wcześniej.
+Otwórz dwa okna przeglądarki i uruchom konsolę przeglądarki w każdej z nich. Następnie uruchom konsolę Mongo z linii komend. W tym momencie, powinieneś zobaczyć w każdym z trzech miejsc pojedynczy dokument, który utworzyliśmy wcześniej.
 
 ~~~bash
 > db.posts.find();
@@ -160,7 +160,7 @@ Bez większych niespodzianek post został dodany do lokalnej kolekcji. Sprawdźm
 ~~~
 <%= caption "Konsola Mongo" %>
 
-Jak widać, post został przeniesiony z powrotem do bazy danych Mongo po stronie serwera bez potrzeby pisania pojedyńczej linii kodu (tak naprawdę to napisaliśmy _jedną_ linię kodu: `new Meteor.Collection('posts')`). Ale to nie wszystko!
+Jak widać, post został przeniesiony z powrotem do bazy danych Mongo po stronie serwera bez potrzeby pisania pojedynczej linii kodu (tak naprawdę to napisaliśmy _jedną_ linię kodu: `new Meteor.Collection('posts')`). Ale to nie wszystko!
 
 Przejdź do drugiej instancji przeglądarki i wpisz w konsoli:
 
@@ -262,7 +262,7 @@ W obrębie aplikacji Meteor jest sprytny na tyle, aby iterować po kursorze bez 
 
 <% end %>
 
-Teraz, zamiast wczytywać statyczną tablicę z listą postów za pomocą zmiennej, zwracamy kursor do helpera `posts`. Ale co tym sposobem osiągneliśmy? Jeżeli wrócimy do przeglądarki, zobaczymy:
+Teraz, zamiast wczytywać statyczną tablicę z listą postów za pomocą zmiennej, zwracamy kursor do helpera `posts`. Ale co tym sposobem osiągnęliśmy? Jeżeli wrócimy do przeglądarki, zobaczymy:
 
 <%= screenshot "4-3", "Użycie zmiennych danych" %>
 
@@ -291,11 +291,11 @@ Właśnie pierwszy raz byłeś naocznym świadkiem działania reaktywności. Gdy
 
 W tym przypadku, najprostszą zmianą było dodanie kolejnego `<div class="post">...</div>`. Jeżeli chcesz się upewnić, że to się na pewno wydarzyło, otwórz DOM inspector i zaznacz element `<div>` odpowiadający jednemu z istniejących postów. 
 
-Teraz, w konsoli JavaScript, wstaw kolejny post. Jeżeli przejdziesz z powrotem do inspectora DOM, zobaczysz dodatkowy element `<div>` odpowiadający nowemu postowi, ale nadal będzie zaznaczony *ten sam* element `<div>` co poprzednio. Jest to użyteczny sposób na sprawdzenie, kiedy elementy zostały przerenderowane i kiedy nie ulegają zmianie.
+Teraz, w konsoli JavaScript, wstaw kolejny post. Jeżeli przejdziesz z powrotem do inspektora DOM, zobaczysz dodatkowy element `<div>` odpowiadający nowemu postowi, ale nadal będzie zaznaczony *ten sam* element `<div>` co poprzednio. Jest to użyteczny sposób na sprawdzenie, kiedy elementy zostały przerenderowane i kiedy nie ulegają zmianie.
 
 <% end %>
 
-### Łączenie kolekcji: Publikacje i Subsrkrypcje
+### Łączenie kolekcji: Publikacje i Subskrypcje
 
 Do tej pory używaliśmy pakietu `autopublish`, który nie jest zamierzony do użycia w środowisku produkcyjnym. Jak nazwa wskazuje, pakiet ten automatycznie publikuje w całości wszystkie kolekcje każdemu podłączonemu klientowi. Nie jest to, co chcemy osiągnąć, więc wyłączmy to.
 
@@ -305,9 +305,9 @@ Otwórz nowe okno terminala i wpisz:
 $ meteor remove autopublish
 ~~~
 
-Ma to efekt natychmiastowy. Jeżeli będziesz obserwował przeglądarkę, zobaczysz, że wszystkie posty zniknęły! Dzieje się tak, poniewaź polegaliśmy na pakiecie `autopublish`, który tworzył lustrzane odbicie wszystkich postów z bazy danych w kolekcji po stronie klienta.
+Ma to efekt natychmiastowy. Jeżeli będziesz obserwował przeglądarkę, zobaczysz, że wszystkie posty zniknęły! Dzieje się tak, ponieważ polegaliśmy na pakiecie `autopublish`, który tworzył lustrzane odbicie wszystkich postów z bazy danych w kolekcji po stronie klienta.
 
-W końcu będzieli musieli się upewnić, że przesyłamy wyłącznie te posty, które użytkownik będzie miał zobaczyć (biorąc również po uwagę np. dzielenie dokumentu na strony). Na teraz, ustawimy publikację kolekcji `Posts` w całości.
+W końcu będziemy musieli się upewnić, że przesyłamy wyłącznie te posty, które użytkownik będzie miał zobaczyć (biorąc również po uwagę np. dzielenie dokumentu na strony). Na teraz, ustawimy publikację kolekcji `Posts` w całości.
 
 Aby to osiągnąć, utworzymy prostą funkcję `publish()`, która zwraca kursor posiadający referencję do wszystkich postów:
 
@@ -329,6 +329,6 @@ Meteor.subscribe('posts');
 
 Jeżeli ponownie sprawdzimy przeglądarkę, zobaczymy ponownie nasze posty. Świetnie!
 
-### Konluzja
+### Konkluzja
 
 Co zatem osiągnęliśmy? Pomimo tego, że jeszcze nie posiadamy interfejsu użytkownika, mamy funkcjonalną aplikację webową. Moglibyśmy wystawić aplikację na zewnętrznym internetowym serwerze i (używając konsolę przeglądarki) zacząć dodawać posty, które byłyby widziane w każdej podłączonej do strony przeglądarki na całym świecie.

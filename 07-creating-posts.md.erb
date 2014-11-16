@@ -110,7 +110,7 @@ Uwaga: jest tu wiele znaczników pochodzących z Bootstrap Twittera. Podczas gdy
 
 <%= screenshot "7-1", "Formularz dodawania posta" %>
 
-Jest to prosty formularz. Nie musimy się martwić o wykonanie konkretnej akcji, ponieważ będziemy przechwytywali zdarzenie `wyślij` na forumlarzu i uaktualniali dane za pomocą JavaScript. (Nie ma sensu dostarczać na wszelki wypadek rozwiązania nie-JavaScript, gdy weźmiesz pod uwagę, że aplikacja Meteora jest całkowicie niefunkcjonalna po wyłączeniu obsługi JavaScript).
+Jest to prosty formularz. Nie musimy się martwić o wykonanie konkretnej akcji, ponieważ będziemy przechwytywali zdarzenie `wyślij` na formularzu i uaktualniali dane za pomocą JavaScript. (Nie ma sensu dostarczać na wszelki wypadek rozwiązania nie-JavaScript, gdy weźmiesz pod uwagę, że aplikacja Meteora jest całkowicie niefunkcjonalna po wyłączeniu obsługi JavaScript).
 
 ### Tworzenie postów
 
@@ -138,9 +138,9 @@ Template.postSubmit.events({
 
 Powyższa funkcja używa [jQuery](http://jquery.com) do parsowania wartości różnych pól formularza i tworzenia nowego obiektu posta z wyników parsowania. Musimy się upewnić, że używamy `preventDefault` na parametrze `event` naszego handlera aby upewnić się, że przeglądarka nie będzie kontynuowała i próbowała wysłać formularza.
 
-Ostatecznie, możemy przekierować uzytkownika to strony nowego posta. Funkcja kolekcji `insert` zwraca wygenerowany `id` dla obiektu, który został wstawiony do bazy danych, który użyje funkcja Routera `go()` aby utworzyć docelowy URL.
+Ostatecznie, możemy przekierować użytkownika to strony nowego posta. Funkcja kolekcji `insert` zwraca wygenerowany `id` dla obiektu, który został wstawiony do bazy danych, który użyje funkcja Routera `go()` aby utworzyć docelowy URL.
 
-Końcowym rezultatem jest to, że po wciśnieciu przycisku `wyślij` przez użytkownika, tworzony jest post i użytkownik jest natychmiastowo zabierany do strony z dyskusją na temat tego nowego posta.
+Końcowym rezultatem jest to, że po wciśnięciu przycisku `wyślij` przez użytkownika, tworzony jest post i użytkownik jest natychmiastowo zabierany do strony z dyskusją na temat tego nowego posta.
 
 ### Dodanie kilku środków bezpieczeństwa
 
@@ -155,7 +155,7 @@ $ meteor remove insecure
 ~~~
 <%= caption "Terminal" %>
 
-Po wykonaniu tej komendy zauważyszm że formularz posta przestanie działać. Dzieje się to, ponieważ bez pakietu `insecure`wstawianie danych po stronie klienta _przestaje być dozwolone_. Musimy dodać Metorowi wyraźne zasady pozwalające na wstawianie postów przez klienta lub wstawiać posty po stronie serwera.
+Po wykonaniu tej komendy zauważysz że formularz posta przestanie działać. Dzieje się to, ponieważ bez pakietu `insecure`wstawianie danych po stronie klienta _przestaje być dozwolone_. Musimy dodać Metorowi wyraźne zasady pozwalające na wstawianie postów przez klienta lub wstawiać posty po stronie serwera.
 
 ### Zezwolenie na wstawianie postów
 
@@ -186,7 +186,7 @@ Zdołaliśmy upewnić się, że musisz być zalogowany, aby móc tworzyć posty.
 
 Jednakże, wciąż musimy dać sobie radę z kilkoma problemami:
 
- - Wylogowani użytkownicy nadal mają dostę do formularza tworzenia posta
+ - Wylogowani użytkownicy nadal mają dostęp do formularza tworzenia posta
  - Post nie jest związany z użytkownikiem w żaden sposób (i nie ma żadnego kodu po stronie serwera, który by to obsługiwał).
  - Można utworzyć wiele postów, które będą wskazywały na ten sam URL.
 
@@ -304,7 +304,7 @@ Helper `currentUser` jest dostarczony przez pakiet `accounts` i jest odpowiednik
 
 ### Serwerowe metody Meteora: Większy stopień bezpieczeństwa i abstrakcji
 
-Zdołaliśmy zabezpieczyć dostęp do strony nowych postów dla niezalogowanych użytkowników, i odmówić takim użytkownim możliwość dodawania postów nawet jeżeli oszukują i używają konsoli przeglądarki. Jest jednak jeszcze kilka rzeczy, o które musimy się zatroszczyć:
+Zdołaliśmy zabezpieczyć dostęp do strony nowych postów dla niezalogowanych użytkowników, i odmówić takim użytkownikom możliwość dodawania postów nawet jeżeli oszukują i używają konsoli przeglądarki. Jest jednak jeszcze kilka rzeczy, o które musimy się zatroszczyć:
 
 - Dodanie znacznika czasu do posta.
 - Upewnienie się, że ten sam URL nie można dodać więcej, niż jeden raz.
@@ -344,7 +344,7 @@ Template.postSubmit.events({
 ~~~
 <%= caption "client/views/posts/post_submit.js" %>
 
-Funkcja `Meteor.call` woła Metodę o nazwie określonej w pierwszym parametrze funkcji. Możesz dodać parametry do wywołania funkcji (w tym przypadku obiekt `post` skonstruowany na podstawie formularza) i ostatecznie dodać callback, który zostanie uruchomiony po zakończeniu Metody. Tutaj po prostu ostrzegamy użytkownika czy wystąpił jakiś problem lub przekierowujemy go nowoutworzonej strony dyskusji konkretnego posta.
+Funkcja `Meteor.call` woła Metodę o nazwie określonej w pierwszym parametrze funkcji. Możesz dodać parametry do wywołania funkcji (w tym przypadku obiekt `post` skonstruowany na podstawie formularza) i ostatecznie dodać callback, który zostanie uruchomiony po zakończeniu Metody. Tutaj po prostu ostrzegamy użytkownika czy wystąpił jakiś problem lub przekierowujemy go nowo utworzonej strony dyskusji konkretnego posta.
 
 Następnie zdefiniujemy Metodą w pliku `collections/posts.js`. Usuniemy blok `allow()` z `posts.js`, ponieważ Metoda Meteora i tak go ominie. Pamiętaj, że Metody są wykonywane po stronie serwera, więc Meteor uważa, że można im ufać.
 
@@ -390,15 +390,15 @@ Meteor.methods({
 
 Metoda ta jest trochę skomplikowana, ale mamy nadzieje że możesz nadążyć.
 
-Na początkek definiujemy zmienną `user` i sprawdzamy, czy post z tym samym linkiem już nie istnieje. Następnie sprawdzamy, czy użytkownik jest zalogowany, rzucając błąd (który końcowo będzie wyświetlony w przeglądarce), jeżeli nie jest. Przeprowadzamy także prostą walidację obiektu posta, aby upewnić się, że post zawiera tytuł.
+Na początek definiujemy zmienną `user` i sprawdzamy, czy post z tym samym linkiem już nie istnieje. Następnie sprawdzamy, czy użytkownik jest zalogowany, rzucając błąd (który końcowo będzie wyświetlony w przeglądarce), jeżeli nie jest. Przeprowadzamy także prostą walidację obiektu posta, aby upewnić się, że post zawiera tytuł.
 
-Następnie, jeżeli istnieje już post z tym samym URL, rzucamy błąd `302` (który oznacza przekierowanie), przekazaując użytkownikowi, że powinien sprawdzić poprzednio tworzony post.
+Następnie, jeżeli istnieje już post z tym samym URL, rzucamy błąd `302` (który oznacza przekierowanie), przekazując użytkownikowi, że powinien sprawdzić poprzednio tworzony post.
 
 Klasa `Error` Meteora ma trzy parametry. Pierwszy, (`error`) będzie numerycznym kodem `302`, drugi (`reason`) zawiera wyjaśnienie zrozumiałe dla człowieka i trzeci (`details`) może być jakąkolwiek użyteczną informacją.
 
 W naszym przypadku, użyjemy trzeci argument aby przekazać ID posta, który właśnie znaleźliśmy. Uwaga: użyjemy tego później aby przekierować użytkownika do jeszcze nieistniejącego posta.
 
-Jeżeli wszystkie kroki są sprawdzone i przechodzą poprawnie, bierzemy pola, które chcemy wstawić (upewniając się, że użytkownik wołający tą Metodę w konsoli przeglądarki nie może dodać fałszywych danych do bazy) i dodajemy pewne informacje o uzytkowniku dodającym posta -- jak również bieżący czas -- do posta.
+Jeżeli wszystkie kroki są sprawdzone i przechodzą poprawnie, bierzemy pola, które chcemy wstawić (upewniając się, że użytkownik wołający tą Metodę w konsoli przeglądarki nie może dodać fałszywych danych do bazy) i dodajemy pewne informacje o użytkowniku dodającym posta -- jak również bieżący czas -- do posta.
 
 Ostatecznie, wstawiamy post do bazy danych i zwracamy nowy `id` użytkownikowi.
 

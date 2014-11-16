@@ -18,7 +18,7 @@ Używanie tych callbacków pozwala na bardziej deklaratywne modyfikowanie bazy d
 
 ### Wiele callbacków
 
-Możemy zdefiniować tyle callbacków `allow`, ile tylko potrzeba. Potrzebujemy, aby _przynajmniej jeden z nich_ zwracał wartość `true` dla bieżącej zmiany. Zatem gdy `Posts.insert` jest wołany w przeglądarce (nieważne, czy z kodu aplikacji po stronie klienta, czy z konsoli przeglądarki), serwer z kolei zawoła cokolwiek jest zezwolone-`insert` sprawdza wzystkie po kolei, aż znajdzie jeden, który zwróci `true`. Jeżeli nie znajdzie żadnego, nie pozwoli na wprowadzenie danych i zwróci klientowi błąd `403`.
+Możemy zdefiniować tyle callbacków `allow`, ile tylko potrzeba. Potrzebujemy, aby _przynajmniej jeden z nich_ zwracał wartość `true` dla bieżącej zmiany. Zatem gdy `Posts.insert` jest wołany w przeglądarce (nieważne, czy z kodu aplikacji po stronie klienta, czy z konsoli przeglądarki), serwer z kolei zawoła cokolwiek jest zezwolone-`insert` sprawdza wszystkie po kolei, aż znajdzie jeden, który zwróci `true`. Jeżeli nie znajdzie żadnego, nie pozwoli na wprowadzenie danych i zwróci klientowi błąd `403`.
 
 Podobnie możemy zdefiniować jeden lub więcej callbacków `deny`. Jeżeli _jakikolwiek_ z tych callbacków zwróci wartość `true`, zmiana będzie odwołana i zostanie zwrócony błąd `403`. Logika tego jest taka, że dla udanego `insert` zostanie zawołany jeden lub więcej callbacków `insert` oraz _kazdy_ callback `deny`.
 

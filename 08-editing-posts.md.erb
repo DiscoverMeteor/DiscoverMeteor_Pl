@@ -7,7 +7,7 @@ contents: jak dodać formularz umożliwiający edytowanie postów.|jak ustawić 
 paragraphs: 29
 ---
 
-Teraz skoro możemy tworzyć posty, następnym krokiem będzie umożliwienie edycji i usuwanie postóœ. Kod UI który to umożliwi jest releatywnie prosty i jest to dobry moment na podjęcie tematu zarządzania praw użytkowników.
+Teraz skoro możemy tworzyć posty, następnym krokiem będzie umożliwienie edycji i usuwanie postów. Kod UI który to umożliwi jest relatywnie prosty i jest to dobry moment na podjęcie tematu zarządzania praw użytkowników.
 
 Zacznijmy od podłączenia routera. Dodamy ścieżkę, która umożliwi dostęp do strony modyfikacji posta i ustawi jej kontekst danych:
 
@@ -52,7 +52,7 @@ Router.before(requireLogin, {only: 'postSubmit'});
 
 ### Szablon edytowania posta
 
-Możemy teraz skoncetrować się na szablonie. Nasz szablon `postEdit` będzie miał całkiem standardową formę:
+Możemy teraz skoncentrować się na szablonie. Nasz szablon `postEdit` będzie miał całkiem standardową formę:
 
 ~~~html
 <template name="postEdit">
@@ -126,7 +126,7 @@ Template.postEdit.events({
 
 Jak do tej pory większość kodu powinna się Tobie wydać znajoma. Na początku mamy helper szablonu, który pobiera bieżący post z bazy danych i przekazuje go do szablonu.
 
-Następnie mamy dwo callbacki zdarzeń szablonu: jeden dla zdarzenia `submit` formularza, drugi dla usunięcia zdarzenia 'click' dla linka.
+Następnie mamy dwa callbacki zdarzeń szablonu: jeden dla zdarzenia `submit` formularza, drugi dla usunięcia zdarzenia 'click' dla linka.
 
 Callback usuwający zdarzenie click jest bardzo prosty: omija domyślne zdarzenie click i pyta o potwierdzenie. Jeżeli je dostanie, korzysta z post ID obecnego posta otrzymanego z kontekstu danych szablonu, usuwa go i ostatecznie przekierowuje użytkownika do strony domowej.
 
@@ -240,11 +240,11 @@ Posts.deny({
 
 Używamy tablicy `fieldNames`, która zawiera listę zmienianych pól i używamy metody `without()` [Underscore](http://underscorejs.org/), aby zwrócić tablicę, która zawiera częściową tablicę zawierającą pola, te które *nie* są polami `url` czy `title`.
 
-Jeżeli wszystko przebiegnie prawidłowo, ta tablica powinna być pusta i jej długość powinna być równa 0. Jeżeli ktoś stara się dokonać czegoś nieoczekiwanego, długość tablicy będzie równa 1 lub więcej i callback zwrócie `true` (odrzucając w ten sposób uaktualnienie).
+Jeżeli wszystko przebiegnie prawidłowo, ta tablica powinna być pusta i jej długość powinna być równa 0. Jeżeli ktoś stara się dokonać czegoś nieoczekiwanego, długość tablicy będzie równa 1 lub więcej i callback zwróci `true` (odrzucając w ten sposób uaktualnienie).
 
 <% note do %>
 
-### Zawołania metod vs manipulacja danych po stronie klienta
+### Zawołania metod vs. manipulacja danych po stronie klienta
 
 Używamy metody `post` aby utworzyć nowe posty, natomiast do edycji i usuwania ich wołamy `update` i `remove` bezpośrednio po stronie klienta i ograniczamy dostęp przez `allow` i `deny`.
 

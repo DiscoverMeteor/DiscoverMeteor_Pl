@@ -12,7 +12,7 @@ W ostatnim rozdziale wprowadziliśmy nowy koncept w świecie Metora: **Metody**,
 
 <%= diagram "latency1", "Bez kompensacji lagów", "pull-right" %>
 
-Metoda w Meteorze umożliwia uruchomienie serii komand na serwerze w uporządkowany sposób. W naszym przykładzie, użytliśmy Metody ponieważ chcieliśmy upewnić się, że nowe posty zostaną otagowane imieniem autora i jego id oraz bieżącym czasem serwera.
+Metoda w Meteorze umożliwia uruchomienie serii komand na serwerze w uporządkowany sposób. W naszym przykładzie, użyliśmy Metody ponieważ chcieliśmy upewnić się, że nowe posty zostaną otagowane imieniem autora i jego id oraz bieżącym czasem serwera.
 
 Gdyby jednak Meteor uruchamiał Metody w sposób najbardziej podstawowy, mielibyśmy problem. Rozważ następującą sekwencję zdarzeń (uwaga: znaczniki czasu są losowymi wartościami, wybranymi wyłącznie dla celów demonstracyjnych):
 
@@ -128,6 +128,6 @@ Gdy definujesz kolekcję po stronie serwera o nazwie `posts`, definiujesz pośre
 
 Jeżeli nadążasz, mogłeś zdać sobie sprawę, że nasza metoda `post` podczas wstawiania postów wywołuje inną metodę (`posts/insert`). Jak to działa?
  
-Gdy uruchamiana jest symulacja (wersja metody po stronie klienta), wykonujemy symulację `insert` (zatem wprowadzamy dane do koelekcji po stronie klienta), ale *nie wołamy* prawdziwej metody `insert` po stronie serwera, ponieważ oczekujemy, że wykona to *serwerowa* wersja metody `post`.
+Gdy uruchamiana jest symulacja (wersja metody po stronie klienta), wykonujemy symulację `insert` (zatem wprowadzamy dane do kolekcji po stronie klienta), ale *nie wołamy* prawdziwej metody `insert` po stronie serwera, ponieważ oczekujemy, że wykona to *serwerowa* wersja metody `post`.
 
 Co za tym idzie, gdy serwerowa metoda `post` woła `insert`, nie ma potrzeby o martwienie się o symulację i wprowadzenie danych przebiega płynnie.

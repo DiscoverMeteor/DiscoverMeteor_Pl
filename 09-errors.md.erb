@@ -13,9 +13,9 @@ Zamiast tego rozwiązania, zbudujemy wszechstronny mechanizm raportowania błęd
 
 ### Wprowadzenie do lokalnych kolekcji
 
-Zaimplementujemy prosty system, który śledzi, które błędy użytkownik zobaczył i wyświetla nowe błędy w odpowienim miejscu "migoczących wiadomości" na stronie. Ten wzorzec UX jest użyteczny, gdy chcemy poinformować użytkownika, że coś się stało bez przerywania ich pracy.
+Zaimplementujemy prosty system, który śledzi, które błędy użytkownik zobaczył i wyświetla nowe błędy w odpowiednim miejscu "migoczących wiadomości" na stronie. Ten wzorzec UX jest użyteczny, gdy chcemy poinformować użytkownika, że coś się stało bez przerywania ich pracy.
 
-Utworzymy coś podobnego do migoczących powiadomień znanych z aplikakcji Ruby on Rails, ale jest bardziej subtelne, bo zaimplementowane po stronie klienta i rozpoznające kiedy użytkownik zobaczył wiadomość.
+Utworzymy coś podobnego do migoczących powiadomień znanych z aplikacji Ruby on Rails, ale jest bardziej subtelne, bo zaimplementowane po stronie klienta i rozpoznające kiedy użytkownik zobaczył wiadomość.
 
 Aby rozpocząć, utworzymy kolekcję, w której będziemy zapamiętywać błędy. Pod warunkiem, że błędy są przeznaczone tylko do bieżącej sesji i nie muszą być w żaden sposób zapisywane, zrobimy coś nowego i stworzymy _lokalną kolekcję_. Oznacza to, że kolekcja `Errors` będzie istniała tylko w przeglądarce po stronie klienta i nie będzie starała się synchronizować z serwerem.
 
@@ -101,7 +101,7 @@ Template.errors.helpers({
 
 ### Tworzenie błędów
 
-wiemy jak wyświetlać błędy, ale potrzebujemy utworzyć kilka zanim będzie można cokolwiek zobaczyć. Błędy są najczęściej uaktywniane przez użytkowników wproadzających nowe dane, zatem będziemy sprawdzali błędy w callbacku tworzenia postów i wyświetlać wiadomość dla jakichkolwiek błędów, które powstają.
+wiemy jak wyświetlać błędy, ale potrzebujemy utworzyć kilka zanim będzie można cokolwiek zobaczyć. Błędy są najczęściej uaktywniane przez użytkowników wprowadzających nowe dane, zatem będziemy sprawdzali błędy w callbacku tworzenia postów i wyświetlać wiadomość dla jakichkolwiek błędów, które powstają.
 
 Dodatkowo, jeżeli otrzymamy błąd `302` (który oznacza, że post o tym samym URL już istnieje), przekierujemy użytkownika to bieżącego posta. Otrzymamy `_id` bieżącego posta z `error.details` (pamiętaj, że przekazaliśmy `_id` posta jako trzeci parametr do `details` naszej klasy `Errors` w rozdziale 7).
 
@@ -183,7 +183,7 @@ Jest to miejsce, w którym przyda się zmienna `seen` (widziany). Musimy się up
 
 Aby tego dokonać, użyjemy funkcji `Meteor.defer()`. Funkcja ta przekazuje Meteorowi, aby uruchomić callback "zaraz po tym" co dzieje się w tej chwili. Jeżeli pomoże to zrozumieć, możesz pomyśleć, że `defer()` to jak przekazanie przeglądarce aby poczekać 1 milisekundę przed kontynuowaniem pracy.
 
-Osiągneliśmy to, że Meteor ustawia `seen` na `true` 1 milisekundę po renderowaniu szablonu `template`. Ale czy pamiętasz jak wspomnieliśmy, że przekierowanie dzieje się natychmiastowo? Oznacza to, że mechanizm przekierowania zostanie uruchomiony przed callbackiem `defer`, który nigdy nie będzie miał możliwości na wykonanie.
+Osiągnęliśmy to, że Meteor ustawia `seen` na `true` 1 milisekundę po renderowaniu szablonu `template`. Ale czy pamiętasz jak wspomnieliśmy, że przekierowanie dzieje się natychmiastowo? Oznacza to, że mechanizm przekierowania zostanie uruchomiony przed callbackiem `defer`, który nigdy nie będzie miał możliwości na wykonanie.
 
 Jest to dokładnie to, co chcieliśmy osiągnąć: jeżeli nie został wykonany, nasz błąd nie zostanie zaznaczony jako `widziany`, co oznacza, że nie będzie usunięty, co również oznacza, że pojawi się na stronie na którą użytkownik został przekierowany, dokładnie tak, jak chcieliśmy!
 
@@ -216,6 +216,6 @@ Callback `rendered` jest wywołany ponownie po renderowaniu szablonu w przegląd
 
 Callback `rendered` szablonu jest wywoływany za każdym razem po renderowaniu szablonu w przeglądarce. Zawiera to oczywiście pierwsze renderowanie, gdy pojawia się na ekranie, ale warto zapamiętać, że callback będzie także wywoływany za każdym razem, gdy szablon jest renderowany ponownie tj. za każdym razem, gdy jego dane ulegną zmianie.
 
-Callback `rendered` jest ogolnie wywoływany przynajmniej dwukrotnie: za pierwszym razem, gdy aplikakcja zostaje załadowana i za drugim razem gdy dane kolekcji zostają wczytane. Powinieneś być zatem ostrożny przy wstawianiu kodu, który nie powinien zostać uruchomiony dwukrotnie (np. alert, czy kod śledzący zdarzenia na stronie).
+Callback `rendered` jest ogólnie wywoływany przynajmniej dwukrotnie: za pierwszym razem, gdy aplikacja zostaje załadowana i za drugim razem gdy dane kolekcji zostają wczytane. Powinieneś być zatem ostrożny przy wstawianiu kodu, który nie powinien zostać uruchomiony dwukrotnie (np. alert, czy kod śledzący zdarzenia na stronie).
 
 <% end %>

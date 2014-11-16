@@ -13,7 +13,7 @@ Opanowaliśmy już głosowanie w czasie rzeczywistym, punktację i ranking. Nies
 
 Zanim dojdziemy do prawdziwej zabawy (przemieszczania elementów na stronie), należy zrozumieć jak Meteor współpracuje z DOM (ang. Document Object Model -- kolekcją elementów HTML które składają się na zawartość strony).
 
-Główną zasadą o której należy pamiętać jest to, że elementy DOM *nie mogą się przemieszczać*. Mogą być wyłącznie usuwane i tworzone (miej na uwadze, że jest to ograniczenie DOM, a nie Meteora). Aby więc spowodawać iluzję zamiany elementów A i B Meteor usunie element B i wstawi całkiem nową kopię (B') przed elementem A.
+Główną zasadą o której należy pamiętać jest to, że elementy DOM *nie mogą się przemieszczać*. Mogą być wyłącznie usuwane i tworzone (miej na uwadze, że jest to ograniczenie DOM, a nie Meteora). Aby więc spowodować iluzję zamiany elementów A i B Meteor usunie element B i wstawi całkiem nową kopię (B') przed elementem A.
 
 Nie ułatwia to animacji, ponieważ nie można po prostu animować elementu B na nową pozycję, ponieważ B zniknie zaraz po przerenderowaniu strony (co jak wiemy dzieje się natychmiastowo dzięki reaktywności). Zamiast tego należy animować nowo stworzony B', który przemieszcza się z początkowej pozycji B' do nowej pozycji przed elementem A.
 
@@ -56,7 +56,7 @@ Aby animować posty, które są zamieniane kolejnością na stronie, musimy wej�
 
 Elementy na stronie domyślnie używają **statycznego** pozycjonowania. Statycznie pozycjonowane elementy naturalnie wpasowują się w stronę i ich współrzędne nie mogą być zmieniane lub animowane.
 
-**Względne** pozycjonowanie oznacza z innej strony, że element także jest naturanie wpasowany w stronę, ale może być umieszczony z przesunięcięm *względnym do pozycji początkowej*.
+**Względne** pozycjonowanie oznacza z innej strony, że element także jest naturalnie wpasowany w stronę, ale może być umieszczony z przesunięciem *względnym do pozycji początkowej*.
 
 **Bezwzględne** pozycjonowanie idzie o jeden krok dalej i pozwala nadać określony współrzędne x/y dla danego elementu względnie do punktu początkowego **dokumentu** lub **pierwszego bezwzględnego lub względnie przesuniętego elementu nadrzędnego**.
 
@@ -86,11 +86,11 @@ To w konsekwencji oznacza, że potrzebowalibyśmy sztucznie ustawić wysokość 
 
 ### Pamięć absolutna.
 
-Pozostaje jeszcze jeden problem. Podczas gdy element A zostaje w DOM i może dzięki temu "pamiętać" poprzednią pozcyję, element B przeżywa reinkarnację jako element B' i ma wyczyszczoną pamięć o poprzedniej pozycji.
+Pozostaje jeszcze jeden problem. Podczas gdy element A zostaje w DOM i może dzięki temu "pamiętać" poprzednią pozycję, element B przeżywa reinkarnację jako element B' i ma wyczyszczoną pamięć o poprzedniej pozycji.
 
 Na szczęście Meteor radzi sobie z tym problemem przez udostępnienie objektu **instancji szablonu** w callbacku `rendered`. Za oficjalną [dokumentacją Meteora](http://docs.meteor.com/#template_rendered):
 
-> W callbacku `this` odności się do obiektu instancji szablonu, który jest unikatowy do tego wystąpienia szablonu i zachowany przy renderowaniu.
+> W callbacku `this` odnosi się do obiektu instancji szablonu, który jest unikatowy do tego wystąpienia szablonu i zachowany przy renderowaniu.
 
 Zatem co zrobimy, to odnajdziemy obecną pozycję posta na stronie i następnie zapamiętamy tą pozycję w obiekcie instancji szablonu. W ten sposób, nawet wtedy gdy post jest usuwany i ponownie tworzony jesteśmy w stanie określić skąd go animować.
 
@@ -104,7 +104,7 @@ Zauważ, że nie możemy wstawić tej własności "ranking" bezpośrednio do baz
 
 Idealnie wstawilibyśmy tą własność w kolekcje `newPosts` i `topPosts` ale Meteor jeszcze nie dostarcza wygodnego mechanizmu pozwalającego to osiągnąć.
 
-Zatem wstawimy "ranking" jako ostatni możliwy krok managera szabloku `postList`:
+Zatem wstawimy "ranking" jako ostatni możliwy krok managera szablonu `postList`:
 
 ~~~js
 Template.postsList.helpers({
@@ -145,7 +145,7 @@ Nie zapomnij uaktualnić szablonu `postList`:
 
 ### A teraz bądź tak miły i przewiń wstecz
 
-Meteor jest jednym z najbardziej przemyślanych i najnowocześniejszych z dostępnych frameworków webowych, ale jedna z jego funcji przywodzi na myśl lata 90te i kasety magnetowidowe: funkcja `rewind()`.
+Meteor jest jednym z najbardziej przemyślanych i najnowocześniejszych z dostępnych frameworków webowych, ale jedna z jego funkcji przywodzi na myśl lata 90-te i kasety magnetowidowe: funkcja `rewind()`.
 
 Za każdym razem, gdy używasz kursora z `forEach()`, `map()`, czy `fetch()` będziesz zmuszony przewinąć kursor do tyłu zanim będzie mógł być ponownie użyty.
 
@@ -199,7 +199,7 @@ Nie powinno być trudne rozumienie tego, jeżeli spojrzysz na nasz poprzedni dia
 
 Zwróć uwagę, że skoro ustawiamy własność `currentPosition` instancji szablonu w callbacku `defer`, oznacza to że ta własność nie będzie istniała podczas pierwszego renderowania fragmentu szablonu. Nie jest to jednak problemem, ponieważ i tak nie jesteśmy zainteresowani animowaniem pierwszego renderowania.
 
-Teraz otwórz swoją stronę w przeglądarce i zacznij dodawać głosy. Powinieneś zaobserować delikatne przemieszczanie się postów niczym podczas baletu!
+Teraz otwórz swoją stronę w przeglądarce i zacznij dodawać głosy. Powinieneś zaobserwować delikatne przemieszczanie się postów niczym podczas baletu!
 
 ### Animacja Nowych Postów
 
@@ -212,7 +212,7 @@ Jest to bardziej skomplikowane, niż wydaje się na pierwszy rzut oka. Problem p
 
 Wyłącznie przypadek 1 powinien być animowany, chyba że masz na celu zmiany interfejsu użytkownia w choinkę przy każdej zmianie danych.
 
-Upewnijmy się, że tylko animujemy posty kiedy są nowe a nie kiedy są ponownie renderowane z powodu zmiany danych, z których korzystają. Już sprawdzamy istnienie zmiennej instancji (która jest ustawiana tylko po pierszym renderowaniu szablonu), zarem wystarczy wrócić do naszego callbacka `rendered` i dodać blok `else`:
+Upewnijmy się, że tylko animujemy posty kiedy są nowe a nie kiedy są ponownie renderowane z powodu zmiany danych, z których korzystają. Już sprawdzamy istnienie zmiennej instancji (która jest ustawiana tylko po pierwszym renderowaniu szablonu), zatem wystarczy wrócić do naszego callbacka `rendered` i dodać blok `else`:
 
 ~~~js
 Template.postItem.helpers({
@@ -263,7 +263,7 @@ Zauważ, że że `removeClass("invisible")` którą dodaliśmy w funkcji `defer(
 
 Jak już zapewne zauważyłeś, używamy klasy CSS `.invisible` aby wyzwolić animację zamiast bezpośrednio animować własność CSS `opacity` jak robiliśmy w przypadku `top`. Jest to spowodowane tym, że dla `top` potrzebna była animacja własności do określonej wartości, która zależała na danych instancji.
 
-Z innej strony, chcemy wyłącznie pokazać element niezależnie od jego danych. Ponieważ przechowywanie CSS z dala od kodu JavaScript jest dobrą praktyką, dodamy wyłącznie tutaj klasę tutaj a ustalimy szczegóły animacji w akruszu stylów (kodzie CSS).
+Z innej strony, chcemy wyłącznie pokazać element niezależnie od jego danych. Ponieważ przechowywanie CSS z dala od kodu JavaScript jest dobrą praktyką, dodamy wyłącznie tutaj klasę tutaj a ustalimy szczegóły animacji w arkuszu stylów (kodzie CSS).
 
 <% end %>
 
